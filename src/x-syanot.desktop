@@ -1,0 +1,7 @@
+[Desktop Entry]
+Comment=Syntactic Analysis Annotation tool for KDE
+Encoding=UTF-8
+Icon=syanot
+MimeType=application/syanot
+Patterns=*.easy.xml
+Type=MimeType

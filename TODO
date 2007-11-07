@@ -1,0 +1,8 @@
+kgraphviewer/kgrapheditor problems
+- BUG: edge selection, not always on the two bounds
+
+
+syanot problems
+- BUG: edge removing does not work
+- handling of 3-ary relations such as coord.
+- should be able to not display controls of the kgraphviewer part that are not useful for syanot

@@ -1,0 +1,182 @@
+<ui version="4.0" >
+ <class>SyanotMainWindow</class>
+ <widget class="QFrame" name="SyanotMainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>776</width>
+    <height>405</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Syanot</string>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="0" >
+    <layout class="QVBoxLayout" >
+     <item>
+      <widget class="KButtonGroup" name="kbuttongroup" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>200</width>
+         <height>85</height>
+        </size>
+       </property>
+       <widget class="QWidget" name="" >
+        <property name="geometry" >
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>717</width>
+          <height>66</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" >
+         <item row="0" column="0" >
+          <widget class="KPushButton" name="sujvbutton" >
+           <property name="text" >
+            <string>SUJ-V</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" >
+          <widget class="KPushButton" name="auxvbutton" >
+           <property name="text" >
+            <string>AUX-V</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2" >
+          <widget class="KPushButton" name="modvbutton" >
+           <property name="text" >
+            <string>MOD-V</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="3" colspan="2" >
+          <widget class="KPushButton" name="modnbutton" >
+           <property name="text" >
+            <string>MOD-N</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="5" colspan="2" >
+          <widget class="KPushButton" name="modrbutton" >
+           <property name="text" >
+            <string>MOD-R</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="7" colspan="2" >
+          <widget class="KPushButton" name="juxtbutton" >
+           <property name="text" >
+            <string>JUXT</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="9" >
+          <widget class="KPushButton" name="coordbutton" >
+           <property name="text" >
+            <string>COORD</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0" >
+          <widget class="KPushButton" name="codvbutton" >
+           <property name="text" >
+            <string>COD-V</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" >
+          <widget class="KPushButton" name="cplvbutton" >
+           <property name="text" >
+            <string>CPL-V</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2" colspan="2" >
+          <widget class="KPushButton" name="atbsobutton" >
+           <property name="text" >
+            <string>ATB_SO</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="4" colspan="2" >
+          <widget class="KPushButton" name="modabutton" >
+           <property name="text" >
+            <string>MOD-A</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="6" colspan="2" >
+          <widget class="KPushButton" name="modpbutton" >
+           <property name="text" >
+            <string>MOD-P</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="8" >
+          <widget class="KPushButton" name="apposbutton" >
+           <property name="text" >
+            <string>APPOS</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="10" >
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KButtonGroup</class>
+   <extends>QGroupBox</extends>
+   <header>kbuttongroup.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
