@@ -39,6 +39,7 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
   graphAttribs["id"] = m_utteranceId;
   graphAttribs["rankdir"] = "LR";
   graphAttribs["ranksep"] = "0.0";
+  graphAttribs["fontsize"] = "14";
   setGraphAttributes(graphAttribs);
   
   QList<EasyConstituent*>&  constituents = m_utterance->constituents();
@@ -84,10 +85,11 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
         QMap<QString,QString> attribs;
         attribs["id"] = form->id();
         attribs["label"] = form->form();
-        //           attribs["shape"] = "plaintext";
         attribs["shape"] = "square";
         attribs["style"] = "filled";
-        attribs["color"] = color;
+        attribs["color"] = "grey";
+        attribs["fillcolor"] = "grey";
+        attribs["fontsize"] = "14";
         addNewNodeToSubgraph(attribs, QString("cluster_") + group->id());
         if (!previousFormId.isEmpty())
         {
