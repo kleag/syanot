@@ -33,15 +33,18 @@ EasyUtterance::~EasyUtterance()
 QTextStream& operator<<(QTextStream& s, const EasyUtterance& u)
 {
   s << "<E id=\""<<u.id()<<"\">\n";
-  
+  s << "<constituants>\n";
   foreach (const EasyConstituent* c, u.constituents())
   {
     c->saveAsXmlTo(s);
   }
+  s << "</constituants>\n";
+  s << "<relations>\n";
   foreach (const EasyRelation* r, u.relations())
   {
     s << *r;
   }
+  s << "</relations>\n";
   s << "</E>\n";
 }
 

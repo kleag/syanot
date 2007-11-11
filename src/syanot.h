@@ -137,13 +137,12 @@ private:
   KToggleAction *m_toolbarAction;
   KToggleAction *m_statusbarAction;
 
-  QStringList m_openedFiles;
-  
   QMap<QString, KParts::Part*> m_utteranceIdPartMap;
   QMap<KParts::Part*, PartMatch*> m_partPartMatchMap;
   QMap<QString, PartMatch*> m_utteranceIdPartMatchMap;
   
-  QString m_openedFile;
+  KUrl m_openedFile;
+  
   KParts::Part* m_currentPart;
   PartMatch* m_currentPartMatch;
   

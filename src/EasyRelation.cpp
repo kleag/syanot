@@ -30,7 +30,7 @@ QTextStream& operator<<(QTextStream& s, const EasyRelation& r)
   }
   if (r.type() == "MOD-N")
   {
-    s<<"<a-propager booleen=\""<<(r.toPropagate()?"vrai":"faux")<<"\"/\n";
+    s<<"<a-propager booleen=\""<<(r.toPropagate()?"vrai":"faux")<<"\"/>\n";
   }
   else if (r.type() == "ATB-SO")
   {

@@ -21,6 +21,8 @@
 
 #include "EasyForm.h"
 
+#include <kdebug.h>
+
 EasyGroup::EasyGroup() : EasyConstituent(), m_forms()
 {
 }
@@ -31,7 +33,44 @@ EasyGroup::~EasyGroup()
 
 void EasyGroup::saveAsXmlTo(QTextStream& s) const
 {
-  s<<"<Groupe type=\""<<m_type<<"\" id=\""<<m_id<<"\">\n";
+  s<<"<Groupe type=\"";
+  switch (m_type)
+  {
+    case GA:
+    {
+      s << "GA";
+      break;
+    }
+    case GN:
+    {
+      s << "GN";
+      break;
+    }
+    case GP:
+    {
+      s << "GP";
+      break;
+    }
+    case GR:
+    {
+      s << "GR";
+      break;
+    }
+    case NV:
+    {
+      s << "NV";
+      break;
+    }
+    case PV:
+    {
+      s << "PV";
+      break;
+    }
+    default:
+      kError() << "Unknown group type" << m_type;
+      s << "";
+  }
+  s<<"\" id=\""<<m_id<<"\">\n";
   foreach(const EasyForm* f, m_forms)
   {
     f->saveAsXmlTo(s);

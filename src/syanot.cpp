@@ -31,6 +31,7 @@
 #include "EasyXmlReader.h"
 #include "PartMatch.h"
 
+#include <KTemporaryFile>
 #include <kshortcutsdialog.h>
 #include <kfiledialog.h>
 #include <kconfig.h>
@@ -185,7 +186,7 @@ void Syanot::openUrl(const KUrl& url)
 
   QString tmpFileName;
   KIO::NetAccess::download(url,tmpFileName,this);
-  QFile file(url.path());
+  QFile file(tmpFileName);
   if (!file.open(QFile::ReadOnly | QFile::Text))
   {
       KMessageBox::error(this,
@@ -207,6 +208,8 @@ void Syanot::openUrl(const KUrl& url)
   }
   else
   {
+    m_openedFile = url;
+    
     statusBar()->showMessage(i18n("File loaded"), 2000);
 
     foreach (EasyUtterance* utterance, *m_document)
@@ -224,13 +227,13 @@ void Syanot::fileOpen()
   // this slot is called whenever the File->Open menu is selected,
   // the Open shortcut is pressed (usually CTRL+O) or the Open toolbar
   // button is clicked
-  QString fileName = KFileDialog::getOpenFileName(KUrl(QString()), QString("*"), 0, QString::null);
+  KUrl url = KFileDialog::getOpenUrl(KUrl(), QString("*"), 0, QString::null);
   
   if (m_rfa != 0)
   {
-    m_rfa->addUrl(fileName);
+    m_rfa->addUrl(url);
   }
-  openUrl(fileName);
+  openUrl(url);
 }
 
 
@@ -348,23 +351,62 @@ void Syanot::fileSave()
   kDebug();
   if (m_widget != 0)
   {
-    QFile f(m_openedFile);
-    if (f.open(QIODevice::WriteOnly))
+    KTemporaryFile* temp = new KTemporaryFile();
+    temp->setAutoRemove(false);
+    temp->open();
+    QString tempFileName = temp->fileName();
+    delete temp;
+    QFile tmpFile(tempFileName);
+//     if (!temp.open())
+    if (!tmpFile.open(QIODevice::WriteOnly))
     {
-      QTextStream s(&f);
-      s << *m_document;
+      KMessageBox::error(this, i18n("Cannot open a temporary file."));
+      return;
     }
+    kDebug() << "using temp file" << tmpFile.fileName();
+    QTextStream s(&tmpFile);
+    s << *m_document;
+    tmpFile.close();
+    kDebug() << "saving to" << m_openedFile.url();
+    if (!KIO::NetAccess::upload(tmpFile.fileName(), m_openedFile, 0))
+    {
+      KMessageBox::error(this, i18n("Failed to save to %1",m_openedFile.url()));
+    }
+    tmpFile.remove();
   }
 }
+
+
+// void Syanot::fileSave()
+// {
+//   kDebug();
+//   if (m_widget != 0)
+//   {
+//     KTemporaryFile temp;
+//     if (!temp.open())
+//     {
+//       KMessageBox::error(this, i18n("Cannot open a temporary file."));
+//       return;
+//     }
+//     kDebug() << "using temp file" << temp.fileName();
+//     QTextStream s(&temp);
+//     s << *m_document;
+//     temp.close();
+//     kDebug() << "saving to" << m_openedFile.url();
+//     if (!KIO::NetAccess::upload(temp.fileName(), m_openedFile, 0))
+//     {
+//       KMessageBox::error(this, i18n("Failed to save to %1",m_openedFile.url()));
+//     }
+//   }
+// }
 
 void Syanot::fileSaveAs()
 {
   if (m_widget != 0)
   {
-    QString fileName = KFileDialog::getSaveFileName(KUrl(),
+    m_openedFile = KFileDialog::getOpenUrl(KUrl(),
                 "*.easy.xml", m_widget,
                 i18n("Save current graph to..."));
-    m_openedFile = fileName;
     fileSave();
   }
 }
