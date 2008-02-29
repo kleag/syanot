@@ -24,6 +24,8 @@
 #include <QString>
 #include <QTextStream>
 
+class EasyUtterance;
+
 /**
  * This is the base class for forms and groups, an utterance being a list of
  * constituents
@@ -32,22 +34,26 @@
  */
 class EasyConstituent : public QObject
 {
+Q_OBJECT
 public:
   /**
     * Default Constructor
     */
-  EasyConstituent();
+  EasyConstituent(EasyUtterance* parent);
 
   virtual ~EasyConstituent();
 
   inline const QString& id() const {return m_id;}
-  inline void setId(const QString& id) {m_id = id;}
+  void setId(const QString& id);
 
   /**
   * This class is an interface. It cannot be
   * instanciated.
   */
   virtual void saveAsXmlTo(QTextStream& s) const = 0;
+
+Q_SIGNALS:
+  void changed(EasyConstituent*);
 
 protected:
   QString m_id;

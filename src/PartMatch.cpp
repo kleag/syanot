@@ -42,14 +42,14 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
   graphAttribs["fontsize"] = "14";
   setGraphAttributes(graphAttribs);
   
-  QList<EasyConstituent*>&  constituents = m_utterance->constituents();
-  foreach (EasyConstituent* constituent, constituents)
+  const QList<EasyConstituent*>&  constituents = m_utterance->constituents();
+  foreach (const EasyConstituent* constituent, constituents)
   {
-    if (dynamic_cast<EasyForm*>(constituent) != 0)
+    if (dynamic_cast<const EasyForm*>(constituent) != 0)
     {
       QMap<QString,QString> attribs;
       attribs["id"] = constituent->id();
-      attribs["label"] = dynamic_cast<EasyForm*>(constituent)->form();
+      attribs["label"] = dynamic_cast<const EasyForm*>(constituent)->form();
       attribs["shape"] = "square";
       addNewNode(attribs);
       if (!previousFormId.isEmpty())
@@ -61,9 +61,9 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
       }
       previousFormId = constituent->id();
     }
-    else if (dynamic_cast<EasyGroup*>(constituent) != 0)
+    else if (dynamic_cast<const EasyGroup*>(constituent) != 0)
     {
-      EasyGroup* group = dynamic_cast<EasyGroup*>(constituent);
+      const EasyGroup* group = dynamic_cast<const EasyGroup*>(constituent);
       QMap<QString,QString> attribs;
       attribs["id"] = QString("cluster_") + group->id();
       QString color = "black";
@@ -102,8 +102,8 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
       }
     }
   }
-  QList<EasyRelation*>&  relations = m_utterance->relations();
-  foreach (EasyRelation* relation, relations)
+  const QList<EasyRelation*>&  relations = m_utterance->relations();
+  foreach (const EasyRelation* relation, relations)
   {
     QMap<QString,QString> attribs;
     attribs["id"] = relation->id();
@@ -203,8 +203,6 @@ void PartMatch::connectSignals()
            m_part,SLOT(slotRemoveEdge(const QString&)));
            
   connect(m_part,SIGNAL(newEdgeAdded(QString,QString)),this,SLOT(slotNewEdgeAdded(QString,QString)));
-           
-           
   connect(m_part,SIGNAL(removeEdge(const QString&)),
                     this,SLOT(slotRemoveEdge(const QString&)));
 }
@@ -287,7 +285,7 @@ void PartMatch::slotNewEdgeAdded(QString src,QString tgt)
     relation->bounds().insert("verbe",tgt);
   }
   
-  m_utterance->relations().push_back(relation);
+  m_utterance->addRelation(relation);
   update();
 }
 
@@ -299,7 +297,7 @@ void PartMatch::slotRemoveEdge(const QString& id)
     EasyRelation* rel = m_utterance->relations().at(i);
     if (rel->id() == id)
     {
-      m_utterance->relations().removeAt(i);
+      m_utterance->removeRelationAt(i);
       delete rel;
       removeEdge(id);
       break;

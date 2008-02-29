@@ -21,13 +21,34 @@
 
 #include "EasyConstituent.h"
 #include "EasyRelation.h"
+#include "EasyDocument.h"
 
-EasyUtterance::EasyUtterance() : QObject()
+EasyUtterance::EasyUtterance(EasyDocument* parent):QObject()
 {
+  connect(this, SIGNAL(changed(EasyUtterance*)),
+      parent,SLOT(slotChanged(EasyUtterance*)));
 }
 
 EasyUtterance::~EasyUtterance()
 {
+}
+
+void EasyUtterance::addRelation(EasyRelation* relation)
+{
+  m_relations.push_back(relation);
+  emit changed(this);
+}
+
+void EasyUtterance::addConstituent(EasyConstituent* constituent)
+{
+  m_constituents.push_back(constituent);
+  emit changed(this);
+}
+
+void EasyUtterance::removeRelationAt(int i)
+{
+  m_relations.removeAt(i);
+  emit changed(this);
 }
 
 QTextStream& operator<<(QTextStream& s, const EasyUtterance& u)

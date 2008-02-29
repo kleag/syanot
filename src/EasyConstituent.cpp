@@ -18,13 +18,22 @@
 
 
 #include "EasyConstituent.h"
+#include "EasyUtterance.h"
 
-EasyConstituent::EasyConstituent()
+EasyConstituent::EasyConstituent(EasyUtterance* parent) : QObject(parent)
 {
+  connect(this, SIGNAL(changed(EasyConstituent*)),
+    parent, SLOT(slotChanged(EasyConstituent*)));
 }
 
 EasyConstituent::~EasyConstituent()
 {
+}
+
+void EasyConstituent::setId(const QString& id)
+{
+  m_id = id;
+  emit(changed(this));
 }
 
 #include "EasyConstituent.moc"

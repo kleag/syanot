@@ -46,7 +46,7 @@ public:
   /**
     * Default Constructor
     */
-  EasyGroup();
+  EasyGroup(EasyUtterance* parent);
 
   /**
     * Default Destructor
@@ -54,14 +54,16 @@ public:
   virtual ~EasyGroup();
 
   inline EasyGroupType type() const {return m_type;}
-  inline void setType(const EasyGroupType t) {m_type = t;}
+  inline void setType(const EasyGroupType t) {m_type = t;emit changed(this);}
 
   inline const QList<EasyForm*>& forms()const {return m_forms;}
-  inline QList<EasyForm*>& forms() {return m_forms;}
-  inline void setForms(QList<EasyForm*>& forms) {m_forms = forms;}
+//   inline QList<EasyForm*>& forms() {return m_forms;}
+  inline void setForms(QList<EasyForm*>& forms) {m_forms = forms;emit changed(this);}
 
   virtual void saveAsXmlTo(QTextStream& s) const;
 
+  void push_back(EasyForm* form);
+  
 private:
   virtual void dummy() {};
 

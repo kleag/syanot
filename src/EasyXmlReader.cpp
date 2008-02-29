@@ -115,7 +115,7 @@ void EasyXmlReader::readUtterance()
 //   kDebug();
   Q_ASSERT(isStartElement() && name() == "E");
 
-  m_currentUtterance = new EasyUtterance();
+  m_currentUtterance = new EasyUtterance(m_document);
   m_currentUtterance->setId(attributes().value("id").toString());
   m_document->push_back(m_currentUtterance);
   while (!atEnd())
@@ -223,14 +223,14 @@ void EasyXmlReader::readRelation()
       }
     }
   }
-  m_currentUtterance->relations().push_back(relation);
+  m_currentUtterance->addRelation(relation);
 }
 
 void EasyXmlReader::readGroup()
 {
   Q_ASSERT(isStartElement() && name() == "Groupe");
 
-  m_currentGroup = new EasyGroup();
+  m_currentGroup = new EasyGroup(m_currentUtterance);
 
 //   kDebug() << attributes().value("type").toString() << attributes().value("id").toString();
   if (attributes().value("type")=="GA")
@@ -258,7 +258,7 @@ void EasyXmlReader::readGroup()
     m_currentGroup->setType(EasyGroup::PV);
   }
   m_currentGroup->setId(attributes().value("id").toString());
-  m_currentUtterance->constituents().push_back(m_currentGroup);
+  m_currentUtterance->addConstituent(m_currentGroup);
   m_currentUtterance->idsToConstituentsMap().insert(m_currentGroup->id(),m_currentGroup);
   while (!atEnd())
   {
@@ -292,10 +292,10 @@ void EasyXmlReader::readGroupForm()
 //   {
 //     kDebug() << a.name().toString() << a.value().toString();
 //   }
-  EasyForm* f = new EasyForm();
+  EasyForm* f = new EasyForm(m_currentUtterance);
   f->setId(id);
   f->setForm(form);
-  m_currentGroup->forms().push_back(f);
+  m_currentGroup->push_back(f);
   m_currentUtterance->idsToConstituentsMap().insert(f->id(),f);
 }
 
@@ -306,10 +306,10 @@ void EasyXmlReader::readForm()
 
   QString id = attributes().value("id").toString();
   QString form = readElementText();
-  EasyForm* f = new EasyForm();
+  EasyForm* f = new EasyForm(m_currentUtterance);
   f->setId(id);
   f->setForm(form);
-  m_currentUtterance->constituents().push_back(f);
+  m_currentUtterance->addConstituent(f);
   m_currentUtterance->idsToConstituentsMap().insert(f->id(),f);
 }
 

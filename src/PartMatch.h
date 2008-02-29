@@ -74,7 +74,7 @@ public:
    */
   inline void removeEdge(const QString& s) {emit sremoveEdge(s);}
 
-  signals:
+Q_SIGNALS:
   void ssetReadWrite();
   void ssaveTo(const QString& fileName);
   void sprepareAddNewEdge(QMap<QString,QString> attribs);
@@ -93,7 +93,7 @@ public:
   void sremoveEdge(const QString&);
   
   
-public slots:
+public Q_SLOTS:
 //   void slotAddAttribute(const QString&);
 //   void slotRemoveAttribute(const QString&,const QString&);
 

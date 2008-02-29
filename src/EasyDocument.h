@@ -32,26 +32,39 @@ class EasyUtterance;
  *
  * @author Gael de Chalendar <kleag@free.fr>
  */
-class EasyDocument : public QList<EasyUtterance*>
+class EasyDocument : public QObject
 {
+Q_OBJECT
 public:
   /**
     * Default Constructor
     */
   EasyDocument();
-
+  
   /**
     * Default Destructor
     */
   virtual ~EasyDocument();
 
   inline const QString& fileName() const {return m_fileName;}
-  inline void setFileName(const QString& fileName) {m_fileName = fileName;}
+  inline void setFileName(const QString& fileName) {m_fileName = fileName; emit changed(this);}
 
+  inline const QList<EasyUtterance*>& utterances() const {return m_utterances;}
+  
   EasyUtterance* utteranceIdentifiedBy(const QString& id);
+
+  void push_back(EasyUtterance* utterance);
+  
+Q_SIGNALS:
+  void changed(EasyDocument*);
+  
+public Q_SLOTS:
+  void slotChanged(EasyUtterance*);
   
 private:
   QString m_fileName;
+
+  QList<EasyUtterance*> m_utterances;
 };
 
 QTextStream& operator<<(QTextStream& s, const EasyDocument& e);

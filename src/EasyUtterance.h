@@ -27,6 +27,7 @@
 
 class EasyConstituent;
 class EasyRelation;
+class EasyDocument;
 
 /**
  * This is an utterance from the easy format. It is made of a list of
@@ -43,7 +44,7 @@ public:
   /**
     * Default Constructor
     */
-  EasyUtterance();
+  EasyUtterance(EasyDocument* parent);
 
   /**
     * Default Destructor
@@ -51,18 +52,26 @@ public:
   virtual ~EasyUtterance();
 
   inline const QList<EasyConstituent*>& constituents() const {return m_constituents;}
-  inline QList<EasyConstituent*>& constituents() {return m_constituents;}
-  inline void setConstituents(const QList<EasyConstituent*>& c) {m_constituents = c;}
+//   inline QList<EasyConstituent*>& constituents() {return m_constituents;}
+  inline void setConstituents(const QList<EasyConstituent*>& c) {m_constituents = c; emit changed(this);}
 
   inline const QString& id() const {return m_id;}
-  inline void setId(const QString& id) {m_id = id;}
+  inline void setId(const QString& id) {m_id = id; emit changed(this);}
 
   inline const QMap<QString, EasyConstituent*>& idsToConstituentsMap() const {return m_idsToConstituentsMap;}
   inline QMap<QString, EasyConstituent*>& idsToConstituentsMap() {return m_idsToConstituentsMap;}
 
   inline const QList<EasyRelation*>& relations() const {return m_relations;}
-  inline QList<EasyRelation*>& relations() {return m_relations;}
+//   inline QList<EasyRelation*>& relations() {return m_relations;}
 
+  void addRelation(EasyRelation* relation);
+  void addConstituent(EasyConstituent* constituent);
+
+  void removeRelationAt(int i);
+  
+Q_SIGNALS:
+  void changed(EasyUtterance*);
+  
 private:
   QString m_id;
   QList<EasyConstituent*> m_constituents;

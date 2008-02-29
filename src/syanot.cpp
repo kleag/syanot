@@ -70,7 +70,8 @@ Syanot::Syanot() :
     m_widget(0),
     m_rfa(0),
     m_currentPart(0),
-    m_document(0)
+    m_document(0),
+    m_documentModified(false)
 {
   kDebug();
   m_factory = KLibLoader::self()->factory("kgraphviewerpart");
@@ -178,12 +179,12 @@ Syanot::~Syanot()
 void Syanot::openUrl(const KUrl& url)
 {
   kDebug() << url;
-  if (m_document != 0)
+  if (slotClose() == false)
   {
-    delete m_document;
+    return ;
   }
+  
   m_document = new EasyDocument();
-
   QString tmpFileName;
   KIO::NetAccess::download(url,tmpFileName,this);
   QFile file(tmpFileName);
@@ -208,17 +209,25 @@ void Syanot::openUrl(const KUrl& url)
   }
   else
   {
+    m_utterancesWidget->clear();
     m_openedFile = url;
     
     statusBar()->showMessage(i18n("File loaded"), 2000);
 
-    foreach (EasyUtterance* utterance, *m_document)
+    foreach (EasyUtterance* utterance, m_document->utterances())
     {
       m_utterancesWidget->addItem(utterance->id());
     }
     m_utterancesWidget->setCurrentRow(0);
-    activateUtterance(m_utterancesWidget->currentItem()->text());
+    if (m_utterancesWidget->currentItem()!=0)
+    {
+      activateUtterance(m_utterancesWidget->currentItem()->text());
+    }
   }
+  m_documentModified = false;
+  connect (m_document,SIGNAL(changed(EasyDocument*)),
+            this,SLOT(slotDocumentModified()));
+
 }
 
 void Syanot::fileOpen()
@@ -248,7 +257,7 @@ void Syanot::setupActions()
   actionCollection()->addAction( KStandardAction::Save, "file_save", this, SLOT( fileSave() ) );
   actionCollection()->addAction( KStandardAction::SaveAs, "file_save_as", this, SLOT( fileSaveAs() ) );
 
-  actionCollection()->addAction( KStandardAction::Quit, "file_quit", this, SLOT( quit() ) );
+  actionCollection()->addAction( KStandardAction::Quit, "file_quit", this, SLOT( slotQuit() ) );
 
   m_statusbarAction = KStandardAction::showStatusbar(this, SLOT(optionsShowStatusbar()), this);
 
@@ -258,13 +267,22 @@ void Syanot::setupActions()
   actionCollection()->addAction( KStandardAction::Preferences, "options_configure", this, SLOT( optionsConfigure() ) );
 }
 
-bool Syanot::queryExit()
+bool Syanot::queryClose()
 {
-  kDebug() ;
+  kDebug() << m_documentModified;
+  if (m_documentModified &&
+        (KMessageBox::questionYesNo(0,
+            i18n("Current document has unsaved changes. Do you really want to close it ?"),
+            i18n("Closing a modified document"),
+            KGuiItem("Close anyway"),
+            KGuiItem("Don't close"),
+            "closeAnyway"   ) == KMessageBox::No))
+  {
+    return false;
+  }
+
   m_rfa->saveEntries(KGlobal::config()->group("syanot"));
 
-  // 
-  //@TODO to port
   return true;
 }
 
@@ -339,11 +357,13 @@ void Syanot::applyNewToolbarConfig()
 
 void Syanot::slotURLSelected(const KUrl& url)
 {
+  kDebug();
   openUrl(url);
 }
 
 void Syanot::close()
 {
+  kDebug();
 }
 
 void Syanot::fileSave()
@@ -612,6 +632,7 @@ void Syanot::createPartFor(const QString& id)
     return;
   }
   
+  kDebug() << "creating part";
   KParts::ReadOnlyPart* part = static_cast<KParts::ReadOnlyPart*>(
   m_factory->create<KParts::ReadOnlyPart>(centralWidget(), this));
   kDebug() << "part created" << part;
@@ -625,7 +646,77 @@ void Syanot::createPartFor(const QString& id)
     createGUI(part);
     m_manager->addPart( part, true );
     connect(this,SIGNAL(hide(KParts::Part*)),part,SLOT(slotHide(KParts::Part*)));
+    connect(part,SIGNAL(close()), this,SLOT(slotClose()));
   }
+}
+
+bool Syanot::slotClose()
+{
+  kDebug() << m_documentModified;
+
+  bool close;
+  
+  if (m_documentModified)
+  {
+    close = (KMessageBox::questionYesNo(0,
+        i18n("Current document has unsaved changes. Do you really want to close it ?"),
+        i18n("Closing a modified document"),
+        KGuiItem("Close anyway"),
+        KGuiItem("Don't close"),
+        "closeAnyway"   ) == KMessageBox::Yes);
+  }
+  else
+  {
+   close = true;
+  }
+  kDebug() << "close=" << close << endl;
+  if (close)
+  {
+    if (m_widget != 0)
+    {
+      m_widget->hide();
+      vboxLayout->removeWidget(m_widget);
+      m_widget = 0;
+    }
+    m_utterancesWidget->clear();
+
+    foreach (KParts::Part* part, m_partPartMatchMap.keys())
+    {
+      delete m_partPartMatchMap[part];
+      delete part;
+    }
+    m_partPartMatchMap.clear();
+    m_utteranceIdPartMap.clear();
+    m_utteranceIdPartMatchMap.clear();
+
+    m_openedFile = KUrl();
+
+    m_currentPart = 0;
+    m_currentPartMatch = 0;
+
+    m_newElementAttributes.clear();
+
+    if (m_document != 0)
+    {
+      delete m_document;
+      m_document = 0;
+      m_documentModified = false;
+    }
+  }
+  return close;
+}
+
+void Syanot::slotDocumentModified()
+{
+  kDebug();
+  m_documentModified = true;
+}
+
+void Syanot::slotQuit()
+{
+  kDebug();
+  if (queryClose())
+    KApplication::kApplication()->quit();
 }
 
 #include "syanot.moc"

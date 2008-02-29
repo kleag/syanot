@@ -19,7 +19,7 @@
 
 #include "EasyForm.h"
 
-EasyForm::EasyForm() : EasyConstituent()
+EasyForm::EasyForm(EasyUtterance* parent) : EasyConstituent(parent)
 {
 }
 

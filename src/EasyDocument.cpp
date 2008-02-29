@@ -20,7 +20,9 @@
 #include "EasyDocument.h"
 #include "EasyUtterance.h"
 
-EasyDocument::EasyDocument() : QList<EasyUtterance*>()
+#include <kdebug.h>
+
+EasyDocument::EasyDocument() : QObject()
 {
 }
 
@@ -31,7 +33,7 @@ EasyDocument::~EasyDocument()
 EasyUtterance* EasyDocument::utteranceIdentifiedBy(const QString& id)
 {
   EasyUtterance* utterance = 0;
-  foreach (EasyUtterance* u, *this)
+  foreach (EasyUtterance* u, m_utterances)
   {
     if (u->id() == id)
     {
@@ -42,14 +44,29 @@ EasyUtterance* EasyDocument::utteranceIdentifiedBy(const QString& id)
   return utterance;
 }
 
+void EasyDocument::slotChanged(EasyUtterance*)
+{
+  kDebug();
+  emit changed(this);
+}
+
+void EasyDocument::push_back(EasyUtterance* utterance)
+{
+  kDebug();
+  m_utterances.push_back(utterance);
+  emit changed(this);
+}
+
 QTextStream& operator<<(QTextStream& s, const EasyDocument& d)
 {
   s << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
   "<!DOCTYPE DOCUMENT SYSTEM \"Guide.ph2.dtd\">\n"
   "<DOCUMENT fichier=\"" << d.fileName() << "\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">\n";
-  foreach (const EasyUtterance* u, d)
+  foreach (const EasyUtterance* u, d.utterances())
   {
     s << *u;
   }
   s << "</DOCUMENT>";
 }
+
+#include "EasyDocument.moc"

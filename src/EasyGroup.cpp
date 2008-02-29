@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-EasyGroup::EasyGroup() : EasyConstituent(), m_forms()
+EasyGroup::EasyGroup(EasyUtterance* parent) : EasyConstituent(parent), m_forms()
 {
 }
 
@@ -77,5 +77,12 @@ void EasyGroup::saveAsXmlTo(QTextStream& s) const
   }
   s<<"</Groupe>\n";
 }
+
+void EasyGroup::push_back(EasyForm* form)
+{
+  m_forms.push_back(form);
+  emit (changed(this));
+}
+
 
 #include "EasyGroup.moc"

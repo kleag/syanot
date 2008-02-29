@@ -68,7 +68,7 @@ public:
  
 protected:
 
-  bool queryExit(); 
+  bool queryClose(); 
 
 signals:
   void hide(KParts::Part* part);
@@ -78,6 +78,13 @@ public slots:
     * Use this method to load whatever file/URL you have
     */
   void openUrl(const QString& url) {openUrl(KUrl(url));}
+
+  /**
+   * Received when the part signals a close action.   */
+  bool slotClose();
+
+  void slotQuit();
+
 
   void slotSetActiveGraph( KParts::Part* part);
 
@@ -100,7 +107,8 @@ public slots:
   void slotAtbSOButtonClicked();
   void slotCplVButtonClicked();
   void slotAuxVButtonClicked();
-  
+
+  void slotDocumentModified();
 /*public slots:
   void reloadOnChangeMode_pressed(int value);
   void openInExistingWindowMode_pressed(int value);
@@ -149,7 +157,7 @@ private:
   QMap<QString, QString> m_newElementAttributes;
 
   EasyDocument* m_document;
-  EasyUtterance* m_currentUtterance;
+  bool m_documentModified;
 
   QString m_currentRelation;
 

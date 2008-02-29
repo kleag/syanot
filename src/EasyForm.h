@@ -38,7 +38,7 @@ public:
   /**
     * Default Constructor
     */
-  EasyForm();
+  EasyForm(EasyUtterance* parent);
 
   /**
     * Default Destructor
@@ -46,7 +46,7 @@ public:
   virtual ~EasyForm();
 
   inline const QString& form() const {return m_form;}
-  inline void setForm(const QString& f) {m_form = f;}
+  inline void setForm(const QString& f) {m_form = f;emit changed(this);}
 
   virtual void saveAsXmlTo(QTextStream& s) const;
 
