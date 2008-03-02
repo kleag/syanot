@@ -67,6 +67,7 @@ QTextStream& operator<<(QTextStream& s, const EasyDocument& d)
     s << *u;
   }
   s << "</DOCUMENT>";
+  return s;
 }
 
 #include "EasyDocument.moc"

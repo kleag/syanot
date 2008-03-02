@@ -201,10 +201,16 @@ void PartMatch::connectSignals()
            m_part,SLOT(slotRemoveAttribute(const QString&,const QString&)));
   connect(this,SIGNAL(sremoveEdge(const QString&)),
            m_part,SLOT(slotRemoveEdge(const QString&)));
+  connect(this,
+      SIGNAL(ssetAttribute(const QString&,const QString&,const QString&)),
+      m_part,
+      SLOT(slotSetAttribute(const QString&,const QString&,const QString&)));
            
   connect(m_part,SIGNAL(newEdgeAdded(QString,QString)),this,SLOT(slotNewEdgeAdded(QString,QString)));
   connect(m_part,SIGNAL(removeEdge(const QString&)),
                     this,SLOT(slotRemoveEdge(const QString&)));
+  connect(m_part,SIGNAL( selectionIs(const QList<QString>&) ),
+                    this,SLOT( slotSelectionIs(const QList<QString>&) ));
 }
 
 void PartMatch::slotNewEdgeAdded(QString src,QString tgt)
@@ -300,10 +306,46 @@ void PartMatch::slotRemoveEdge(const QString& id)
       m_utterance->removeRelationAt(i);
       delete rel;
       removeEdge(id);
+      update();
       break;
     }
   }
 }
 
+void PartMatch::prepareAddNewEdge(QMap<QString,QString> attribs)
+{
+  kDebug() << attribs;
+  bool relabeled = false; // will be true if there is an edge in the selection
+                          // in this case, we will relabel it instead of
+                          // creating a new edge
+  if (!m_selection.isEmpty())
+  {
+    QList<EasyRelation*>&  relations = m_utterance->relations();
+    foreach (EasyRelation* relation, relations)
+    {
+      if (m_selection.contains(relation->id()))
+      {
+        relation->setType(attribs["label"]);
+        setAttribute(relation->id(),"label",attribs["label"]);
+        relabeled = true;
+      }
+    }
+  }
+  if (!relabeled)
+  {
+    m_currentRelation = attribs["label"];
+    emit sprepareAddNewEdge(attribs);
+  }
+  else
+  {
+    update();
+  }
+}
+
+void PartMatch::slotSelectionIs(const QList<QString>& selection)
+{
+  kDebug() << selection;
+  m_selection = selection;
+}
 
 #include "PartMatch.moc"

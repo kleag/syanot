@@ -62,7 +62,7 @@ public:
   inline QMap<QString, EasyConstituent*>& idsToConstituentsMap() {return m_idsToConstituentsMap;}
 
   inline const QList<EasyRelation*>& relations() const {return m_relations;}
-//   inline QList<EasyRelation*>& relations() {return m_relations;}
+  inline QList<EasyRelation*>& relations() {return m_relations;}
 
   void addRelation(EasyRelation* relation);
   void addConstituent(EasyConstituent* constituent);

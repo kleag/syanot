@@ -393,32 +393,9 @@ void Syanot::fileSave()
       KMessageBox::error(this, i18n("Failed to save to %1",m_openedFile.url()));
     }
     tmpFile.remove();
+    m_documentModified = false;
   }
 }
-
-
-// void Syanot::fileSave()
-// {
-//   kDebug();
-//   if (m_widget != 0)
-//   {
-//     KTemporaryFile temp;
-//     if (!temp.open())
-//     {
-//       KMessageBox::error(this, i18n("Cannot open a temporary file."));
-//       return;
-//     }
-//     kDebug() << "using temp file" << temp.fileName();
-//     QTextStream s(&temp);
-//     s << *m_document;
-//     temp.close();
-//     kDebug() << "saving to" << m_openedFile.url();
-//     if (!KIO::NetAccess::upload(temp.fileName(), m_openedFile, 0))
-//     {
-//       KMessageBox::error(this, i18n("Failed to save to %1",m_openedFile.url()));
-//     }
-//   }
-// }
 
 void Syanot::fileSaveAs()
 {
@@ -473,6 +450,7 @@ void Syanot::slotSujVButtonClicked()
   attribs["color"] = "black";
   attribs["label"] = "SUJ-V";
   attribs["weight"] = "0.0";
+  attribs["z"] = "5";
   m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
@@ -482,6 +460,7 @@ void Syanot::slotCodVButtonClicked()
   attribs["color"] = "black";
   attribs["label"] = "COD-V";
   attribs["weight"] = "0.0";
+  attribs["z"] = "5";
   m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
@@ -491,6 +470,7 @@ void Syanot::slotModVButtonClicked()
   attribs["color"] = "black";
   attribs["label"] = "MOD-V";
   attribs["weight"] = "0.0";
+  attribs["z"] = "5";
   m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
@@ -500,6 +480,7 @@ void Syanot::slotModAButtonClicked()
   attribs["color"] = "black";
   attribs["label"] = "MOD-A";
   attribs["weight"] = "0.0";
+  attribs["z"] = "5";
   m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
@@ -509,6 +490,7 @@ void Syanot::slotModPButtonClicked()
   attribs["color"] = "black";
   attribs["label"] = "MOD-P";
   attribs["weight"] = "0.0";
+  attribs["z"] = "5";
   m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
@@ -518,6 +500,7 @@ void Syanot::slotJuxtButtonClicked()
   attribs["color"] = "black";
   attribs["label"] = "JUXT";
   attribs["weight"] = "0.0";
+  attribs["z"] = "5";
   m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
@@ -527,6 +510,7 @@ void Syanot::slotApposButtonClicked()
   attribs["color"] = "black";
   attribs["label"] = "APPOS";
   attribs["weight"] = "0.0";
+  attribs["z"] = "5";
   m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
@@ -536,6 +520,7 @@ void Syanot::slotCoordButtonClicked()
   attribs["color"] = "black";
   attribs["label"] = "COORD";
   attribs["weight"] = "0.0";
+  attribs["z"] = "5";
   m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
@@ -545,6 +530,7 @@ void Syanot::slotModRButtonClicked()
   attribs["color"] = "black";
   attribs["label"] = "MOD-R";
   attribs["weight"] = "0.0";
+  attribs["z"] = "5";
   m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
@@ -554,6 +540,7 @@ void Syanot::slotModNButtonClicked()
   attribs["color"] = "black";
   attribs["label"] = "MOD-N";
   attribs["weight"] = "0.0";
+  attribs["z"] = "5";
   m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
@@ -563,6 +550,7 @@ void Syanot::slotAtbSOButtonClicked()
   attribs["color"] = "black";
   attribs["label"] = "ATB-SO";
   attribs["weight"] = "0.0";
+  attribs["z"] = "5";
   m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
@@ -572,6 +560,7 @@ void Syanot::slotCplVButtonClicked()
   attribs["color"] = "black";
   attribs["label"] = "CPL-V";
   attribs["weight"] = "0.0";
+  attribs["z"] = "5";
   m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
@@ -581,6 +570,7 @@ void Syanot::slotAuxVButtonClicked()
   attribs["color"] = "black";
   attribs["label"] = "AUX-V";
   attribs["weight"] = "0.0";
+  attribs["z"] = "5";
   m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 

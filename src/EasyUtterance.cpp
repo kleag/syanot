@@ -67,6 +67,7 @@ QTextStream& operator<<(QTextStream& s, const EasyUtterance& u)
   }
   s << "</relations>\n";
   s << "</E>\n";
+  return s;
 }
 
 #include "EasyUtterance.moc"

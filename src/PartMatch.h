@@ -55,11 +55,7 @@ public:
   
   inline void setReadWrite() {emit ssetReadWrite();}
   inline void saveTo(const QString& fileName) {emit ssaveTo(fileName);}
-  inline void prepareAddNewEdge(QMap<QString,QString> attribs)
-  {
-    m_currentRelation = attribs["label"];
-    emit sprepareAddNewEdge(attribs);
-  }
+  void prepareAddNewEdge(QMap<QString,QString> attribs);
   inline void setGraphAttributes(QMap<QString,QString> attribs) {emit ssetGraphAttributes(attribs);}
   inline void addNewNode(QMap<QString,QString> attribs) {emit saddNewNode(attribs);}
   inline void addNewNodeToSubgraph(QMap<QString,QString> attribs, QString subgraph) {emit saddNewNodeToSubgraph(attribs,subgraph);}
@@ -73,7 +69,8 @@ public:
    * @param id the edge id
    */
   inline void removeEdge(const QString& s) {emit sremoveEdge(s);}
-
+  inline void setAttribute(const QString& e,const QString& n,const QString& v) {emit ssetAttribute(e,n,v);}
+  
 Q_SIGNALS:
   void ssetReadWrite();
   void ssaveTo(const QString& fileName);
@@ -91,7 +88,7 @@ Q_SIGNALS:
    * @param id the edge id
    */
   void sremoveEdge(const QString&);
-  
+  void ssetAttribute(const QString&,const QString&,const QString&);
   
 public Q_SLOTS:
 //   void slotAddAttribute(const QString&);
@@ -108,6 +105,8 @@ public Q_SLOTS:
    * edge
    */
   void slotRemoveEdge(const QString& id);
+
+  void slotSelectionIs(const QList<QString>&);
   
 private:
   void connectSignals();
@@ -119,6 +118,8 @@ private:
   EasyUtterance* m_utterance;
 
   QString m_currentRelation;
+
+  QList<QString> m_selection;
 };
 
 #endif // PARTMATCH_H
