@@ -634,6 +634,7 @@ void Syanot::createPartFor(const QString& id)
     m_partPartMatchMap[part] = partMatch;
     
     createGUI(part);
+    part->unplugActionList("view_actionlist");
     m_manager->addPart( part, true );
     connect(this,SIGNAL(hide(KParts::Part*)),part,SLOT(slotHide(KParts::Part*)));
     connect(part,SIGNAL(close()), this,SLOT(slotClose()));

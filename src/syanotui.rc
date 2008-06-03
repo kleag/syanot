@@ -11,6 +11,10 @@
     <Separator/>
     <Action name="file_quit"/>
   </Menu>
+  <Menu name="view"><text>&amp;View</text>
+    <DefineGroup name="view_merge"/>
+    <Separator/>
+  </Menu>
   <Menu name="settings"><text>&amp;Settings</text>
     <Action name="options_show_toolbar"/>
     <Action name="options_show_statusbar"/>

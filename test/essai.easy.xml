@@ -33,43 +33,8 @@
 </Groupe>
  <F id="E1F16">?</F>
 <relation xlink:type="extended" type="SUJ-V" id="E1R1">
-<sujet xlink:type="locator" xlink:href="E1G2"/>
+<sujet xlink:type="locator" xlink:href="E1F6"/>
 <verbe xlink:type="locator" xlink:href="E1F7"/>
-</relation>
-<relation xlink:type="extended" type="SUJ-V" id="E1R2">
-<sujet xlink:type="locator" xlink:href="E1F8"/>
-<verbe xlink:type="locator" xlink:href="E1F7"/>
-</relation>
-<relation xlink:type="extended" type="AUX-V" id="E1R3">
-<auxiliaire xlink:type="locator" xlink:href="E1F7"/>
-<verbe xlink:type="locator" xlink:href="E1F9"/>
-</relation>
-<relation xlink:type="extended" type="COD-V" id="E1R4">
-<cod xlink:type="locator" xlink:href="E1F11"/>
-<verbe xlink:type="locator" xlink:href="E1F9"/>
-</relation>
-<relation xlink:type="extended" type="CPL-V" id="E1R5">
-<complement xlink:type="locator" xlink:href="E1G1"/>
-<verbe xlink:type="locator" xlink:href="E1F9"/>
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E1R6">
-<modifieur xlink:type="locator" xlink:href="E1G7"/>
-<nom xlink:type="locator" xlink:href="E1F12"/>
-<a-propager booleen="faux"/
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E1R7">
-<modifieur xlink:type="locator" xlink:href="E1F12"/>
-<nom xlink:type="locator" xlink:href="E1F11"/>
-<a-propager booleen="faux"/
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E1R8">
-<modifieur xlink:type="locator" xlink:href="E1G2"/>
-<nom xlink:type="locator" xlink:href="E1G2"/>
-<a-propager booleen="vrai"/
-</relation>
-<relation xlink:type="extended" type="JUXT" id="E1R9">
-<premier xlink:type="locator" xlink:href="E1F1"/>
-<suivant xlink:type="locator" xlink:href="E1F3"/>
 </relation>
 </E>
 <E id="E2">
@@ -94,31 +59,6 @@
  <F id="E2F10">automobile</F>
 </Groupe>
  <F id="E2F11">?</F>
-<relation xlink:type="extended" type="SUJ-V" id="E2R1">
-<sujet xlink:type="locator" xlink:href="E2F5"/>
-<verbe xlink:type="locator" xlink:href="E2F4"/>
-</relation>
-<relation xlink:type="extended" type="AUX-V" id="E2R2">
-<auxiliaire xlink:type="locator" xlink:href="E2F4"/>
-<verbe xlink:type="locator" xlink:href="E2F7"/>
-</relation>
-<relation xlink:type="extended" type="COD-V" id="E2R3">
-<cod xlink:type="locator" xlink:href="E2G5"/>
-<verbe xlink:type="locator" xlink:href="E2F7"/>
-</relation>
-<relation xlink:type="extended" type="CPL-V" id="E2R4">
-<complement xlink:type="locator" xlink:href="E2G1"/>
-<verbe xlink:type="locator" xlink:href="E2F7"/>
-</relation>
-<relation xlink:type="extended" type="MOD-V" id="E2R5">
-<modifieur xlink:type="locator" xlink:href="E2F6"/>
-<verbe xlink:type="locator" xlink:href="E2F7"/>
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E2R6">
-<modifieur xlink:type="locator" xlink:href="E2F9"/>
-<nom xlink:type="locator" xlink:href="E2F10"/>
-<a-propager booleen="faux"/
-</relation>
 </E>
 <E id="E3">
 <Groupe type="2" id="E3G1">
@@ -127,11 +67,6 @@
  <F id="E3F3">fille</F>
 </Groupe>
  <F id="E3F4">!</F>
-<relation xlink:type="extended" type="MOD-N" id="E3R1">
-<modifieur xlink:type="locator" xlink:href="E3F2"/>
-<nom xlink:type="locator" xlink:href="E3F3"/>
-<a-propager booleen="faux"/
-</relation>
 </E>
 <E id="E4">
 <Groupe type="2" id="E4G1">
@@ -144,15 +79,6 @@
  <F id="E4F5">Tivolle</F>
 </Groupe>
  <F id="E4F6">.</F>
-<relation xlink:type="extended" type="MOD-N" id="E4R1">
-<modifieur xlink:type="locator" xlink:href="E4G2"/>
-<nom xlink:type="locator" xlink:href="E4G2"/>
-<a-propager booleen="vrai"/
-</relation>
-<relation xlink:type="extended" type="JUXT" id="E4R2">
-<premier xlink:type="locator" xlink:href="E4G1"/>
-<suivant xlink:type="locator" xlink:href="E4G2"/>
-</relation>
 </E>
 <E id="E5">
 <Groupe type="2" id="E5G1">
@@ -173,32 +99,6 @@
  <F id="E5F9">admis</F>
 </Groupe>
  <F id="E5F10">.</F>
-<relation xlink:type="extended" type="SUJ-V" id="E5R1">
-<sujet xlink:type="locator" xlink:href="E5G1"/>
-<verbe xlink:type="locator" xlink:href="E5G2"/>
-</relation>
-<relation xlink:type="extended" type="AUX-V" id="E5R2">
-<auxiliaire xlink:type="locator" xlink:href="E5F7"/>
-<verbe xlink:type="locator" xlink:href="E5G4"/>
-</relation>
-<relation xlink:type="extended" type="COD-V" id="E5R3">
-<cod xlink:type="locator" xlink:href="E5F6"/>
-<verbe xlink:type="locator" xlink:href="E5G4"/>
-</relation>
-<relation xlink:type="extended" type="MOD-V" id="E5R4">
-<modifieur xlink:type="locator" xlink:href="E5G3"/>
-<verbe xlink:type="locator" xlink:href="E5G4"/>
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E5R5">
-<modifieur xlink:type="locator" xlink:href="E5F2"/>
-<nom xlink:type="locator" xlink:href="E5F4"/>
-<a-propager booleen="faux"/
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E5R6">
-<modifieur xlink:type="locator" xlink:href="E5F3"/>
-<nom xlink:type="locator" xlink:href="E5F4"/>
-<a-propager booleen="faux"/
-</relation>
 </E>
 <E id="E6">
 <Groupe type="2" id="E6G1">
@@ -405,250 +305,6 @@
  <F id="E6F107">pavillon</F>
 </Groupe>
  <F id="E6F108">.</F>
-<relation xlink:type="extended" type="SUJ-V" id="E6R1">
-<sujet xlink:type="locator" xlink:href="E6F42"/>
-<verbe xlink:type="locator" xlink:href="E6F44"/>
-</relation>
-<relation xlink:type="extended" type="SUJ-V" id="E6R2">
-<sujet xlink:type="locator" xlink:href="E6G22"/>
-<verbe xlink:type="locator" xlink:href="E6G23"/>
-</relation>
-<relation xlink:type="extended" type="SUJ-V" id="E6R3">
-<sujet xlink:type="locator" xlink:href="E6F62"/>
-<verbe xlink:type="locator" xlink:href="E6F65"/>
-</relation>
-<relation xlink:type="extended" type="SUJ-V" id="E6R4">
-<sujet xlink:type="locator" xlink:href="E6F68"/>
-<verbe xlink:type="locator" xlink:href="E6F69"/>
-</relation>
-<relation xlink:type="extended" type="SUJ-V" id="E6R5">
-<sujet xlink:type="locator" xlink:href="E6F74"/>
-<verbe xlink:type="locator" xlink:href="E6F75"/>
-</relation>
-<relation xlink:type="extended" type="SUJ-V" id="E6R6">
-<sujet xlink:type="locator" xlink:href="E6G37"/>
-<verbe xlink:type="locator" xlink:href="E6G38"/>
-</relation>
-<relation xlink:type="extended" type="SUJ-V" id="E6R7">
-<sujet xlink:type="locator" xlink:href="E6G37"/>
-<verbe xlink:type="locator" xlink:href="E6G39"/>
-</relation>
-<relation xlink:type="extended" type="SUJ-V" id="E6R8">
-<sujet xlink:type="locator" xlink:href="E6F91"/>
-<verbe xlink:type="locator" xlink:href="E6F92"/>
-</relation>
-<relation xlink:type="extended" type="SUJ-V" id="E6R9">
-<sujet xlink:type="locator" xlink:href="E6F103"/>
-<verbe xlink:type="locator" xlink:href="E6F104"/>
-</relation>
-<relation xlink:type="extended" type="AUX-V" id="E6R10">
-<auxiliaire xlink:type="locator" xlink:href="E6F44"/>
-<verbe xlink:type="locator" xlink:href="E6F46"/>
-</relation>
-<relation xlink:type="extended" type="AUX-V" id="E6R11">
-<auxiliaire xlink:type="locator" xlink:href="E6F92"/>
-<verbe xlink:type="locator" xlink:href="E6F93"/>
-</relation>
-<relation xlink:type="extended" type="AUX-V" id="E6R12">
-<auxiliaire xlink:type="locator" xlink:href="E6F104"/>
-<verbe xlink:type="locator" xlink:href="E6F104"/>
-</relation>
-<relation xlink:type="extended" type="COD-V" id="E6R13">
-<cod xlink:type="locator" xlink:href="E6G20"/>
-<verbe xlink:type="locator" xlink:href="E6G19"/>
-</relation>
-<relation xlink:type="extended" type="COD-V" id="E6R14">
-<cod xlink:type="locator" xlink:href="E6F64"/>
-<verbe xlink:type="locator" xlink:href="E6F65"/>
-</relation>
-<relation xlink:type="extended" type="COD-V" id="E6R15">
-<cod xlink:type="locator" xlink:href="E6G36"/>
-<verbe xlink:type="locator" xlink:href="E6G32"/>
-</relation>
-<relation xlink:type="extended" type="COD-V" id="E6R16">
-<cod xlink:type="locator" xlink:href="E6G40"/>
-<verbe xlink:type="locator" xlink:href="E6G39"/>
-</relation>
-<relation xlink:type="extended" type="COD-V" id="E6R17">
-<cod xlink:type="locator" xlink:href="E6G43"/>
-<verbe xlink:type="locator" xlink:href="E6G42"/>
-</relation>
-<relation xlink:type="extended" type="CPL-V" id="E6R18">
-<complement xlink:type="locator" xlink:href="E6G4"/>
-<verbe xlink:type="locator" xlink:href="E6G3"/>
-</relation>
-<relation xlink:type="extended" type="CPL-V" id="E6R19">
-<complement xlink:type="locator" xlink:href="E6G5"/>
-<verbe xlink:type="locator" xlink:href="E6G3"/>
-</relation>
-<relation xlink:type="extended" type="CPL-V" id="E6R20">
-<complement xlink:type="locator" xlink:href="E6G11"/>
-<verbe xlink:type="locator" xlink:href="E6G8"/>
-</relation>
-<relation xlink:type="extended" type="CPL-V" id="E6R21">
-<complement xlink:type="locator" xlink:href="E6G24"/>
-<verbe xlink:type="locator" xlink:href="E6G23"/>
-</relation>
-<relation xlink:type="extended" type="CPL-V" id="E6R22">
-<complement xlink:type="locator" xlink:href="E6G34"/>
-<verbe xlink:type="locator" xlink:href="E6G32"/>
-</relation>
-<relation xlink:type="extended" type="CPL-V" id="E6R23">
-<complement xlink:type="locator" xlink:href="E6G39"/>
-<verbe xlink:type="locator" xlink:href="E6G38"/>
-</relation>
-<relation xlink:type="extended" type="CPL-V" id="E6R24">
-<complement xlink:type="locator" xlink:href="E6G48"/>
-<verbe xlink:type="locator" xlink:href="E6G47"/>
-</relation>
-<relation xlink:type="extended" type="CPL-V" id="E6R25">
-<complement xlink:type="locator" xlink:href="E6G16"/>
-<verbe xlink:type="locator" xlink:href="E6G19"/>
-</relation>
-<relation xlink:type="extended" type="MOD-V" id="E6R26">
-<modifieur xlink:type="locator" xlink:href="E6G18"/>
-<verbe xlink:type="locator" xlink:href="E6G19"/>
-</relation>
-<relation xlink:type="extended" type="MOD-V" id="E6R27">
-<modifieur xlink:type="locator" xlink:href="E6F66"/>
-<verbe xlink:type="locator" xlink:href="E6F65"/>
-</relation>
-<relation xlink:type="extended" type="MOD-V" id="E6R28">
-<modifieur xlink:type="locator" xlink:href="E6F70"/>
-<verbe xlink:type="locator" xlink:href="E6F69"/>
-</relation>
-<relation xlink:type="extended" type="MOD-V" id="E6R29">
-<modifieur xlink:type="locator" xlink:href="E6F76"/>
-<verbe xlink:type="locator" xlink:href="E6F75"/>
-</relation>
-<relation xlink:type="extended" type="ATB-SO" id="E6R30">
-<attribut xlink:type="locator" xlink:href="E6G31"/>
-<verbe xlink:type="locator" xlink:href="E6G29"/>
-<s-o valeur="sujet"/>
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E6R31">
-<modifieur xlink:type="locator" xlink:href="E6G2"/>
-<nom xlink:type="locator" xlink:href="E6G1"/>
-<a-propager booleen="faux"/
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E6R32">
-<modifieur xlink:type="locator" xlink:href="E6G3"/>
-<nom xlink:type="locator" xlink:href="E6G1"/>
-<a-propager booleen="faux"/
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E6R33">
-<modifieur xlink:type="locator" xlink:href="E6G7"/>
-<nom xlink:type="locator" xlink:href="E6G6"/>
-<a-propager booleen="faux"/
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E6R34">
-<modifieur xlink:type="locator" xlink:href="E6F17"/>
-<nom xlink:type="locator" xlink:href="E6F18"/>
-<a-propager booleen="faux"/
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E6R35">
-<modifieur xlink:type="locator" xlink:href="E6G8"/>
-<nom xlink:type="locator" xlink:href="E6G6"/>
-<a-propager booleen="faux"/
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E6R36">
-<modifieur xlink:type="locator" xlink:href="E6G10"/>
-<nom xlink:type="locator" xlink:href="E6G9"/>
-<a-propager booleen="faux"/
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E6R37">
-<modifieur xlink:type="locator" xlink:href="E6G12"/>
-<nom xlink:type="locator" xlink:href="E6G13"/>
-<a-propager booleen="faux"/
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E6R38">
-<modifieur xlink:type="locator" xlink:href="E6G14"/>
-<nom xlink:type="locator" xlink:href="E6G13"/>
-<a-propager booleen="faux"/
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E6R39">
-<modifieur xlink:type="locator" xlink:href="E6G19"/>
-<nom xlink:type="locator" xlink:href="E6G15"/>
-<a-propager booleen="faux"/
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E6R40">
-<modifieur xlink:type="locator" xlink:href="E6G23"/>
-<nom xlink:type="locator" xlink:href="E6G21"/>
-<a-propager booleen="faux"/
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E6R41">
-<modifieur xlink:type="locator" xlink:href="E6G35"/>
-<nom xlink:type="locator" xlink:href="E6F79"/>
-<a-propager booleen="faux"/
-</relation>
-<relation xlink:type="extended" type="MOD-N" id="E6R42">
-<modifieur xlink:type="locator" xlink:href="E6G38"/>
-<nom xlink:type="locator" xlink:href="E6G36"/>
-<a-propager booleen="faux"/
-</relation>
-<relation xlink:type="extended" type="MOD-R" id="E6R43">
-<adverbe xlink:type="locator" xlink:href="E6G26"/>
-<modifieur xlink:type="locator" xlink:href="E6G25"/>
-</relation>
-<relation xlink:type="extended" type="COORD" id="E6R44">
-<coord-d xlink:type="locator" xlink:href="E6G6"/>
-<coord-g xlink:type="locator" xlink:href="E6G1"/>
-<coordonnant xlink:type="locator" xlink:href="E6F12"/>
-</relation>
-<relation xlink:type="extended" type="COORD" id="E6R45">
-<coord-d xlink:type="locator" xlink:href="E6G13"/>
-<coord-g xlink:type="locator" xlink:href="E6G6"/>
-<coordonnant xlink:type="locator" xlink:href="E6F28"/>
-</relation>
-<relation xlink:type="extended" type="COORD" id="E6R46">
-<coord-d xlink:type="locator" xlink:href="E6G21"/>
-<coord-g xlink:type="locator" xlink:href="E6G1"/>
-<coordonnant xlink:type="locator" xlink:href="E6F50"/>
-</relation>
-<relation xlink:type="extended" type="COORD" id="E6R47">
-<coord-d xlink:type="locator" xlink:href="E6G26"/>
-<coord-g xlink:type="locator" xlink:href="E6G21"/>
-<coordonnant xlink:type="locator" xlink:href="E6F58"/>
-</relation>
-<relation xlink:type="extended" type="COORD" id="E6R48">
-<coord-d xlink:type="locator" xlink:href="E6G32"/>
-<coord-g xlink:type="locator" xlink:href="E6G29"/>
-<coordonnant xlink:type="locator" xlink:href="E6F73"/>
-</relation>
-<relation xlink:type="extended" type="COORD" id="E6R49">
-<coord-d xlink:type="locator" xlink:href="E6G45"/>
-<coord-g xlink:type="locator" xlink:href="E6G44"/>
-<coordonnant xlink:type="locator" xlink:href="E6F99"/>
-</relation>
-<relation xlink:type="extended" type="COORD" id="E6R50">
-<coord-d xlink:type="locator" xlink:href="E6G47"/>
-<coord-g xlink:type="locator" xlink:href="E6G42"/>
-<coordonnant xlink:type="locator" xlink:href="E6F102"/>
-</relation>
-<relation xlink:type="extended" type="APPOS" id="E6R51">
-<appose xlink:type="locator" xlink:href="E6G6"/>
-<premier xlink:type="locator" xlink:href="E6G9"/>
-</relation>
-<relation xlink:type="extended" type="APPOS" id="E6R52">
-<appose xlink:type="locator" xlink:href="E6G13"/>
-<premier xlink:type="locator" xlink:href="E6G15"/>
-</relation>
-<relation xlink:type="extended" type="APPOS" id="E6R53">
-<appose xlink:type="locator" xlink:href="E6F91"/>
-<premier xlink:type="locator" xlink:href="E6F99"/>
-</relation>
-<relation xlink:type="extended" type="JUXT" id="E6R54">
-<premier xlink:type="locator" xlink:href="E6G26"/>
-<suivant xlink:type="locator" xlink:href="E6G27"/>
-</relation>
-<relation xlink:type="extended" type="JUXT" id="E6R55">
-<premier xlink:type="locator" xlink:href="E6G27"/>
-<suivant xlink:type="locator" xlink:href="E6G29"/>
-</relation>
-<relation xlink:type="extended" type="JUXT" id="E6R56">
-<premier xlink:type="locator" xlink:href="E6G32"/>
-<suivant xlink:type="locator" xlink:href="E6F102"/>
-</relation>
 </E>
 <E id="E7">
 <Groupe type="2" id="E7G1">
@@ -665,18 +321,6 @@
  <F id="E7F5">venir</F>
 </Groupe>
  <F id="E7F6">.</F>
-<relation xlink:type="extended" type="SUJ-V" id="E7R1">
-<sujet xlink:type="locator" xlink:href="E7F1"/>
-<verbe xlink:type="locator" xlink:href="E7F3"/>
-</relation>
-<relation xlink:type="extended" type="COD-V" id="E7R2">
-<cod xlink:type="locator" xlink:href="E7F5"/>
-<verbe xlink:type="locator" xlink:href="E7F3"/>
-</relation>
-<relation xlink:type="extended" type="MOD-V" id="E7R3">
-<modifieur xlink:type="locator" xlink:href="E7G3"/>
-<verbe xlink:type="locator" xlink:href="E7F3"/>
-</relation>
 </E>
 <E id="E8">
 <Groupe type="2" id="E8G1">
@@ -690,17 +334,5 @@
  <F id="E8F4">venir</F>
 </Groupe>
  <F id="E8F5">.</F>
-<relation xlink:type="extended" type="SUJ-V" id="E8R1">
-<sujet xlink:type="locator" xlink:href="E8G1"/>
-<verbe xlink:type="locator" xlink:href="E8F2"/>
-</relation>
-<relation xlink:type="extended" type="COD-V" id="E8R2">
-<cod xlink:type="locator" xlink:href="E8F4"/>
-<verbe xlink:type="locator" xlink:href="E8F2"/>
-</relation>
-<relation xlink:type="extended" type="MOD-V" id="E8R3">
-<modifieur xlink:type="locator" xlink:href="E8F3"/>
-<verbe xlink:type="locator" xlink:href="E8F4"/>
-</relation>
 </E>
 </DOCUMENT>

@@ -1,17 +1,22 @@
 kgraphviewer/kgrapheditor problems
-- BUG: edge selection marks not always on the two bounds
+- BUG added edges are drawn not exactly at the good position (each new edge is a little bit more too low)
+- BUG edge selection marks not always on the two bounds
 - FEATURE should be able to scroll by DnD or with the mouse wheel
 
 
 syanot problems
+- BUG save does not work anymore
 - BUG edge removing does not work
 - BUG sometimes, scrolling does not start (if the scene is left aligned)
+- BUG correct the linking of groups (subgraphs): should be more explicit
 
-- FEATURE should be able to change the type of a relation
+- FEATURE handle the a-propager feature (still needed ?)
+- FEATURE should be able to change the type of a relation/a group
 - FEATURE should be able to individualy move the bounds of a relation
 - FEATURE handling of 3-ary relations such as coord.
 - FEATURE should be able to not display controls of the kgraphviewer part that are not
   useful for syanot
-- FEATURE should be able to edit the groups
+- FEATURE should be able to edit (add/remove/edit) the groups
 - FEATURE should be able to display the sentence in more than one line when necessary
   or when chosen by the user
+- FEATURE should be able to close the currently opened file, checking for changes
