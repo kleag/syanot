@@ -26,6 +26,7 @@
 class kgraphviewerPart;
 
 class EasyUtterance;
+class EasyRelation;
 
 /**
  * @author Gael de Chalendar <kleag@free.fr>
@@ -89,7 +90,8 @@ Q_SIGNALS:
    */
   void sremoveEdge(const QString&);
   void ssetAttribute(const QString&,const QString&,const QString&);
-  
+  void ssetHighlighting(bool);
+
 public Q_SLOTS:
 //   void slotAddAttribute(const QString&);
 //   void slotRemoveAttribute(const QString&,const QString&);
@@ -107,10 +109,16 @@ public Q_SLOTS:
   void slotRemoveEdge(const QString& id);
 
   void slotSelectionIs(const QList<QString>&);
-  
+
+  void slotNewEdgeFinished(
+      const QString&,
+      const QString&,
+      const QMap<QString, QString>&);
+
 private:
   void connectSignals();
-  
+  void addRelation(const EasyRelation* relation);
+
   QString m_utteranceId;
   
   KParts::Part* m_part;

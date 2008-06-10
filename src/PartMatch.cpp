@@ -105,68 +105,7 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
   const QList<EasyRelation*>&  relations = m_utterance->relations();
   foreach (const EasyRelation* relation, relations)
   {
-    QMap<QString,QString> attribs;
-    attribs["id"] = relation->id();
-    attribs["label"] = relation->type();
-    if (!relation->value().isEmpty())
-    {
-      attribs["label"] += QString(' ') += relation->value();
-    }
-    attribs["weight"] = "0.0";
-    attribs["z"] = "5";
-    if (relation->type() == "SUJ-V")
-    {
-      addNewEdge(relation->bounds()["sujet"],relation->bounds()["verbe"],attribs);
-    }
-    else if (relation->type() == "COD-V")
-    {
-      addNewEdge(relation->bounds()["cod"],relation->bounds()["verbe"],attribs);
-    }
-    else if (relation->type() == "MOD-V")
-    {
-      addNewEdge(relation->bounds()["modifieur"],relation->bounds()["verbe"],attribs);
-    }
-    else if (relation->type() == "MOD-A")
-    {
-      addNewEdge(relation->bounds()["modifieur"],relation->bounds()["adjectif"],attribs);
-    }
-    else if (relation->type() == "MOD-P")
-    {
-      addNewEdge(relation->bounds()["modifieur"],relation->bounds()["preposition"],attribs);
-    }
-    else if (relation->type() == "JUXT")
-    {
-      addNewEdge(relation->bounds()["premier"],relation->bounds()["suivant"],attribs);
-    }
-    else if (relation->type() == "APPOS")
-    {
-      addNewEdge(relation->bounds()["premier"],relation->bounds()["appose"],attribs);
-    }
-    else if (relation->type() == "COORD")
-    {
-      addNewEdge(relation->bounds()["coordonnant"],relation->bounds()["coord-g"],attribs);
-      addNewEdge(relation->bounds()["coordonnant"],relation->bounds()["coord-d"],attribs);
-    }
-    else if (relation->type() == "MOD-R")
-    {
-      addNewEdge(relation->bounds()["modifieur"],relation->bounds()["adverbe"],attribs);
-    }
-    else if (relation->type() == "MOD-N")
-    {
-      addNewEdge(relation->bounds()["modifieur"],relation->bounds()["nom"],attribs);
-    }
-    else if (relation->type() == "ATB-SO")
-    {
-      addNewEdge(relation->bounds()["attribut"],relation->bounds()["verbe"],attribs);
-    }
-    else if (relation->type() == "CPL-V")
-    {
-      addNewEdge(relation->bounds()["complement"],relation->bounds()["verbe"],attribs);
-    }
-    else if (relation->type() == "AUX-V")
-    {
-      addNewEdge(relation->bounds()["auxiliaire"],relation->bounds()["verbe"],attribs);
-    }
+    addRelation(relation);
   }
   update();
 }
@@ -205,24 +144,246 @@ void PartMatch::connectSignals()
       SIGNAL(ssetAttribute(const QString&,const QString&,const QString&)),
       m_part,
       SLOT(slotSetAttribute(const QString&,const QString&,const QString&)));
-           
+  connect(this,SIGNAL(ssetHighlighting(bool)),
+           m_part,SLOT(slotSetHighlighting(bool)));
+  emit ssetHighlighting(true);
+
+
   connect(m_part,SIGNAL(newEdgeAdded(QString,QString)),this,SLOT(slotNewEdgeAdded(QString,QString)));
   connect(m_part,SIGNAL(removeEdge(const QString&)),
                     this,SLOT(slotRemoveEdge(const QString&)));
   connect(m_part,SIGNAL( selectionIs(const QList<QString>&) ),
                     this,SLOT( slotSelectionIs(const QList<QString>&) ));
+  connect(
+    m_part,
+    SIGNAL( newEdgeFinished(
+      const QString&, const QString&, const QMap<QString, QString>&) ),
+    this,
+    SLOT( slotNewEdgeFinished(
+      const QString&, const QString&, const QMap<QString, QString>&) ) );
+}
+
+void PartMatch::addRelation(const EasyRelation* relation)
+{
+  kDebug() << relation->id();
+  QMap<QString,QString> attribs;
+  attribs["id"] = relation->id();
+  attribs["label"] = relation->type();
+  if (!relation->value().isEmpty())
+  {
+    attribs["label"] += QString(' ') += relation->value();
+  }
+  attribs["weight"] = "0.0";
+  attribs["z"] = "5";
+
+
+  if (relation->type() == "SUJ-V")
+  {
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["sujet"]])!=0)
+    {
+      attribs["arrowtail"] = "odot";
+    }
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["verbe"]])!=0)
+    {
+      attribs["arrowhead"] = "normalodot";
+    }
+    addNewEdge(relation->bounds()["sujet"],relation->bounds()["verbe"],attribs);
+  }
+  else if (relation->type() == "COD-V")
+  {
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["cod"]])!=0)
+    {
+      attribs["arrowtail"] = "odot";
+    }
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["verbe"]])!=0)
+    {
+      attribs["arrowhead"] = "normalodot";
+    }
+    addNewEdge(relation->bounds()["cod"],relation->bounds()["verbe"],attribs);
+  }
+  else if (relation->type() == "MOD-V")
+  {
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["modifieur"]])!=0)
+    {
+      attribs["arrowtail"] = "odot";
+    }
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["verbe"]])!=0)
+    {
+      attribs["arrowhead"] = "normalodot";
+    }
+    addNewEdge(relation->bounds()["modifieur"],relation->bounds()["verbe"],attribs);
+  }
+  else if (relation->type() == "MOD-A")
+  {
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["modifieur"]])!=0)
+    {
+      attribs["arrowtail"] = "odot";
+    }
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["adjectif"]])!=0)
+    {
+      attribs["arrowhead"] = "normalodot";
+    }
+    addNewEdge(relation->bounds()["modifieur"],relation->bounds()["adjectif"],attribs);
+  }
+  else if (relation->type() == "MOD-P")
+  {
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["modifieur"]])!=0)
+    {
+      attribs["arrowtail"] = "odot";
+    }
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["preposition"]])!=0)
+    {
+      attribs["arrowhead"] = "normalodot";
+    }
+    addNewEdge(relation->bounds()["modifieur"],relation->bounds()["preposition"],attribs);
+  }
+  else if (relation->type() == "JUXT")
+  {
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["sujet"]])!=0)
+    {
+      attribs["premier"] = "odot";
+    }
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["suivant"]])!=0)
+    {
+      attribs["arrowhead"] = "normalodot";
+    }
+    addNewEdge(relation->bounds()["premier"],relation->bounds()["suivant"],attribs);
+  }
+  else if (relation->type() == "APPOS")
+  {
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["premier"]])!=0)
+    {
+      attribs["arrowtail"] = "odot";
+    }
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["appose"]])!=0)
+    {
+      attribs["arrowhead"] = "normalodot";
+    }
+    addNewEdge(relation->bounds()["premier"],relation->bounds()["appose"],attribs);
+  }
+  else if (relation->type() == "COORD")
+  {
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["coordonnant"]])!=0)
+    {
+      attribs["arrowtail"] = "odot";
+    }
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["coord-g"]])!=0)
+    {
+      attribs["arrowhead"] = "normalodot";
+    }
+    addNewEdge(relation->bounds()["coordonnant"],relation->bounds()["coord-g"],attribs);
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["coordonnant"]])!=0)
+    {
+      attribs["arrowtail"] = "odot";
+    }
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["coord-d"]])!=0)
+    {
+      attribs["arrowhead"] = "normalodot";
+    }
+    addNewEdge(relation->bounds()["coordonnant"],relation->bounds()["coord-d"],attribs);
+  }
+  else if (relation->type() == "MOD-R")
+  {
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["modifieur"]])!=0)
+    {
+      attribs["arrowtail"] = "odot";
+    }
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["adverbe"]])!=0)
+    {
+      attribs["arrowhead"] = "normalodot";
+    }
+    addNewEdge(relation->bounds()["modifieur"],relation->bounds()["adverbe"],attribs);
+  }
+  else if (relation->type() == "MOD-N")
+  {
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["modifieur"]])!=0)
+    {
+      attribs["arrowtail"] = "odot";
+    }
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["nom"]])!=0)
+    {
+      attribs["arrowhead"] = "normalodot";
+    }
+    addNewEdge(relation->bounds()["modifieur"],relation->bounds()["nom"],attribs);
+  }
+  else if (relation->type() == "ATB-SO")
+  {
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["attribut"]])!=0)
+    {
+      attribs["arrowtail"] = "odot";
+    }
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["verbe"]])!=0)
+    {
+      attribs["arrowhead"] = "normalodot";
+    }
+    addNewEdge(relation->bounds()["attribut"],relation->bounds()["verbe"],attribs);
+  }
+  else if (relation->type() == "CPL-V")
+  {
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["complement"]])!=0)
+    {
+      attribs["arrowtail"] = "odot";
+    }
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["verbe"]])!=0)
+    {
+      attribs["arrowhead"] = "normalodot";
+    }
+    addNewEdge(relation->bounds()["complement"],relation->bounds()["verbe"],attribs);
+  }
+  else if (relation->type() == "AUX-V")
+  {
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["auxiliaire"]])!=0)
+    {
+      attribs["arrowtail"] = "odot";
+    }
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["verbe"]])!=0)
+    {
+      attribs["arrowhead"] = "normalodot";
+    }
+    addNewEdge(relation->bounds()["auxiliaire"],relation->bounds()["verbe"],attribs);
+  }
+}
+
+void PartMatch::slotNewEdgeFinished(
+      const QString& srcId,
+      const QString& tgtId,
+      const QMap<QString, QString>& attributes)
+{
+  kDebug() << srcId << tgtId << attributes;
+
+  QMap<QString, QString> attribs = attributes;
+  QString src = srcId;
+  src.remove("cluster_");
+  kDebug() << m_utterance->idsToConstituentsMap()[src] ;
+  if (dynamic_cast<EasyGroup*>( m_utterance->idsToConstituentsMap()[src])!=0)
+  {
+    kDebug() << "arrowtail odot";
+    attribs["arrowtail"] = "odot";
+  }
+  QString tgt = tgtId;
+  tgt = tgt.remove("cluster_");
+  kDebug() << m_utterance->idsToConstituentsMap()[tgt] ;
+  if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[tgt])!=0)
+  {
+    kDebug() << "arrowhead normalodot";
+    attribs["arrowhead"] = "normalodot";
+  }
+  addNewEdge(srcId, tgtId, attribs);
+  update();
 }
 
 void PartMatch::slotNewEdgeAdded(QString src,QString tgt)
 {
   kDebug() << src << tgt;
   EasyConstituent* srcc = m_utterance->idsToConstituentsMap()[src];
+
   EasyConstituent* tgtc = m_utterance->idsToConstituentsMap()[tgt];
   kDebug() << srcc << tgtc;
   EasyRelation* relation = new EasyRelation();
   relation->setId(QString("E1R")+QString::number(m_utterance->relations().size()+1));
   kDebug() << m_utteranceId << QString(QString("E1R")+QString::number(m_utterance->relations().size()+1));
   relation->setType(m_currentRelation);
+
   if (m_currentRelation=="SUJ-V")
   {
     relation->bounds().insert("sujet",src);
@@ -290,8 +451,8 @@ void PartMatch::slotNewEdgeAdded(QString src,QString tgt)
     relation->bounds().insert("auxiliaire",src);
     relation->bounds().insert("verbe",tgt);
   }
-  
-  m_utterance->addRelation(relation);
+  addRelation(relation);
+//   m_utterance->addRelation(relation);
   update();
 }
 
