@@ -9,20 +9,22 @@ kgraphviewer/kgrapheditor problems
 syanot problems
 - [DONE] BUG save does not work anymore
 - [DONE] BUG edge removing does not work
-- [DONE] BUG should be able to put edge bounds on token or group easily
+- [DONE] BUG should be able to put and visualize edge bounds on token or group easily
 - BUG sometimes, scrolling does not start (if the scene is left aligned)
-- BUG correct the linking of groups (subgraphs): should be more explicit
 
 - [DONE] FEATURE should differentiate edge bounds on source/target type: token or group
-- FEATURE handle the a-propager feature (still needed ?)
+- [DONE] FEATURE should be able to remove the groups
+- [DONE] FEATURE should be able to close the currently opened file, checking for changes
 - FEATURE should be able to change the type of a relation/a group
+- FEATURE should be able to add groups
+- FEATURE should be able to edit (i.e. change the bounds) the groups
 - FEATURE should be able to individualy move the bounds of a relation
+- FEATURE should be able to fetch data from the Passage server and send it back to it
 - FEATURE handling of 3-ary relations such as coord.
-- FEATURE should be able to not display controls of the kgraphviewer part that are not
-  useful for syanot
-- FEATURE should be able to edit (add/remove/edit) the groups
 - FEATURE should be able to display the sentence in more than one line when necessary
   or when chosen by the user
-- FEATURE should be able to close the currently opened file, checking for changes
+- FEATURE handle the a-propager feature (still needed ?)
+- FEATURE should be able to not display controls of the kgraphviewer part that are not
+  useful for syanot
 
 

@@ -63,7 +63,8 @@ public:
   virtual void saveAsXmlTo(QTextStream& s) const;
 
   void push_back(EasyForm* form);
-  
+
+  void removeForm(EasyForm* form) {m_forms.removeAll(form);}
 private:
   virtual void dummy() {};
 

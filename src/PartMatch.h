@@ -64,6 +64,7 @@ public:
   inline void addNewEdge(QString src, QString tgt, QMap<QString,QString> attribs) {emit saddNewEdge(src,tgt,attribs);}
   inline void update() {emit supdate();}
   inline void removeNode(const QString& s) {emit sremoveNode(s);}
+  inline void removeSubgraph(const QString& s) {emit sremoveSubgraph(s);}
   inline void addAttribute(const QString& s) {emit saddAttribute(s);}
   inline void removeAttribute(const QString& s1,const QString&s2) {emit sremoveAttribute(s1,s2);}
   /** Asks the part to hide and remove the corresponding edge
@@ -83,6 +84,7 @@ Q_SIGNALS:
   void saddNewEdge(QString src, QString tgt, QMap<QString,QString> attribs);
   void supdate();
   void sremoveNode(const QString&);
+  void sremoveSubgraph(const QString&);
   void saddAttribute(const QString&);
   void sremoveAttribute(const QString&,const QString&);
   /** Asks the part to hide and remove the corresponding edge
@@ -107,6 +109,11 @@ public Q_SLOTS:
    * edge
    */
   void slotRemoveEdge(const QString& id);
+
+  /**
+   * Received when the part signals an element (node or subgraph) removing action. Will remove the token or group from the model and ask back to the part to remove the corresponding element
+   */
+  void slotRemoveElement(const QString& id);
 
   void slotSelectionIs(const QList<QString>&);
 

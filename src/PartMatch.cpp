@@ -134,6 +134,8 @@ void PartMatch::connectSignals()
            m_part,SLOT(saveTo(const QString&)));
   connect(this,SIGNAL(sremoveNode(const QString&)),
            m_part,SLOT(slotRemoveNode(const QString&)));
+  connect(this,SIGNAL(sremoveSubgraph(const QString&)),
+           m_part,SLOT(slotRemoveSubgraph(const QString&)));
   connect(this,SIGNAL(saddAttribute(const QString&)),
            m_part,SLOT(slotAddAttribute(const QString&)));
   connect(this,SIGNAL(sremoveAttribute(const QString&,const QString&)),
@@ -152,6 +154,8 @@ void PartMatch::connectSignals()
   connect(m_part,SIGNAL(newEdgeAdded(QString,QString)),this,SLOT(slotNewEdgeAdded(QString,QString)));
   connect(m_part,SIGNAL(removeEdge(const QString&)),
                     this,SLOT(slotRemoveEdge(const QString&)));
+  connect(m_part,SIGNAL(removeElement(const QString&)),
+                    this,SLOT(slotRemoveElement(const QString&)));
   connect(m_part,SIGNAL( selectionIs(const QList<QString>&) ),
                     this,SLOT( slotSelectionIs(const QList<QString>&) ));
   connect(
@@ -470,6 +474,45 @@ void PartMatch::slotRemoveEdge(const QString& id)
       update();
       break;
     }
+  }
+}
+
+void PartMatch::slotRemoveElement(const QString& id)
+{
+  kDebug() << id;
+  if (id.startsWith("cluster_"))
+  {
+    QString groupId = id;
+    groupId.remove("cluster_");
+
+    for (int i = 0; i < m_utterance->relations().size(); i++)
+    {
+      EasyRelation* rel = m_utterance->relations().at(i);
+      foreach (const QString& bound, rel->bounds().values())
+      {
+        if (bound == groupId)
+        {
+          kDebug() << "remove " << rel->id();
+          m_utterance->removeRelationAt(i);
+          removeEdge(rel->id());
+          delete rel; rel=0;
+          break;
+        }
+      }
+    }
+
+    EasyGroup* group = dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[groupId]);
+
+    foreach (EasyForm* form, group->forms())
+    {
+      kDebug() << "add " << form->id();
+      m_utterance->addConstituent(form);
+    }
+    kDebug() << "remove " << group->id();
+    removeSubgraph(QString("cluster_")+group->id());
+    m_utterance->removeConstituent(group);
+    delete group;
+    update();
   }
 }
 

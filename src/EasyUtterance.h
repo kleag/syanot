@@ -67,6 +67,7 @@ public:
   void addRelation(EasyRelation* relation);
   void addConstituent(EasyConstituent* constituent);
 
+  void removeConstituent(EasyConstituent* constituent);
   void removeRelationAt(int i);
   
 Q_SIGNALS:

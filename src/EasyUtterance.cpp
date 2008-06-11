@@ -42,12 +42,20 @@ void EasyUtterance::addRelation(EasyRelation* relation)
 void EasyUtterance::addConstituent(EasyConstituent* constituent)
 {
   m_constituents.push_back(constituent);
+  m_idsToConstituentsMap[constituent->id()] = constituent;
   emit changed(this);
 }
 
 void EasyUtterance::removeRelationAt(int i)
 {
   m_relations.removeAt(i);
+  emit changed(this);
+}
+
+void EasyUtterance::removeConstituent(EasyConstituent* constituent)
+{
+  m_constituents.removeAll(constituent);
+  m_idsToConstituentsMap.remove(constituent->id());
   emit changed(this);
 }
 
