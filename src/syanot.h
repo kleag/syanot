@@ -107,7 +107,8 @@ public slots:
   void slotAtbSOButtonClicked();
   void slotCplVButtonClicked();
   void slotAuxVButtonClicked();
-
+  void slotGroupButtonClicked();
+  
   void slotDocumentModified();
 /*public slots:
   void reloadOnChangeMode_pressed(int value);

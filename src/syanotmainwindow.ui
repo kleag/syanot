@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>776</width>
-    <height>405</height>
+    <width>1159</width>
+    <height>521</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -29,13 +29,13 @@
          <height>85</height>
         </size>
        </property>
-       <widget class="QWidget" name="" >
+       <widget class="QWidget" name="layoutWidget" >
         <property name="geometry" >
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>717</width>
-          <height>66</height>
+          <width>897</width>
+          <height>80</height>
          </rect>
         </property>
         <layout class="QGridLayout" >
@@ -135,13 +135,20 @@
            <property name="orientation" >
             <enum>Qt::Horizontal</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0" >
             <size>
              <width>40</width>
              <height>20</height>
             </size>
            </property>
           </spacer>
+         </item>
+         <item row="1" column="9" >
+          <widget class="KPushButton" name="groupbutton" >
+           <property name="text" >
+            <string>Group</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -152,7 +159,7 @@
        <property name="orientation" >
         <enum>Qt::Vertical</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>20</width>
          <height>40</height>

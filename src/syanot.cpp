@@ -70,6 +70,7 @@ Syanot::Syanot() :
     m_widget(0),
     m_rfa(0),
     m_currentPart(0),
+    m_currentPartMatch(0),
     m_document(0),
     m_documentModified(false)
 {
@@ -103,6 +104,7 @@ Syanot::Syanot() :
   connect(this->atbsobutton,SIGNAL(clicked()),this,SLOT(slotAtbSOButtonClicked()));
   connect(this->cplvbutton,SIGNAL(clicked()),this,SLOT(slotCplVButtonClicked()));
   connect(this->auxvbutton,SIGNAL(clicked()),this,SLOT(slotAuxVButtonClicked()));
+  connect(this->groupbutton,SIGNAL(clicked()),this,SLOT(slotGroupButtonClicked()));
 
 //     QDockWidget* topLeftDockWidget = new QDockWidget(this);
 //   connect(m_treeWidget, SIGNAL(removeNode(const QString&)),
@@ -451,7 +453,8 @@ void Syanot::slotSujVButtonClicked()
   attribs["label"] = "SUJ-V";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_currentPartMatch != 0)
+    m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotCodVButtonClicked()
@@ -461,7 +464,8 @@ void Syanot::slotCodVButtonClicked()
   attribs["label"] = "COD-V";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_currentPartMatch != 0)
+    m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotModVButtonClicked()
@@ -471,7 +475,8 @@ void Syanot::slotModVButtonClicked()
   attribs["label"] = "MOD-V";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_currentPartMatch != 0)
+    m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotModAButtonClicked()
@@ -481,7 +486,8 @@ void Syanot::slotModAButtonClicked()
   attribs["label"] = "MOD-A";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_currentPartMatch != 0)
+    m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotModPButtonClicked()
@@ -491,7 +497,8 @@ void Syanot::slotModPButtonClicked()
   attribs["label"] = "MOD-P";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_currentPartMatch != 0)
+    m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotJuxtButtonClicked()
@@ -501,7 +508,8 @@ void Syanot::slotJuxtButtonClicked()
   attribs["label"] = "JUXT";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_currentPartMatch != 0)
+    m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotApposButtonClicked()
@@ -511,7 +519,8 @@ void Syanot::slotApposButtonClicked()
   attribs["label"] = "APPOS";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_currentPartMatch != 0)
+    m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotCoordButtonClicked()
@@ -521,7 +530,8 @@ void Syanot::slotCoordButtonClicked()
   attribs["label"] = "COORD";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_currentPartMatch != 0)
+    m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotModRButtonClicked()
@@ -531,7 +541,8 @@ void Syanot::slotModRButtonClicked()
   attribs["label"] = "MOD-R";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_currentPartMatch != 0)
+    m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotModNButtonClicked()
@@ -541,7 +552,8 @@ void Syanot::slotModNButtonClicked()
   attribs["label"] = "MOD-N";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_currentPartMatch != 0)
+    m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotAtbSOButtonClicked()
@@ -551,7 +563,8 @@ void Syanot::slotAtbSOButtonClicked()
   attribs["label"] = "ATB-SO";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_currentPartMatch != 0)
+    m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotCplVButtonClicked()
@@ -561,7 +574,8 @@ void Syanot::slotCplVButtonClicked()
   attribs["label"] = "CPL-V";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_currentPartMatch != 0)
+    m_currentPartMatch-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotAuxVButtonClicked()
@@ -571,7 +585,15 @@ void Syanot::slotAuxVButtonClicked()
   attribs["label"] = "AUX-V";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_currentPartMatch != 0)
+    m_currentPartMatch-> prepareAddNewEdge(attribs);
+}
+
+void Syanot::slotGroupButtonClicked()
+{
+  kDebug();
+  if (m_currentPartMatch != 0)
+    m_currentPartMatch-> prepareSelectElements();
 }
 
 void Syanot::slotUtteranceClicked(QListWidgetItem* item)

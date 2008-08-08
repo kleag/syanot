@@ -22,10 +22,12 @@
 #include "EasyUtterance.h"
 #include "EasyRelation.h"
 #include "EasyForm.h"
-#include "EasyGroup.h"
 
 #include <kparts/partmanager.h>
 #include <kdebug.h>
+
+#include <QMenu>
+#include <QAction>
 
 PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
     QObject(parent),
@@ -148,6 +150,8 @@ void PartMatch::connectSignals()
       SLOT(slotSetAttribute(const QString&,const QString&,const QString&)));
   connect(this,SIGNAL(ssetHighlighting(bool)),
            m_part,SLOT(slotSetHighlighting(bool)));
+  connect(this,SIGNAL(sprepareSelectElements()),
+           m_part,SLOT(slotPrepareToSelect()));
   emit ssetHighlighting(true);
 
 
@@ -156,8 +160,8 @@ void PartMatch::connectSignals()
                     this,SLOT(slotRemoveEdge(const QString&)));
   connect(m_part,SIGNAL(removeElement(const QString&)),
                     this,SLOT(slotRemoveElement(const QString&)));
-  connect(m_part,SIGNAL( selectionIs(const QList<QString>&) ),
-                    this,SLOT( slotSelectionIs(const QList<QString>&) ));
+  connect(m_part,SIGNAL( selectionIs(const QList<QString>, const QPoint&)),
+           this,SLOT( slotSelectionIs(const QList<QString>,const QPoint&) ));
   connect(
     m_part,
     SIGNAL( newEdgeFinished(
@@ -546,10 +550,107 @@ void PartMatch::prepareAddNewEdge(QMap<QString,QString> attribs)
   }
 }
 
-void PartMatch::slotSelectionIs(const QList<QString>& selection)
+void PartMatch::slotSelectionIs(const QList<QString> selection, const QPoint& eventPos)
 {
   kDebug() << selection;
   m_selection = selection;
+//   GA, GN, GP, GR, NV, PV
+  
+  QAction* actionGA = new QAction( "GA", this );
+  QAction* actionGN = new QAction( "GN", this );
+  QAction* actionGP = new QAction( "GP", this );
+  QAction* actionGR = new QAction( "GR", this );
+  QAction* actionNV = new QAction( "NV", this );
+  QAction* actionPV = new QAction( "PV", this );
+  
+  QMenu* ctxmenu = new QMenu (  );
+  ctxmenu->addAction(actionGA);
+  connect(actionGA, SIGNAL(triggered()), this, SLOT(slotAddGA()));
+  ctxmenu->addAction(actionGN);
+  connect(actionGN, SIGNAL(triggered()), this, SLOT(slotAddGN()));
+  ctxmenu->addAction(actionGP);
+  connect(actionGP, SIGNAL(triggered()), this, SLOT(slotAddGP()));
+  ctxmenu->addAction(actionGR);
+  connect(actionGR, SIGNAL(triggered()), this, SLOT(slotAddGR()));
+  ctxmenu->addAction(actionNV);
+  connect(actionNV, SIGNAL(triggered()), this, SLOT(slotAddNV()));
+  ctxmenu->addAction(actionPV);
+  connect(actionPV, SIGNAL(triggered()), this, SLOT(slotAddPV()));
+  ctxmenu->exec(eventPos);
+
+  EasyGroup* newGroup = new EasyGroup(m_utterance);
+  QList<EasyConstituent*> toRemove;
+  foreach (EasyConstituent* constituent, m_utterance->constituents())
+  {
+    if (dynamic_cast<EasyForm*>(constituent) != 0)
+    {
+      kDebug() << m_selection << "|" << constituent->id();
+      if (m_selection.contains(constituent->id()))
+      {
+        toRemove.push_back(constituent);
+        newGroup->push_back(dynamic_cast<EasyForm*>(constituent));
+      }
+    }
+    else if (dynamic_cast<EasyGroup*>(constituent) != 0)
+    {
+      QList<EasyForm*> toRemove2;
+      foreach (EasyForm* form,  dynamic_cast<EasyGroup*>(constituent)->forms())
+      {
+        kDebug() << m_selection << "|" << constituent->id() << "|" << form->id();
+        if (m_selection.contains(form->id()))
+        {
+          toRemove2.push_back(form);
+          newGroup->push_back(dynamic_cast<EasyForm*>(form));
+        }
+      }
+      foreach (EasyForm* form, toRemove2)
+      {
+        dynamic_cast<EasyGroup*>(constituent)->removeForm(form);
+      }
+    }
+  }
+  foreach (EasyConstituent* constituent, toRemove)
+  {
+    m_utterance->removeConstituent(constituent);
+  }
+  m_utterance->addConstituent(newGroup);
+  update();
+}
+
+void PartMatch::slotAddGA()
+{
+  kDebug();
+  addGroup(EasyGroup::GA);
+}
+
+void PartMatch::slotAddGN()
+{
+  kDebug();
+}
+
+void PartMatch::slotAddGP()
+{
+  kDebug();
+}
+
+void PartMatch::slotAddGR()
+{
+  kDebug();
+}
+
+void PartMatch::slotAddNV()
+{
+  kDebug();
+}
+
+void PartMatch::slotAddPV()
+{
+  kDebug();
+}
+
+void PartMatch::addGroup(EasyGroup::EasyGroupType type)
+{
+  kDebug() << type;
 }
 
 #include "PartMatch.moc"

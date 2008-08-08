@@ -20,6 +20,8 @@
 #ifndef PARTMATCH_H
 #define PARTMATCH_H
 
+#include "EasyGroup.h"
+
 #include <QObject>
 #include <kparts/mainwindow.h>
 
@@ -57,6 +59,8 @@ public:
   inline void setReadWrite() {emit ssetReadWrite();}
   inline void saveTo(const QString& fileName) {emit ssaveTo(fileName);}
   void prepareAddNewEdge(QMap<QString,QString> attribs);
+
+  inline void prepareSelectElements() { emit sprepareSelectElements(); }
   inline void setGraphAttributes(QMap<QString,QString> attribs) {emit ssetGraphAttributes(attribs);}
   inline void addNewNode(QMap<QString,QString> attribs) {emit saddNewNode(attribs);}
   inline void addNewNodeToSubgraph(QMap<QString,QString> attribs, QString subgraph) {emit saddNewNodeToSubgraph(attribs,subgraph);}
@@ -77,6 +81,7 @@ Q_SIGNALS:
   void ssetReadWrite();
   void ssaveTo(const QString& fileName);
   void sprepareAddNewEdge(QMap<QString,QString> attribs);
+  void sprepareSelectElements();
   void ssetGraphAttributes(QMap<QString,QString> attribs);
   void saddNewNode(QMap<QString,QString> attribs);
   void saddNewNodeToSubgraph(QMap<QString,QString> attribs, QString subgraph);
@@ -115,17 +120,25 @@ public Q_SLOTS:
    */
   void slotRemoveElement(const QString& id);
 
-  void slotSelectionIs(const QList<QString>&);
+  void slotSelectionIs(const QList<QString> selection, const QPoint& eventPos);
 
   void slotNewEdgeFinished(
       const QString&,
       const QString&,
       const QMap<QString, QString>&);
 
+  void slotAddGA();
+  void slotAddGN();
+  void slotAddGP();
+  void slotAddGR();
+  void slotAddNV();
+  void slotAddPV();
+      
 private:
   void connectSignals();
   void addRelation(const EasyRelation* relation);
-
+  void addGroup(EasyGroup::EasyGroupType type);
+  
   QString m_utteranceId;
   
   KParts::Part* m_part;

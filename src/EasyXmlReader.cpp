@@ -112,7 +112,7 @@ void EasyXmlReader::readDocument()
 
 void EasyXmlReader::readUtterance()
 {
-//   kDebug();
+//   kDebug() << name().toString();
   Q_ASSERT(isStartElement() && name() == "E");
 
   m_currentUtterance = new EasyUtterance(m_document);
@@ -131,6 +131,12 @@ void EasyXmlReader::readUtterance()
         readConstituants();
       else if (name() == "relations")
         readRelations();
+      else if (name() == "F")
+        readForm();
+      else if (name() == "Groupe")
+      {
+        readGroup();
+      }
       else
         readUnknownElement();
     }
@@ -139,7 +145,7 @@ void EasyXmlReader::readUtterance()
 
 void EasyXmlReader::readConstituants()
 {
-//   kDebug();
+//   kDebug() << name().toString();
   Q_ASSERT(isStartElement() && name() == "constituants");
 
   while (!atEnd())
@@ -165,7 +171,7 @@ void EasyXmlReader::readConstituants()
 
 void EasyXmlReader::readRelations()
 {
-//   kDebug();
+//   kDebug() << name().toString();
   Q_ASSERT(isStartElement() && name() == "relations");
 
   while (!atEnd())
@@ -187,7 +193,7 @@ void EasyXmlReader::readRelations()
 
 void EasyXmlReader::readRelation()
 {
-//   kDebug();
+//   kDebug() << name().toString();
   Q_ASSERT(isStartElement() && name() == "relation");
 
   EasyRelation* relation = new EasyRelation();
@@ -228,6 +234,7 @@ void EasyXmlReader::readRelation()
 
 void EasyXmlReader::readGroup()
 {
+//   kDebug() << name().toString();
   Q_ASSERT(isStartElement() && name() == "Groupe");
 
   m_currentGroup = new EasyGroup(m_currentUtterance);
@@ -283,6 +290,7 @@ void EasyXmlReader::readGroup()
 
 void EasyXmlReader::readGroupForm()
 {
+//   kDebug() << name().toString();
   Q_ASSERT(isStartElement() && name() == "F");
 
   QString id = attributes().value("id").toString();
@@ -301,7 +309,7 @@ void EasyXmlReader::readGroupForm()
 
 void EasyXmlReader::readForm()
 {
-//   kDebug();
+//   kDebug() << name().toString();
   Q_ASSERT(isStartElement() && name() == "F");
 
   QString id = attributes().value("id").toString();
