@@ -185,7 +185,6 @@ void Syanot::openUrl(const KUrl& url)
   {
     return ;
   }
-  
   m_document = new EasyDocument();
   QString tmpFileName;
   KIO::NetAccess::download(url,tmpFileName,this);
@@ -448,6 +447,7 @@ void Syanot::slotRemoveNewElementAttribute(const QString& attrib)
 
 void Syanot::slotSujVButtonClicked()
 {
+  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "SUJ-V";
@@ -459,6 +459,7 @@ void Syanot::slotSujVButtonClicked()
 
 void Syanot::slotCodVButtonClicked()
 {
+  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "COD-V";
@@ -470,6 +471,7 @@ void Syanot::slotCodVButtonClicked()
 
 void Syanot::slotModVButtonClicked()
 {
+  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "MOD-V";
@@ -481,6 +483,7 @@ void Syanot::slotModVButtonClicked()
 
 void Syanot::slotModAButtonClicked()
 {
+  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "MOD-A";
@@ -492,6 +495,7 @@ void Syanot::slotModAButtonClicked()
 
 void Syanot::slotModPButtonClicked()
 {
+  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "MOD-P";
@@ -503,6 +507,7 @@ void Syanot::slotModPButtonClicked()
 
 void Syanot::slotJuxtButtonClicked()
 {
+  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "JUXT";
@@ -514,6 +519,7 @@ void Syanot::slotJuxtButtonClicked()
 
 void Syanot::slotApposButtonClicked()
 {
+  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "APPOS";
@@ -525,6 +531,7 @@ void Syanot::slotApposButtonClicked()
 
 void Syanot::slotCoordButtonClicked()
 {
+  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "COORD";
@@ -536,6 +543,7 @@ void Syanot::slotCoordButtonClicked()
 
 void Syanot::slotModRButtonClicked()
 {
+  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "MOD-R";
@@ -547,6 +555,7 @@ void Syanot::slotModRButtonClicked()
 
 void Syanot::slotModNButtonClicked()
 {
+  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "MOD-N";
@@ -558,6 +567,7 @@ void Syanot::slotModNButtonClicked()
 
 void Syanot::slotAtbSOButtonClicked()
 {
+  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "ATB-SO";
@@ -569,6 +579,7 @@ void Syanot::slotAtbSOButtonClicked()
 
 void Syanot::slotCplVButtonClicked()
 {
+  m_currentPartMatch->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "CPL-V";
@@ -580,6 +591,7 @@ void Syanot::slotCplVButtonClicked()
 
 void Syanot::slotAuxVButtonClicked()
 {
+  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "AUX-V";
@@ -593,7 +605,10 @@ void Syanot::slotGroupButtonClicked()
 {
   kDebug();
   if (m_currentPartMatch != 0)
+  {
     m_currentPartMatch-> prepareSelectElements();
+    m_currentPartMatch->setAddingGroup(true);
+  }
 }
 
 void Syanot::slotUtteranceClicked(QListWidgetItem* item)
@@ -669,6 +684,7 @@ bool Syanot::slotClose()
 
   bool close;
   
+  if (m_currentPartMatch) m_currentPartMatch->setAddingGroup(false);
   if (m_documentModified)
   {
     close = (KMessageBox::questionYesNo(0,

@@ -54,7 +54,7 @@ public:
   virtual ~EasyGroup();
 
   inline EasyGroupType type() const {return m_type;}
-  inline void setType(const EasyGroupType t) {m_type = t;emit changed(this);}
+  void setType(const EasyGroupType t);
 
   inline const QList<EasyForm*>& forms()const {return m_forms;}
 //   inline QList<EasyForm*>& forms() {return m_forms;}
@@ -65,6 +65,9 @@ public:
   void push_back(EasyForm* form);
 
   void removeForm(EasyForm* form) {m_forms.removeAll(form);}
+
+  inline bool isEmpty() const {return m_forms.isEmpty();}
+  
 private:
   virtual void dummy() {};
 

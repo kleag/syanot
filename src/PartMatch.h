@@ -64,10 +64,13 @@ public:
   inline void setGraphAttributes(QMap<QString,QString> attribs) {emit ssetGraphAttributes(attribs);}
   inline void addNewNode(QMap<QString,QString> attribs) {emit saddNewNode(attribs);}
   inline void addNewNodeToSubgraph(QMap<QString,QString> attribs, QString subgraph) {emit saddNewNodeToSubgraph(attribs,subgraph);}
+  inline void addExistingNodeToSubgraph(QMap<QString,QString> attribs, QString subgraph) {emit saddExistingNodeToSubgraph(attribs,subgraph);}
   inline void addNewSubgraph(QMap<QString,QString> attribs) {emit saddNewSubgraph(attribs);}
   inline void addNewEdge(QString src, QString tgt, QMap<QString,QString> attribs) {emit saddNewEdge(src,tgt,attribs);}
   inline void update() {emit supdate();}
-  inline void removeNode(const QString& s) {emit sremoveNode(s);}
+  inline void removeNode(const QString& n) {emit sremoveNode(n);}
+  inline void removeElement(const QString& e) {emit sremoveElement(e);}
+  inline void removeNodeFromSubgraph(const QString& n, const QString& s) {emit sremoveNodeFromSubgraph(n,s);}
   inline void removeSubgraph(const QString& s) {emit sremoveSubgraph(s);}
   inline void addAttribute(const QString& s) {emit saddAttribute(s);}
   inline void removeAttribute(const QString& s1,const QString&s2) {emit sremoveAttribute(s1,s2);}
@@ -76,6 +79,9 @@ public:
    */
   inline void removeEdge(const QString& s) {emit sremoveEdge(s);}
   inline void setAttribute(const QString& e,const QString& n,const QString& v) {emit ssetAttribute(e,n,v);}
+
+  inline bool addingGroup() const {return m_addingGroup;}
+  inline void setAddingGroup(bool v) {m_addingGroup = v;}
   
 Q_SIGNALS:
   void ssetReadWrite();
@@ -85,10 +91,13 @@ Q_SIGNALS:
   void ssetGraphAttributes(QMap<QString,QString> attribs);
   void saddNewNode(QMap<QString,QString> attribs);
   void saddNewNodeToSubgraph(QMap<QString,QString> attribs, QString subgraph);
+  void saddExistingNodeToSubgraph(QMap<QString,QString> attribs, QString subgraph);
   void saddNewSubgraph(QMap<QString,QString> attribs);
   void saddNewEdge(QString src, QString tgt, QMap<QString,QString> attribs);
   void supdate();
   void sremoveNode(const QString&);
+  void sremoveElement(const QString&);
+  void sremoveNodeFromSubgraph(const QString&, const QString&);
   void sremoveSubgraph(const QString&);
   void saddAttribute(const QString&);
   void sremoveAttribute(const QString&,const QString&);
@@ -133,12 +142,39 @@ public Q_SLOTS:
   void slotAddGR();
   void slotAddNV();
   void slotAddPV();
-      
+
+  void slotContextMenuEvent(const QString&, const QPoint&);
+
+  void slotRemoveSelectedElements();
+
+  void slotSetGroupTypeGA();
+  void slotSetGroupTypeGN();
+  void slotSetGroupTypeGP();
+  void slotSetGroupTypeGR();
+  void slotSetGroupTypeNV();
+  void slotSetGroupTypePV();
+
+  void slotSetRelationTypeSujV();
+  void slotSetRelationTypeAuxV();
+  void slotSetRelationTypeModV();
+  void slotSetRelationTypeModN();
+  void slotSetRelationTypeModR();
+  void slotSetRelationTypeJuxt();
+  void slotSetRelationTypeCoord();
+  void slotSetRelationTypeCodV();
+  void slotSetRelationTypeCplV();
+  void slotSetRelationTypeAtbSo();
+  void slotSetRelationTypeModA();
+  void slotSetRelationTypeModP();
+  void slotSetRelationTypeAppos();
+
 private:
   void connectSignals();
   void addRelation(const EasyRelation* relation);
   void addGroup(EasyGroup::EasyGroupType type);
-  
+  void setGroupType(const QString& id, EasyGroup::EasyGroupType type);
+  void setRelationType(const QString& id, const QString& type);
+
   QString m_utteranceId;
   
   KParts::Part* m_part;
@@ -148,6 +184,8 @@ private:
   QString m_currentRelation;
 
   QList<QString> m_selection;
+
+  bool m_addingGroup;
 };
 
 #endif // PARTMATCH_H

@@ -193,7 +193,7 @@ void EasyXmlReader::readRelations()
 
 void EasyXmlReader::readRelation()
 {
-//   kDebug() << name().toString();
+  kDebug() << name().toString();
   Q_ASSERT(isStartElement() && name() == "relation");
 
   EasyRelation* relation = new EasyRelation();

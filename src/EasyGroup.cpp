@@ -31,6 +31,13 @@ EasyGroup::~EasyGroup()
 {
 }
 
+void EasyGroup::setType(const EasyGroupType t)
+{
+  kDebug();
+  m_type = t;
+  emit changed(this);
+}
+
 void EasyGroup::saveAsXmlTo(QTextStream& s) const
 {
   s<<"<Groupe type=\"";

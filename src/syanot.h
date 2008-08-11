@@ -65,7 +65,7 @@ public:
     * Use this method to load whatever file/URL you have
     */
   void openUrl(const KUrl& url);
- 
+
 protected:
 
   bool queryClose(); 

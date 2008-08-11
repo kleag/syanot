@@ -25,15 +25,18 @@
 
 #include <kparts/partmanager.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <QMenu>
-#include <QAction>
+#include <KAction>
+#include <QUuid>
 
 PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
     QObject(parent),
     m_utteranceId(u->id()),
     m_part(p),
-    m_utterance(u)
+    m_utterance(u),
+    m_addingGroup(false)
 {
   connectSignals();
   QString previousFormId;
@@ -127,6 +130,8 @@ void PartMatch::connectSignals()
            m_part,SLOT(slotAddNewNode(QMap<QString,QString>)));
   connect(this,SIGNAL(saddNewNodeToSubgraph(QMap<QString,QString>,QString)),
            m_part,SLOT(slotAddNewNodeToSubgraph(QMap<QString,QString>,QString)));
+  connect(this,SIGNAL(saddExistingNodeToSubgraph(QMap<QString,QString>,QString)),
+           m_part,SLOT(slotAddExistingNodeToSubgraph(QMap<QString,QString>,QString)));
   connect(this,SIGNAL(saddNewSubgraph(QMap<QString,QString>)),
            m_part,SLOT(slotAddNewSubgraph(QMap<QString,QString>)));
   connect(this,SIGNAL(saddNewEdge(QString,QString,QMap<QString,QString>)),
@@ -136,6 +141,10 @@ void PartMatch::connectSignals()
            m_part,SLOT(saveTo(const QString&)));
   connect(this,SIGNAL(sremoveNode(const QString&)),
            m_part,SLOT(slotRemoveNode(const QString&)));
+  connect(this,SIGNAL(sremoveElement(const QString&)),
+           m_part,SLOT(slotRemoveElement(const QString&)));
+  connect(this,SIGNAL(sremoveNodeFromSubgraph(const QString&, const QString&)),
+           m_part,SLOT(slotRemoveNodeFromSubgraph(const QString&, const QString&)));
   connect(this,SIGNAL(sremoveSubgraph(const QString&)),
            m_part,SLOT(slotRemoveSubgraph(const QString&)));
   connect(this,SIGNAL(saddAttribute(const QString&)),
@@ -169,6 +178,10 @@ void PartMatch::connectSignals()
     this,
     SLOT( slotNewEdgeFinished(
       const QString&, const QString&, const QMap<QString, QString>&) ) );
+
+  connect(
+      m_part,SIGNAL( contextMenuEvent(const QString&, const QPoint&) ),
+      this, SLOT( slotContextMenuEvent(const QString&, const QPoint&) ) );
 }
 
 void PartMatch::addRelation(const EasyRelation* relation)
@@ -555,30 +568,76 @@ void PartMatch::slotSelectionIs(const QList<QString> selection, const QPoint& ev
   kDebug() << selection;
   m_selection = selection;
 //   GA, GN, GP, GR, NV, PV
-  
-  QAction* actionGA = new QAction( "GA", this );
-  QAction* actionGN = new QAction( "GN", this );
-  QAction* actionGP = new QAction( "GP", this );
-  QAction* actionGR = new QAction( "GR", this );
-  QAction* actionNV = new QAction( "NV", this );
-  QAction* actionPV = new QAction( "PV", this );
-  
-  QMenu* ctxmenu = new QMenu (  );
-  ctxmenu->addAction(actionGA);
-  connect(actionGA, SIGNAL(triggered()), this, SLOT(slotAddGA()));
-  ctxmenu->addAction(actionGN);
-  connect(actionGN, SIGNAL(triggered()), this, SLOT(slotAddGN()));
-  ctxmenu->addAction(actionGP);
-  connect(actionGP, SIGNAL(triggered()), this, SLOT(slotAddGP()));
-  ctxmenu->addAction(actionGR);
-  connect(actionGR, SIGNAL(triggered()), this, SLOT(slotAddGR()));
-  ctxmenu->addAction(actionNV);
-  connect(actionNV, SIGNAL(triggered()), this, SLOT(slotAddNV()));
-  ctxmenu->addAction(actionPV);
-  connect(actionPV, SIGNAL(triggered()), this, SLOT(slotAddPV()));
-  ctxmenu->exec(eventPos);
 
+  if (m_addingGroup)
+  {
+    KAction* actionGA = new KAction( "GA", this );
+    KAction* actionGN = new KAction( "GN", this );
+    KAction* actionGP = new KAction( "GP", this );
+    KAction* actionGR = new KAction( "GR", this );
+    KAction* actionNV = new KAction( "NV", this );
+    KAction* actionPV = new KAction( "PV", this );
+
+    QMenu* ctxmenu = new QMenu (  );
+    ctxmenu->addAction(actionGA);
+    connect(actionGA, SIGNAL(triggered()), this, SLOT(slotAddGA()));
+    ctxmenu->addAction(actionGN);
+    connect(actionGN, SIGNAL(triggered()), this, SLOT(slotAddGN()));
+    ctxmenu->addAction(actionGP);
+    connect(actionGP, SIGNAL(triggered()), this, SLOT(slotAddGP()));
+    ctxmenu->addAction(actionGR);
+    connect(actionGR, SIGNAL(triggered()), this, SLOT(slotAddGR()));
+    ctxmenu->addAction(actionNV);
+    connect(actionNV, SIGNAL(triggered()), this, SLOT(slotAddNV()));
+    ctxmenu->addAction(actionPV);
+    connect(actionPV, SIGNAL(triggered()), this, SLOT(slotAddPV()));
+    ctxmenu->exec(eventPos);
+  }
+}
+
+void PartMatch::slotAddGA()
+{
+  kDebug();
+  addGroup(EasyGroup::GA);
+}
+
+void PartMatch::slotAddGN()
+{
+  kDebug();
+  addGroup(EasyGroup::GN);
+}
+
+void PartMatch::slotAddGP()
+{
+  kDebug();
+  addGroup(EasyGroup::GP);
+}
+
+void PartMatch::slotAddGR()
+{
+  kDebug();
+  addGroup(EasyGroup::GR);
+}
+
+void PartMatch::slotAddNV()
+{
+  kDebug();
+  addGroup(EasyGroup::NV);
+}
+
+void PartMatch::slotAddPV()
+{
+  kDebug();
+  addGroup(EasyGroup::PV);
+}
+
+void PartMatch::addGroup(EasyGroup::EasyGroupType type)
+{
+  kDebug() << type;
+  m_addingGroup = false;
   EasyGroup* newGroup = new EasyGroup(m_utterance);
+  newGroup->setId(QString("G")+QUuid::createUuid().toString().remove("{").remove("}").remove("-"));
+  newGroup->setType(type);
   QList<EasyConstituent*> toRemove;
   foreach (EasyConstituent* constituent, m_utterance->constituents())
   {
@@ -599,6 +658,7 @@ void PartMatch::slotSelectionIs(const QList<QString> selection, const QPoint& ev
         kDebug() << m_selection << "|" << constituent->id() << "|" << form->id();
         if (m_selection.contains(form->id()))
         {
+          kDebug() << "set " << form->id() << " to remove";
           toRemove2.push_back(form);
           newGroup->push_back(dynamic_cast<EasyForm*>(form));
         }
@@ -606,51 +666,325 @@ void PartMatch::slotSelectionIs(const QList<QString> selection, const QPoint& ev
       foreach (EasyForm* form, toRemove2)
       {
         dynamic_cast<EasyGroup*>(constituent)->removeForm(form);
+        removeNodeFromSubgraph(form->id(), QString("cluster_") + constituent->id());
+        if (dynamic_cast<EasyGroup*>(constituent)->isEmpty())
+        {
+          toRemove.push_back(constituent);
+        }
       }
     }
   }
   foreach (EasyConstituent* constituent, toRemove)
   {
+    kDebug() << "Removing constituent " << constituent->id();
     m_utterance->removeConstituent(constituent);
   }
+  kDebug() << "Adding group " << newGroup->id();
   m_utterance->addConstituent(newGroup);
+
+  QMap<QString,QString> attribs;
+  attribs["id"] = QString("cluster_") + newGroup->id();
+  QString color = "black";
+  switch (newGroup->type())
+  {//GA, GN, GP, GR, NV, PV
+    case EasyGroup::GA: color = "violet"; break;
+    case EasyGroup::GN: color = "red"; break;
+    case EasyGroup::GP: color = "blue"; break;
+    case EasyGroup::GR: color = "orange"; break;
+    case EasyGroup::NV: color = "green"; break;
+    case EasyGroup::PV: color = "grey"; break;
+    default:;
+  }
+  attribs["color"] = color;
+  attribs["style"] = "filled";
+  addNewSubgraph(attribs);
+  foreach(EasyForm* form, newGroup->forms())
+  {
+    kDebug() << form->id();
+    QMap<QString,QString> attribs;
+    attribs["id"] = form->id();
+    attribs["label"] = form->form();
+    attribs["shape"] = "square";
+    attribs["style"] = "filled";
+    attribs["color"] = "grey";
+    attribs["fillcolor"] = "grey";
+    attribs["fontsize"] = "14";
+    addExistingNodeToSubgraph(attribs, QString("cluster_") + newGroup->id());
+  }
+
   update();
 }
 
-void PartMatch::slotAddGA()
+void PartMatch::slotContextMenuEvent(const QString& id, const QPoint& p)
 {
-  kDebug();
-  addGroup(EasyGroup::GA);
+  kDebug() << id << p;
+  QMenu* ctxmenu = new QMenu (  );
+
+  if (m_selection.size() > 1)
+  {
+    KAction* removeElementAction = new KAction(i18n("Remove selected elements"), this);
+    ctxmenu->addAction(removeElementAction);
+    connect(removeElementAction, SIGNAL(triggered()), this, SLOT(slotRemoveSelectedElements()));
+  }
+  else
+  {
+    QString correctedId = id;
+    correctedId.remove("cluster_");
+    m_selection.clear();
+    m_selection.push_back(id);
+    if (m_utterance->idsToConstituentsMap().keys().contains(correctedId))
+    {
+      EasyConstituent* constituent = m_utterance->idsToConstituentsMap()[correctedId];
+      kDebug() << "constituent:" << constituent;
+      if (dynamic_cast<EasyForm*>(constituent) == 0)
+      {
+        KAction* removeElementAction = new KAction(i18n("Remove selected element"), this);
+        ctxmenu->addAction(removeElementAction);
+        connect(removeElementAction, SIGNAL(triggered()), this, SLOT(slotRemoveSelectedElements()));
+      }
+      if (dynamic_cast<EasyGroup*>(constituent) != 0)
+      {
+        KAction* actionGA = new KAction( "GA", this );
+        KAction* actionGN = new KAction( "GN", this );
+        KAction* actionGP = new KAction( "GP", this );
+        KAction* actionGR = new KAction( "GR", this );
+        KAction* actionNV = new KAction( "NV", this );
+        KAction* actionPV = new KAction( "PV", this );
+
+        ctxmenu->addAction(actionGA);
+        connect(actionGA, SIGNAL(triggered()), this, SLOT(slotSetGroupTypeGA()));
+        ctxmenu->addAction(actionGN);
+        connect(actionGN, SIGNAL(triggered()), this, SLOT(slotSetGroupTypeGN()));
+        ctxmenu->addAction(actionGP);
+        connect(actionGP, SIGNAL(triggered()), this, SLOT(slotSetGroupTypeGP()));
+        ctxmenu->addAction(actionGR);
+        connect(actionGR, SIGNAL(triggered()), this, SLOT(slotSetGroupTypeGR()));
+        ctxmenu->addAction(actionNV);
+        connect(actionNV, SIGNAL(triggered()), this, SLOT(slotSetGroupTypeNV()));
+        ctxmenu->addAction(actionPV);
+        connect(actionPV, SIGNAL(triggered()), this, SLOT(slotSetGroupTypePV()));
+      }
+    }
+    else
+    {
+      KAction* removeElementAction = new KAction(i18n("Remove selected element"), this);
+      ctxmenu->addAction(removeElementAction);
+      connect(removeElementAction, SIGNAL(triggered()), this, SLOT(slotRemoveSelectedElements()));
+      foreach(EasyRelation* rel, m_utterance->relations())
+      {
+        kDebug() << rel->id() << correctedId;
+        if (rel->id() == correctedId)
+        {
+          KAction* actionSujV = new KAction( "SUJ-V", this );
+          KAction* actionAuxV = new KAction( "AUX-V", this );
+          KAction* actionModV = new KAction( "MOD-V", this );
+          KAction* actionModN = new KAction( "MOD-N", this );
+          KAction* actionModR = new KAction( "MOD-R", this );
+          KAction* actionJuxt = new KAction( "JUXT", this );
+          KAction* actionCoord = new KAction( "COORD", this );
+          KAction* actionCodV = new KAction( "COD-V", this );
+          KAction* actionCplV = new KAction( "CPL-V", this );
+          KAction* actionAtbSo = new KAction( "ATB-SO", this );
+          KAction* actionModA = new KAction( "MOD-A", this );
+          KAction* actionModP = new KAction( "MOD-P", this );
+          KAction* actionAppos = new KAction( "APPOS", this );
+
+          ctxmenu->addAction(actionSujV);
+          connect(actionSujV, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeSujV()));
+          ctxmenu->addAction(actionAuxV);
+          connect(actionAuxV, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeAuxV()));
+          ctxmenu->addAction(actionModV);
+          connect(actionModV, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeModV()));
+          ctxmenu->addAction(actionModN);
+          connect(actionModN, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeModN()));
+          ctxmenu->addAction(actionModR);
+          connect(actionModR, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeModR()));
+          ctxmenu->addAction(actionJuxt);
+          connect(actionJuxt, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeJuxt()));
+          ctxmenu->addAction(actionCoord);
+          connect(actionCoord, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeCoord()));
+          ctxmenu->addAction(actionCodV);
+          connect(actionCodV, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeCodV()));
+          ctxmenu->addAction(actionCplV);
+          connect(actionCplV, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeCplV()));
+          ctxmenu->addAction(actionAtbSo);
+          connect(actionAtbSo, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeAtbSo()));
+          ctxmenu->addAction(actionModA);
+          connect(actionModA, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeModA()));
+          ctxmenu->addAction(actionModP);
+          connect(actionModP, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeModP()));
+          ctxmenu->addAction(actionAppos);
+          connect(actionAppos, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeAppos()));
+          break;
+        }
+      }
+    }
+  }
+  ctxmenu->exec(p);
 }
 
-void PartMatch::slotAddGN()
+void PartMatch::slotRemoveSelectedElements()
 {
   kDebug();
+  foreach(const QString& id, m_selection)
+  {
+    removeElement(id);
+  }
 }
 
-void PartMatch::slotAddGP()
+void PartMatch::slotSetGroupTypeGA()
+{
+  kDebug() << m_selection;
+  setGroupType(m_selection[0], EasyGroup::GA);
+}
+
+void PartMatch::slotSetGroupTypeGN()
 {
   kDebug();
+  setGroupType(m_selection[0], EasyGroup::GN);
 }
 
-void PartMatch::slotAddGR()
+void PartMatch::slotSetGroupTypeGP()
 {
   kDebug();
+  setGroupType(m_selection[0], EasyGroup::GP);
 }
 
-void PartMatch::slotAddNV()
+void PartMatch::slotSetGroupTypeGR()
 {
   kDebug();
+  setGroupType(m_selection[0], EasyGroup::GR);
 }
 
-void PartMatch::slotAddPV()
+void PartMatch::slotSetGroupTypeNV()
 {
   kDebug();
+  setGroupType(m_selection[0], EasyGroup::NV);
 }
 
-void PartMatch::addGroup(EasyGroup::EasyGroupType type)
+void PartMatch::slotSetGroupTypePV()
 {
-  kDebug() << type;
+  kDebug();
+  setGroupType(m_selection[0], EasyGroup::PV);
 }
+
+void PartMatch::setGroupType(const QString& id, EasyGroup::EasyGroupType type)
+{
+  kDebug() << id << type << m_utterance->idsToConstituentsMap().keys();
+  QString correctedId = id; correctedId.remove("cluster_");
+  EasyGroup* group = dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[correctedId]);
+  group->setType(type);
+  QString color;
+  switch (group->type())
+  {//GA, GN, GP, GR, NV, PV
+    case EasyGroup::GA: color = "violet"; break;
+    case EasyGroup::GN: color = "red"; break;
+    case EasyGroup::GP: color = "blue"; break;
+    case EasyGroup::GR: color = "orange"; break;
+    case EasyGroup::NV: color = "green"; break;
+    case EasyGroup::PV: color = "grey"; break;
+    default:;
+  }
+  setAttribute(id,"color",color);
+  update();
+}
+
+void PartMatch::slotSetRelationTypeSujV()
+{
+  kDebug();
+  setRelationType(m_selection[0], "SUJ-V");
+}
+
+void PartMatch::slotSetRelationTypeAuxV()
+{
+  kDebug();
+  setRelationType(m_selection[0], "AUX-V");
+}
+
+void PartMatch::slotSetRelationTypeModV()
+{
+  kDebug();
+  setRelationType(m_selection[0], "MOD-V");
+}
+
+void PartMatch::slotSetRelationTypeModN()
+{
+  kDebug();
+  setRelationType(m_selection[0], "MOD-N");
+}
+
+void PartMatch::slotSetRelationTypeModR()
+{
+  kDebug();
+  setRelationType(m_selection[0], "MOD-R");
+}
+
+void PartMatch::slotSetRelationTypeJuxt()
+{
+  kDebug();
+  setRelationType(m_selection[0], "JUXT");
+}
+
+void PartMatch::slotSetRelationTypeCoord()
+{
+  kDebug();
+  setRelationType(m_selection[0], "COORD");
+}
+
+void PartMatch::slotSetRelationTypeCodV()
+{
+  kDebug();
+  setRelationType(m_selection[0], "COD-V");
+}
+
+void PartMatch::slotSetRelationTypeCplV()
+{
+  kDebug();
+  setRelationType(m_selection[0], "CPL-V");
+}
+
+void PartMatch::slotSetRelationTypeAtbSo()
+{
+  kDebug();
+  setRelationType(m_selection[0], "ATB-SO");
+}
+
+void PartMatch::slotSetRelationTypeModA()
+{
+  kDebug();
+  setRelationType(m_selection[0], "MOD-A");
+}
+
+void PartMatch::slotSetRelationTypeModP()
+{
+  kDebug();
+  setRelationType(m_selection[0], "MOD-P");
+}
+
+void PartMatch::slotSetRelationTypeAppos()
+{
+  kDebug();
+  setRelationType(m_selection[0], "APPOS");
+}
+
+void PartMatch::setRelationType(const QString& id, const QString& type)
+{
+  kDebug() << id << type;
+  foreach (EasyRelation* relation, m_utterance->relations())
+  {
+    if (relation->id() == id)
+    {
+      relation->setType(type);
+      QString label = type;
+      if (!relation->value().isEmpty())
+      {
+        label += QString(' ') += relation->value();
+      }
+      setAttribute(id,"label",label);
+      update();
+    }
+  }
+}
+
 
 #include "PartMatch.moc"

@@ -23,6 +23,8 @@
 #include "EasyRelation.h"
 #include "EasyDocument.h"
 
+#include <kdebug.h>
+
 EasyUtterance::EasyUtterance(EasyDocument* parent):QObject()
 {
   connect(this, SIGNAL(changed(EasyUtterance*)),
@@ -35,6 +37,7 @@ EasyUtterance::~EasyUtterance()
 
 void EasyUtterance::addRelation(EasyRelation* relation)
 {
+  kDebug() << relation->id();
   m_relations.push_back(relation);
   emit changed(this);
 }
