@@ -22,8 +22,8 @@
 
 EasyConstituent::EasyConstituent(EasyUtterance* parent) : QObject(parent)
 {
-  connect(this, SIGNAL(changed(EasyConstituent*)),
-    parent, SLOT(slotChanged(EasyConstituent*)));
+//   connect(this, SIGNAL(changed(EasyConstituent*)),
+//     parent, SLOT(slotChanged(EasyConstituent*)));
 }
 
 EasyConstituent::~EasyConstituent()

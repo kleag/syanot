@@ -65,6 +65,7 @@ public:
   inline void addNewNode(QMap<QString,QString> attribs) {emit saddNewNode(attribs);}
   inline void addNewNodeToSubgraph(QMap<QString,QString> attribs, QString subgraph) {emit saddNewNodeToSubgraph(attribs,subgraph);}
   inline void addExistingNodeToSubgraph(QMap<QString,QString> attribs, QString subgraph) {emit saddExistingNodeToSubgraph(attribs,subgraph);}
+  inline void moveExistingNodeToMainGraph(QMap<QString,QString> attribs) {emit smoveExistingNodeToMainGraph(attribs);}
   inline void addNewSubgraph(QMap<QString,QString> attribs) {emit saddNewSubgraph(attribs);}
   inline void addNewEdge(QString src, QString tgt, QMap<QString,QString> attribs) {emit saddNewEdge(src,tgt,attribs);}
   inline void update() {emit supdate();}
@@ -92,6 +93,7 @@ Q_SIGNALS:
   void saddNewNode(QMap<QString,QString> attribs);
   void saddNewNodeToSubgraph(QMap<QString,QString> attribs, QString subgraph);
   void saddExistingNodeToSubgraph(QMap<QString,QString> attribs, QString subgraph);
+  void smoveExistingNodeToMainGraph(QMap<QString,QString> attribs);
   void saddNewSubgraph(QMap<QString,QString> attribs);
   void saddNewEdge(QString src, QString tgt, QMap<QString,QString> attribs);
   void supdate();

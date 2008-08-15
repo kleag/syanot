@@ -60,7 +60,7 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
       if (!previousFormId.isEmpty())
       {
         QMap<QString,QString> eattribs;
-        eattribs["style"] = "invis";
+        eattribs["style"] = "dashed";
         eattribs["id"] = previousFormId+constituent->id();
         addNewEdge(previousFormId,constituent->id(),eattribs);
       }
@@ -84,6 +84,8 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
       }
       attribs["color"] = color;
       attribs["style"] = "filled";
+      attribs["rankdir"] = "LR";
+      attribs["ranksep"] = "0.0";
       addNewSubgraph(attribs);
       foreach(EasyForm* form, group->forms())
       {
@@ -99,7 +101,7 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
         if (!previousFormId.isEmpty())
         {
           QMap<QString,QString> eattribs;
-          eattribs["style"] = "invis";
+          eattribs["style"] = "dashed";
           eattribs["id"] = previousFormId+form->id();
           addNewEdge(previousFormId,form->id(),eattribs);
         }
@@ -132,6 +134,8 @@ void PartMatch::connectSignals()
            m_part,SLOT(slotAddNewNodeToSubgraph(QMap<QString,QString>,QString)));
   connect(this,SIGNAL(saddExistingNodeToSubgraph(QMap<QString,QString>,QString)),
            m_part,SLOT(slotAddExistingNodeToSubgraph(QMap<QString,QString>,QString)));
+  connect(this,SIGNAL(smoveExistingNodeToMainGraph(QMap<QString,QString>)),
+           m_part,SLOT(slotMoveExistingNodeToMainGraph(QMap<QString,QString>)));
   connect(this,SIGNAL(saddNewSubgraph(QMap<QString,QString>)),
            m_part,SLOT(slotAddNewSubgraph(QMap<QString,QString>)));
   connect(this,SIGNAL(saddNewEdge(QString,QString,QMap<QString,QString>)),
@@ -524,6 +528,16 @@ void PartMatch::slotRemoveElement(const QString& id)
     {
       kDebug() << "add " << form->id();
       m_utterance->addConstituent(form);
+/*      QMap<QString,QString> attribs;
+      attribs["id"] = form->id();
+      attribs["label"] = form->form();
+      attribs["shape"] = "square";
+      attribs["style"] = "filled";
+      attribs["color"] = "grey";
+      attribs["fillcolor"] = "grey";
+      attribs["fontsize"] = "14";
+      moveExistingNodeToMainGraph(attribs);
+*/
     }
     kDebug() << "remove " << group->id();
     removeSubgraph(QString("cluster_")+group->id());
@@ -666,7 +680,7 @@ void PartMatch::addGroup(EasyGroup::EasyGroupType type)
       foreach (EasyForm* form, toRemove2)
       {
         dynamic_cast<EasyGroup*>(constituent)->removeForm(form);
-        removeNodeFromSubgraph(form->id(), QString("cluster_") + constituent->id());
+//         removeNodeFromSubgraph(form->id(), QString("cluster_") + constituent->id());
         if (dynamic_cast<EasyGroup*>(constituent)->isEmpty())
         {
           toRemove.push_back(constituent);
@@ -697,6 +711,8 @@ void PartMatch::addGroup(EasyGroup::EasyGroupType type)
   }
   attribs["color"] = color;
   attribs["style"] = "filled";
+  attribs["rankdir"] = "LR";
+  attribs["ranksep"] = "0.0";
   addNewSubgraph(attribs);
   foreach(EasyForm* form, newGroup->forms())
   {
@@ -828,7 +844,8 @@ void PartMatch::slotRemoveSelectedElements()
   kDebug();
   foreach(const QString& id, m_selection)
   {
-    removeElement(id);
+    slotRemoveElement(id);
+//     removeElement(id);
   }
 }
 

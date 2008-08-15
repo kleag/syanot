@@ -46,7 +46,7 @@ EasyUtterance* EasyDocument::utteranceIdentifiedBy(const QString& id)
 
 void EasyDocument::slotChanged(EasyUtterance*)
 {
-  kDebug();
+//   kDebug();
   emit changed(this);
 }
 
