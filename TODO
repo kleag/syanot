@@ -4,13 +4,13 @@ kgraphviewer/kgrapheditor problems
 - [DONE] BUG edge selection marks not always on the two bounds
 - [DONE] FEATURE should be able to scroll by DnD
 - [DONE] FEATURE should be able to scroll with the mouse wheel
+- BUG scrolling does not start if the scene is left aligned
 
 
 syanot problems
 - [DONE] BUG save does not work anymore
 - [DONE] BUG edge removing does not work
 - [DONE] BUG should be able to put and visualize edge bounds on token or group easily
-- BUG sometimes, scrolling does not start (if the scene is left aligned)
 
 - [DONE] FEATURE should differentiate edge bounds on source/target type: token or group
 - [DONE] FEATURE should be able to remove the groups
@@ -18,12 +18,13 @@ syanot problems
 - [DONE] FEATURE should be able to change the type of a relation/a group
 - [DONE] FEATURE should be able to add groups
 - [DONE] FEATURE should be able to edit (i.e. change the bounds) the groups
-- FEATURE handling of 3-ary relations such as coord.
+- [DONE] handling of 3-ary relations such as coord.
+- FEATURE handle the a-propager feature (still needed ?)
+- FEATURE handle the s/o attribute of ATB-SO
 - FEATURE should be able to fetch data from the Passage server and send it back to it
 - FEATURE should be able to individualy move the bounds of a relation
 - FEATURE should be able to display the sentence in more than one line when necessary
   or when chosen by the user
-- FEATURE handle the a-propager feature (still needed ?)
 - FEATURE should be able to not display controls of the kgraphviewer part that are not
   useful for syanot
 

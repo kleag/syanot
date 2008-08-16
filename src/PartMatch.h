@@ -81,6 +81,8 @@ public:
    */
   inline void removeEdge(const QString& s) {emit sremoveEdge(s);}
   inline void setAttribute(const QString& e,const QString& n,const QString& v) {emit ssetAttribute(e,n,v);}
+  inline void setCursor(const QCursor& c) {emit ssetCursor(c);}
+  inline void unsetCursor() {emit sunsetCursor();}
 
   inline bool addingGroup() const {return m_addingGroup;}
   inline void setAddingGroup(bool v) {m_addingGroup = v;}
@@ -111,6 +113,8 @@ Q_SIGNALS:
   void sremoveEdge(const QString&);
   void ssetAttribute(const QString&,const QString&,const QString&);
   void ssetHighlighting(bool);
+  void ssetCursor(const QCursor&);
+  void sunsetCursor();
 
 public Q_SLOTS:
 //   void slotAddAttribute(const QString&);

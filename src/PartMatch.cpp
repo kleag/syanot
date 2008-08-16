@@ -26,10 +26,30 @@
 #include <kparts/partmanager.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kstandarddirs.h>
+#include <KMenu>
 
 #include <QMenu>
 #include <KAction>
 #include <QUuid>
+#include <QBitmap>
+
+// EasyRef relations colors
+//
+// SUJ-V 144 238 144 #90EE90
+// AUX-V 173 217 230 #ADDAE6
+// MOD-V 255 153 255 #FF99FF
+// MOD-N 255 204 153 #FFCC99
+// MOD-R 204 204 0 #CCCC00
+// JUXT 0 255 204 #00FFCC
+// COORD 204 255 255 #CCFFFF
+// COD-V 255 162 0 #FFA200
+// CPL-V 255 255 0 #FFFF00
+// ATB-SO 0 255 255 #00FFFF
+// MOD-A 204 153 0 #CC9900
+// MOD-P 51 255 255 #33FFFF
+// APPOS 0 255 0 #00FF00
+// COMP 102 255 255 #66FFFF
 
 PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
     QObject(parent),
@@ -168,9 +188,13 @@ void PartMatch::connectSignals()
       SLOT(slotSetAttribute(const QString&,const QString&,const QString&)));
   connect(this,SIGNAL(ssetHighlighting(bool)),
            m_part,SLOT(slotSetHighlighting(bool)));
+  emit ssetHighlighting(true);
+
   connect(this,SIGNAL(sprepareSelectElements()),
            m_part,SLOT(slotPrepareToSelect()));
-  emit ssetHighlighting(true);
+  connect(this,SIGNAL(ssetCursor(const QCursor&)),
+           m_part,SLOT(slotSetCursor(const QCursor&)));
+  connect(this,SIGNAL(sunsetCursor()), m_part,SLOT(slotUnsetCursor()));
 
 
   connect(m_part,SIGNAL(newEdgeAdded(QString,QString)),this,SLOT(slotNewEdgeAdded(QString,QString)));
@@ -206,9 +230,9 @@ void PartMatch::addRelation(const EasyRelation* relation)
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
 
-
   if (relation->type() == "SUJ-V")
   {
+    attribs["color"] = "#000000:#90EE90";
     if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["sujet"]])!=0)
     {
       attribs["arrowtail"] = "odot";
@@ -221,6 +245,7 @@ void PartMatch::addRelation(const EasyRelation* relation)
   }
   else if (relation->type() == "COD-V")
   {
+    attribs["color"] = "#000000:#FFA200";
     if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["cod"]])!=0)
     {
       attribs["arrowtail"] = "odot";
@@ -233,6 +258,7 @@ void PartMatch::addRelation(const EasyRelation* relation)
   }
   else if (relation->type() == "MOD-V")
   {
+    attribs["color"] = "#000000:#FF99FF";
     if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["modifieur"]])!=0)
     {
       attribs["arrowtail"] = "odot";
@@ -245,6 +271,7 @@ void PartMatch::addRelation(const EasyRelation* relation)
   }
   else if (relation->type() == "MOD-A")
   {
+    attribs["color"] = "#000000:#CC9900";
     if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["modifieur"]])!=0)
     {
       attribs["arrowtail"] = "odot";
@@ -257,6 +284,7 @@ void PartMatch::addRelation(const EasyRelation* relation)
   }
   else if (relation->type() == "MOD-P")
   {
+    attribs["color"] = "#000000:#33FFFF";
     if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["modifieur"]])!=0)
     {
       attribs["arrowtail"] = "odot";
@@ -269,6 +297,7 @@ void PartMatch::addRelation(const EasyRelation* relation)
   }
   else if (relation->type() == "JUXT")
   {
+    attribs["color"] = "#000000:#00FFCC";
     if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["sujet"]])!=0)
     {
       attribs["premier"] = "odot";
@@ -281,6 +310,7 @@ void PartMatch::addRelation(const EasyRelation* relation)
   }
   else if (relation->type() == "APPOS")
   {
+    attribs["color"] = "#000000:#00FF00";
     if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["premier"]])!=0)
     {
       attribs["arrowtail"] = "odot";
@@ -319,6 +349,7 @@ void PartMatch::addRelation(const EasyRelation* relation)
   }
   else if (relation->type() == "MOD-R")
   {
+    attribs["color"] = "#000000:#CCCC00";
     if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["modifieur"]])!=0)
     {
       attribs["arrowtail"] = "odot";
@@ -331,6 +362,7 @@ void PartMatch::addRelation(const EasyRelation* relation)
   }
   else if (relation->type() == "MOD-N")
   {
+    attribs["color"] = "#000000:#FFCC99";
     if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["modifieur"]])!=0)
     {
       attribs["arrowtail"] = "odot";
@@ -343,6 +375,7 @@ void PartMatch::addRelation(const EasyRelation* relation)
   }
   else if (relation->type() == "ATB-SO")
   {
+    attribs["color"] = "#000000:#00FFFF";
     if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["attribut"]])!=0)
     {
       attribs["arrowtail"] = "odot";
@@ -355,6 +388,7 @@ void PartMatch::addRelation(const EasyRelation* relation)
   }
   else if (relation->type() == "CPL-V")
   {
+    attribs["color"] = "#000000:#FFFF00";
     if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["complement"]])!=0)
     {
       attribs["arrowtail"] = "odot";
@@ -367,6 +401,7 @@ void PartMatch::addRelation(const EasyRelation* relation)
   }
   else if (relation->type() == "AUX-V")
   {
+    attribs["color"] = "#000000:#ADDAE6";
     if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["auxiliaire"]])!=0)
     {
       attribs["arrowtail"] = "odot";
@@ -376,6 +411,19 @@ void PartMatch::addRelation(const EasyRelation* relation)
       attribs["arrowhead"] = "normalodot";
     }
     addNewEdge(relation->bounds()["auxiliaire"],relation->bounds()["verbe"],attribs);
+  }
+  else if (relation->type() == "COMP")
+  {
+    attribs["color"] = "#000000:#66FFFF";
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["complementeur"]])!=0)
+    {
+      attribs["arrowtail"] = "odot";
+    }
+    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["verbe"]])!=0)
+    {
+      attribs["arrowhead"] = "normalodot";
+    }
+    addNewEdge(relation->bounds()["complementeur"],relation->bounds()["verbe"],attribs);
   }
 }
 
@@ -581,6 +629,22 @@ void PartMatch::slotRemoveElement(const QString& id)
 void PartMatch::prepareAddNewEdge(QMap<QString,QString> attribs)
 {
   kDebug() << attribs;
+
+  if (attribs["label"] == "SUJ-V") attribs["color"] = "#90EE90:#000000";
+  else if (attribs["label"] == "AUX-V") attribs["color"] = "#ADDAE6:#000000";
+  else if (attribs["label"] == "MOD-V") attribs["color"] = "#FF99FF:#000000";
+  else if (attribs["label"] == "MOD-N") attribs["color"] = "#FFCC99:#000000";
+  else if (attribs["label"] == "MOD-R") attribs["color"] = "#CCCC00:#000000";
+  else if (attribs["label"] == "JUXT") attribs["color"] = "#00FFCC:#000000";
+  else if (attribs["label"] == "COORD") attribs["color"] = "#CCFFFF:#000000";
+  else if (attribs["label"] == "COD-V") attribs["color"] = "#FFA200:#000000";
+  else if (attribs["label"] == "CPL-V") attribs["color"] = "#FFFF00:#000000";
+  else if (attribs["label"] == "ATB-SO") attribs["color"] = "#00FFFF:#000000";
+  else if (attribs["label"] == "MOD-A") attribs["color"] = "#CC9900:#000000";
+  else if (attribs["label"] == "MOD-P") attribs["color"] = "#33FFFF:#000000";
+  else if (attribs["label"] == "APPOS") attribs["color"] = "#00FF00:#000000";
+  else if (attribs["label"] == "COMP") attribs["color"] = "#66FFFF:#000000";
+
   bool relabeled = false; // will be true if there is an edge in the selection
                           // in this case, we will relabel it instead of
                           // creating a new edge
@@ -593,6 +657,7 @@ void PartMatch::prepareAddNewEdge(QMap<QString,QString> attribs)
       {
         relation->setType(attribs["label"]);
         setAttribute(relation->id(),"label",attribs["label"]);
+        setAttribute(relation->id(),"color",attribs["color"]);
         relabeled = true;
       }
     }
@@ -616,6 +681,8 @@ void PartMatch::prepareAddNewCoord(QMap<QString,QString> attribs)
   m_coordCoordonantFormId = "";
   m_coordCoordgFormId = "";
   m_coordCoorddFormId = "";
+  QBitmap bm(KGlobal::dirs()->findResource("data","syanot/pics/syanot-coord-coordonant.png"));
+  setCursor(QCursor(bm,bm,14,29));
 }
 
 void PartMatch::slotSelectionIs(const QList<QString> selection, const QPoint& eventPos)
@@ -626,12 +693,24 @@ void PartMatch::slotSelectionIs(const QList<QString> selection, const QPoint& ev
 
   if (m_addingGroup)
   {
-    KAction* actionGA = new KAction( "GA", this );
-    KAction* actionGN = new KAction( "GN", this );
-    KAction* actionGP = new KAction( "GP", this );
-    KAction* actionGR = new KAction( "GR", this );
-    KAction* actionNV = new KAction( "NV", this );
-    KAction* actionPV = new KAction( "PV", this );
+    QPixmap gaPix(16,16);
+    gaPix.fill("violet");
+    KAction* actionGA = new KAction( KIcon(QIcon(gaPix)), "GA", this );
+    QPixmap gnPix(16,16);
+    gnPix.fill("red");
+    KAction* actionGN = new KAction( KIcon(QIcon(gnPix)),  "GN", this );
+    QPixmap gpPix(16,16);
+    gpPix.fill("blue");
+    KAction* actionGP = new KAction( KIcon(QIcon(gpPix)), "GP", this );
+    QPixmap grPix(16,16);
+    grPix.fill("orange");
+    KAction* actionGR = new KAction( KIcon(QIcon(grPix)), "GR", this );
+    QPixmap nvPix(16,16);
+    nvPix.fill("green");
+    KAction* actionNV = new KAction( KIcon(QIcon(nvPix)), "NV", this );
+    QPixmap pvPix(16,16);
+    pvPix.fill("grey");
+    KAction* actionPV = new KAction( KIcon(QIcon(pvPix)), "PV", this );
 
     QMenu* ctxmenu = new QMenu (  );
     ctxmenu->addAction(actionGA);
@@ -651,13 +730,28 @@ void PartMatch::slotSelectionIs(const QList<QString> selection, const QPoint& ev
   else if (m_addingCoord)
   {
     kDebug() << "Adding coord" << m_coordCoordonantFormId << m_coordCoordgFormId << m_coordCoorddFormId;
+    if (m_selection.isEmpty())
+    {
+      m_coordCoordonantFormId = "";
+      m_coordCoordgFormId = "";
+      m_coordCoorddFormId = "";
+      m_addingCoord = false;
+      unsetCursor();
+      return;
+    }
     if (m_coordCoordonantFormId == "")
     {
       m_coordCoordonantFormId = m_selection[0];
+      unsetCursor();
+      QBitmap bm(KGlobal::dirs()->findResource("data","syanot/pics/syanot-coord-coordg.png"));
+      setCursor(QCursor(bm,bm,1,17));
     }
     else if (m_coordCoordgFormId == "")
     {
       m_coordCoordgFormId = m_selection[0];
+      unsetCursor();
+      QBitmap bm(KGlobal::dirs()->findResource("data","syanot/pics/syanot-coord-coordd.png"));
+      setCursor(QCursor(bm,bm,27,18));
     }
     else if (m_coordCoorddFormId == "")
     {
@@ -674,6 +768,7 @@ void PartMatch::slotSelectionIs(const QList<QString> selection, const QPoint& ev
 
       addNewCoord(relation->id(), m_coordCoordonantFormId, m_coordCoordgFormId, m_coordCoorddFormId);
       m_addingCoord = false;
+      unsetCursor();
     }
   }
 }
@@ -803,7 +898,7 @@ void PartMatch::addGroup(EasyGroup::EasyGroupType type)
 void PartMatch::slotContextMenuEvent(const QString& id, const QPoint& p)
 {
   kDebug() << id << p;
-  QMenu* ctxmenu = new QMenu (  );
+  KMenu* ctxmenu = new KMenu (  );
 
   if (m_selection.size() > 1)
   {
@@ -829,12 +924,24 @@ void PartMatch::slotContextMenuEvent(const QString& id, const QPoint& p)
       }
       if (dynamic_cast<EasyGroup*>(constituent) != 0)
       {
-        KAction* actionGA = new KAction( "GA", this );
-        KAction* actionGN = new KAction( "GN", this );
-        KAction* actionGP = new KAction( "GP", this );
-        KAction* actionGR = new KAction( "GR", this );
-        KAction* actionNV = new KAction( "NV", this );
-        KAction* actionPV = new KAction( "PV", this );
+        QPixmap gaPix(16,16);
+        gaPix.fill("violet");
+        KAction* actionGA = new KAction( KIcon(QIcon(gaPix)), "GA", this );
+        QPixmap gnPix(16,16);
+        gnPix.fill("red");
+        KAction* actionGN = new KAction( KIcon(QIcon(gnPix)),  "GN", this );
+        QPixmap gpPix(16,16);
+        gpPix.fill("blue");
+        KAction* actionGP = new KAction( KIcon(QIcon(gpPix)), "GP", this );
+        QPixmap grPix(16,16);
+        grPix.fill("orange");
+        KAction* actionGR = new KAction( KIcon(QIcon(grPix)), "GR", this );
+        QPixmap nvPix(16,16);
+        nvPix.fill("green");
+        KAction* actionNV = new KAction( KIcon(QIcon(nvPix)), "NV", this );
+        QPixmap pvPix(16,16);
+        pvPix.fill("grey");
+        KAction* actionPV = new KAction( KIcon(QIcon(pvPix)), "PV", this );
 
         ctxmenu->addAction(actionGA);
         connect(actionGA, SIGNAL(triggered()), this, SLOT(slotSetGroupTypeGA()));
@@ -1094,17 +1201,20 @@ void PartMatch::addNewCoord(
   QMap<QString,QString> attribsng;
   attribsng["id"] = QString("R")+QUuid::createUuid().toString().remove("{").remove("}").remove("-");
   attribsng["weight"] = "0";
+  attribsng["color"] = "#CCFFFF:#000000";
   addNewEdge(attribsc["id"],coordg,attribsng);
 
   QMap<QString,QString> attribsnd;
   attribsnd["id"] = QString("R")+QUuid::createUuid().toString().remove("{").remove("}").remove("-");
   attribsnd["weight"] = "0";
+  attribsnd["color"] = "#CCFFFF:#000000";
   addNewEdge(attribsc["id"],coordd,attribsnd);
 
   QMap<QString,QString> attribsnc;
   attribsnc["id"] = QString("R")+QUuid::createUuid().toString().remove("{").remove("}").remove("-");
   attribsnc["label"] = "COORD";
   attribsnc["weight"] = "0";
+  attribsnc["color"] = "#CCFFFF:#000000";
   addNewEdge(attribsc["id"],coordonant,attribsnc);
 
   m_coordMap[attribsc["id"]] = id;

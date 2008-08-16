@@ -26,5 +26,7 @@ install( FILES syanotsettings.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
 install( FILES syanotui.rc DESTINATION ${DATA_INSTALL_DIR}/syanot )
 install( FILES syanot.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES syanot.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-
+install( FILES syanot-coord-coordonant.png DESTINATION ${DATA_INSTALL_DIR}/syanot/pics )
+install( FILES syanot-coord-coordg.png DESTINATION ${DATA_INSTALL_DIR}/syanot/pics )
+install( FILES syanot-coord-coordd.png DESTINATION ${DATA_INSTALL_DIR}/syanot/pics )
 
