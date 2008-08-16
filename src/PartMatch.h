@@ -84,7 +84,6 @@ public:
   inline bool addingGroup() const {return m_addingGroup;}
   inline void setAddingGroup(bool v) {m_addingGroup = v;}
 
-  void addNewCoord(const QString& coordonant, const QString& coordg, const QString& coordd);
 
 Q_SIGNALS:
   void ssetReadWrite();
@@ -178,6 +177,7 @@ private:
   void addGroup(EasyGroup::EasyGroupType type);
   void setGroupType(const QString& id, EasyGroup::EasyGroupType type);
   void setRelationType(const QString& id, const QString& type);
+  void addNewCoord(const QString& id, const QString& coordonant, const QString& coordg, const QString& coordd);
 
   QString m_utteranceId;
   
@@ -190,6 +190,10 @@ private:
   QList<QString> m_selection;
 
   bool m_addingGroup;
+
+  /// contains links from coord elements ids in the kgraphviewer
+  /// graph to the coord relation id
+  QMap<QString, QString> m_coordMap;
 };
 
 #endif // PARTMATCH_H

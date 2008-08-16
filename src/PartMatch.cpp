@@ -61,7 +61,7 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
       if (!previousFormId.isEmpty())
       {
         QMap<QString,QString> eattribs;
-        eattribs["style"] = "dashed";
+        eattribs["style"] = "invis";
         eattribs["id"] = previousFormId+constituent->id();
         addNewEdge(previousFormId,constituent->id(),eattribs);
       }
@@ -102,7 +102,7 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
         if (!previousFormId.isEmpty())
         {
           QMap<QString,QString> eattribs;
-          eattribs["style"] = "dashed";
+          eattribs["style"] = "invis";
           eattribs["id"] = previousFormId+form->id();
           addNewEdge(previousFormId,form->id(),eattribs);
         }
@@ -290,6 +290,7 @@ void PartMatch::addRelation(const EasyRelation* relation)
   else if (relation->type() == "COORD")
   {
     addNewCoord(
+      relation->id(),
       relation->bounds()["coordonnant"],
       relation->bounds()["coord-g"],
       relation->bounds()["coord-d"]);
@@ -554,6 +555,23 @@ void PartMatch::slotRemoveElement(const QString& id)
   {
     slotRemoveEdge(id);
   }
+  else if (m_coordMap.contains(id))
+  {
+    kDebug() << "Removing coord for" << id;
+    kDebug() << "m_coordMap is" << m_coordMap;
+    QString relationId = m_coordMap[id];
+    m_utterance->relations().remove(m_utterance->relationNamed(relationId));
+    QString key = m_coordMap.key(relationId);
+    while (key != "")
+    {
+      kDebug() << "Handling" << key;
+      removeNode(key);
+      removeEdge(key);
+      m_coordMap.remove(key);
+      key = m_coordMap.key(relationId);
+    }
+    update();
+  }
 }
 
 void PartMatch::prepareAddNewEdge(QMap<QString,QString> attribs)
@@ -795,52 +813,55 @@ void PartMatch::slotContextMenuEvent(const QString& id, const QPoint& p)
       KAction* removeElementAction = new KAction(i18n("Remove selected element"), this);
       ctxmenu->addAction(removeElementAction);
       connect(removeElementAction, SIGNAL(triggered()), this, SLOT(slotRemoveSelectedElements()));
-      foreach(EasyRelation* rel, m_utterance->relations())
+      if (!m_coordMap.contains(correctedId))
       {
-        kDebug() << rel->id() << correctedId;
-        if (rel->id() == correctedId)
+        foreach(EasyRelation* rel, m_utterance->relations())
         {
-          KAction* actionSujV = new KAction( "SUJ-V", this );
-          KAction* actionAuxV = new KAction( "AUX-V", this );
-          KAction* actionModV = new KAction( "MOD-V", this );
-          KAction* actionModN = new KAction( "MOD-N", this );
-          KAction* actionModR = new KAction( "MOD-R", this );
-          KAction* actionJuxt = new KAction( "JUXT", this );
-          KAction* actionCoord = new KAction( "COORD", this );
-          KAction* actionCodV = new KAction( "COD-V", this );
-          KAction* actionCplV = new KAction( "CPL-V", this );
-          KAction* actionAtbSo = new KAction( "ATB-SO", this );
-          KAction* actionModA = new KAction( "MOD-A", this );
-          KAction* actionModP = new KAction( "MOD-P", this );
-          KAction* actionAppos = new KAction( "APPOS", this );
+          kDebug() << rel->id() << correctedId;
+          if (rel->id() == correctedId)
+          {
+            KAction* actionSujV = new KAction( "SUJ-V", this );
+            KAction* actionAuxV = new KAction( "AUX-V", this );
+            KAction* actionModV = new KAction( "MOD-V", this );
+            KAction* actionModN = new KAction( "MOD-N", this );
+            KAction* actionModR = new KAction( "MOD-R", this );
+            KAction* actionJuxt = new KAction( "JUXT", this );
+            KAction* actionCoord = new KAction( "COORD", this );
+            KAction* actionCodV = new KAction( "COD-V", this );
+            KAction* actionCplV = new KAction( "CPL-V", this );
+            KAction* actionAtbSo = new KAction( "ATB-SO", this );
+            KAction* actionModA = new KAction( "MOD-A", this );
+            KAction* actionModP = new KAction( "MOD-P", this );
+            KAction* actionAppos = new KAction( "APPOS", this );
 
-          ctxmenu->addAction(actionSujV);
-          connect(actionSujV, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeSujV()));
-          ctxmenu->addAction(actionAuxV);
-          connect(actionAuxV, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeAuxV()));
-          ctxmenu->addAction(actionModV);
-          connect(actionModV, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeModV()));
-          ctxmenu->addAction(actionModN);
-          connect(actionModN, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeModN()));
-          ctxmenu->addAction(actionModR);
-          connect(actionModR, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeModR()));
-          ctxmenu->addAction(actionJuxt);
-          connect(actionJuxt, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeJuxt()));
-          ctxmenu->addAction(actionCoord);
-          connect(actionCoord, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeCoord()));
-          ctxmenu->addAction(actionCodV);
-          connect(actionCodV, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeCodV()));
-          ctxmenu->addAction(actionCplV);
-          connect(actionCplV, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeCplV()));
-          ctxmenu->addAction(actionAtbSo);
-          connect(actionAtbSo, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeAtbSo()));
-          ctxmenu->addAction(actionModA);
-          connect(actionModA, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeModA()));
-          ctxmenu->addAction(actionModP);
-          connect(actionModP, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeModP()));
-          ctxmenu->addAction(actionAppos);
-          connect(actionAppos, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeAppos()));
-          break;
+            ctxmenu->addAction(actionSujV);
+            connect(actionSujV, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeSujV()));
+            ctxmenu->addAction(actionAuxV);
+            connect(actionAuxV, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeAuxV()));
+            ctxmenu->addAction(actionModV);
+            connect(actionModV, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeModV()));
+            ctxmenu->addAction(actionModN);
+            connect(actionModN, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeModN()));
+            ctxmenu->addAction(actionModR);
+            connect(actionModR, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeModR()));
+            ctxmenu->addAction(actionJuxt);
+            connect(actionJuxt, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeJuxt()));
+            ctxmenu->addAction(actionCoord);
+            connect(actionCoord, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeCoord()));
+            ctxmenu->addAction(actionCodV);
+            connect(actionCodV, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeCodV()));
+            ctxmenu->addAction(actionCplV);
+            connect(actionCplV, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeCplV()));
+            ctxmenu->addAction(actionAtbSo);
+            connect(actionAtbSo, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeAtbSo()));
+            ctxmenu->addAction(actionModA);
+            connect(actionModA, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeModA()));
+            ctxmenu->addAction(actionModP);
+            connect(actionModP, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeModP()));
+            ctxmenu->addAction(actionAppos);
+            connect(actionAppos, SIGNAL(triggered()), this, SLOT(slotSetRelationTypeAppos()));
+            break;
+          }
         }
       }
     }
@@ -1017,6 +1038,7 @@ void PartMatch::setRelationType(const QString& id, const QString& type)
 // conj0 -> E1F8 [label="COORD",weight=10];
 // conj0 -> E1F9 [];
 void PartMatch::addNewCoord(
+    const QString& id,
     const QString& coordonant,
     const QString& coordg,
     const QString& coordd)
@@ -1042,6 +1064,11 @@ void PartMatch::addNewCoord(
   attribsnc["label"] = "COORD";
   attribsnc["weight"] = "0";
   addNewEdge(attribsc["id"],coordonant,attribsnc);
+
+  m_coordMap[attribsc["id"]] = id;
+  m_coordMap[attribsng["id"]] = id;
+  m_coordMap[attribsnd["id"]] = id;
+  m_coordMap[attribsnc["id"]] = id;
 }
 
 #include "PartMatch.moc"
