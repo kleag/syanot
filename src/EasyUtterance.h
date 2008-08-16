@@ -69,6 +69,8 @@ public:
 
   void removeConstituent(EasyConstituent* constituent);
   void removeRelationAt(int i);
+
+  EasyRelation* relationNamed(const QString& id);
   
 Q_SIGNALS:
   void changed(EasyUtterance*);

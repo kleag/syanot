@@ -25,6 +25,11 @@
 
 #include <kdebug.h>
 
+// to draw coordinations
+// conj0 -> E1F7 [];
+// conj0 -> E1F8 [label="COORD",weight=10];
+// conj0 -> E1F9 [];
+
 EasyUtterance::EasyUtterance(EasyDocument* parent):QObject()
 {
   connect(this, SIGNAL(changed(EasyUtterance*)),
@@ -60,6 +65,18 @@ void EasyUtterance::removeConstituent(EasyConstituent* constituent)
   m_constituents.removeAll(constituent);
   m_idsToConstituentsMap.remove(constituent->id());
   emit changed(this);
+}
+
+EasyRelation* EasyUtterance::relationNamed(const QString& id)
+{
+  foreach (EasyRelation* relation, m_relations)
+  {
+    if (relation->id() == id)
+    {
+      return relation;
+    }
+  }
+  return 0;
 }
 
 QTextStream& operator<<(QTextStream& s, const EasyUtterance& u)

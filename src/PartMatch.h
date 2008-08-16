@@ -83,7 +83,9 @@ public:
 
   inline bool addingGroup() const {return m_addingGroup;}
   inline void setAddingGroup(bool v) {m_addingGroup = v;}
-  
+
+  void addNewCoord(const QString& coordonant, const QString& coordg, const QString& coordd);
+
 Q_SIGNALS:
   void ssetReadWrite();
   void ssaveTo(const QString& fileName);

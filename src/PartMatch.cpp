@@ -45,6 +45,7 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
   graphAttribs["rankdir"] = "LR";
   graphAttribs["ranksep"] = "0.0";
   graphAttribs["fontsize"] = "14";
+  graphAttribs["compound"] = "true";
   setGraphAttributes(graphAttribs);
   
   const QList<EasyConstituent*>&  constituents = m_utterance->constituents();
@@ -288,7 +289,11 @@ void PartMatch::addRelation(const EasyRelation* relation)
   }
   else if (relation->type() == "COORD")
   {
-    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["coordonnant"]])!=0)
+    addNewCoord(
+      relation->bounds()["coordonnant"],
+      relation->bounds()["coord-g"],
+      relation->bounds()["coord-d"]);
+/*    if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["coordonnant"]])!=0)
     {
       attribs["arrowtail"] = "odot";
     }
@@ -305,7 +310,7 @@ void PartMatch::addRelation(const EasyRelation* relation)
     {
       attribs["arrowhead"] = "normalodot";
     }
-    addNewEdge(relation->bounds()["coordonnant"],relation->bounds()["coord-d"],attribs);
+    addNewEdge(relation->bounds()["coordonnant"],relation->bounds()["coord-d"],attribs);*/
   }
   else if (relation->type() == "MOD-R")
   {
@@ -544,6 +549,10 @@ void PartMatch::slotRemoveElement(const QString& id)
     m_utterance->removeConstituent(group);
     delete group;
     update();
+  }
+  else if (m_utterance->relationNamed(id) != 0)
+  {
+    slotRemoveEdge(id);
   }
 }
 
@@ -1003,5 +1012,36 @@ void PartMatch::setRelationType(const QString& id, const QString& type)
   }
 }
 
+// to draw coordinations
+// conj0 -> E1F7 [];
+// conj0 -> E1F8 [label="COORD",weight=10];
+// conj0 -> E1F9 [];
+void PartMatch::addNewCoord(
+    const QString& coordonant,
+    const QString& coordg,
+    const QString& coordd)
+{
+  QMap<QString,QString> attribsc;
+  attribsc["id"] = QString("N")+QUuid::createUuid().toString().remove("{").remove("}").remove("-");
+  attribsc["label"] = "";
+  attribsc["shape"] = "point";
+  addNewNode(attribsc);
+
+  QMap<QString,QString> attribsng;
+  attribsng["id"] = QString("R")+QUuid::createUuid().toString().remove("{").remove("}").remove("-");
+  attribsng["weight"] = "0";
+  addNewEdge(attribsc["id"],coordg,attribsng);
+
+  QMap<QString,QString> attribsnd;
+  attribsnd["id"] = QString("R")+QUuid::createUuid().toString().remove("{").remove("}").remove("-");
+  attribsnd["weight"] = "0";
+  addNewEdge(attribsc["id"],coordd,attribsnd);
+
+  QMap<QString,QString> attribsnc;
+  attribsnc["id"] = QString("R")+QUuid::createUuid().toString().remove("{").remove("}").remove("-");
+  attribsnc["label"] = "COORD";
+  attribsnc["weight"] = "0";
+  addNewEdge(attribsc["id"],coordonant,attribsnc);
+}
 
 #include "PartMatch.moc"
