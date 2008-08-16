@@ -36,7 +36,11 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
     m_utteranceId(u->id()),
     m_part(p),
     m_utterance(u),
-    m_addingGroup(false)
+    m_addingGroup(false),
+    m_addingCoord(false),
+    m_coordCoordonantFormId(""),
+    m_coordCoordgFormId(""),
+    m_coordCoorddFormId("")
 {
   connectSignals();
   QString previousFormId;
@@ -604,6 +608,16 @@ void PartMatch::prepareAddNewEdge(QMap<QString,QString> attribs)
   }
 }
 
+void PartMatch::prepareAddNewCoord(QMap<QString,QString> attribs)
+{
+  kDebug() << attribs;
+  m_addingCoord = true;
+  m_addingGroup = false;
+  m_coordCoordonantFormId = "";
+  m_coordCoordgFormId = "";
+  m_coordCoorddFormId = "";
+}
+
 void PartMatch::slotSelectionIs(const QList<QString> selection, const QPoint& eventPos)
 {
   kDebug() << selection;
@@ -633,6 +647,34 @@ void PartMatch::slotSelectionIs(const QList<QString> selection, const QPoint& ev
     ctxmenu->addAction(actionPV);
     connect(actionPV, SIGNAL(triggered()), this, SLOT(slotAddPV()));
     ctxmenu->exec(eventPos);
+  }
+  else if (m_addingCoord)
+  {
+    kDebug() << "Adding coord" << m_coordCoordonantFormId << m_coordCoordgFormId << m_coordCoorddFormId;
+    if (m_coordCoordonantFormId == "")
+    {
+      m_coordCoordonantFormId = m_selection[0];
+    }
+    else if (m_coordCoordgFormId == "")
+    {
+      m_coordCoordgFormId = m_selection[0];
+    }
+    else if (m_coordCoorddFormId == "")
+    {
+      m_coordCoorddFormId = m_selection[0];
+
+      kDebug() << "Creating the coord" << m_coordCoordonantFormId << m_coordCoordgFormId << m_coordCoorddFormId;
+      EasyRelation* relation = new EasyRelation();
+      relation->setId(m_utteranceId+"R"+QUuid::createUuid().toString().remove("{").remove("}").remove("-"));
+      relation->setType("COORD");
+      relation->bounds().insert("coordonnant",m_coordCoordonantFormId);
+      relation->bounds().insert("coord-g",m_coordCoordgFormId);
+      relation->bounds().insert("coord-d",m_coordCoorddFormId);
+      m_utterance->relations().push_back(relation);
+
+      addNewCoord(relation->id(), m_coordCoordonantFormId, m_coordCoordgFormId, m_coordCoorddFormId);
+      m_addingCoord = false;
+    }
   }
 }
 
@@ -1069,6 +1111,8 @@ void PartMatch::addNewCoord(
   m_coordMap[attribsng["id"]] = id;
   m_coordMap[attribsnd["id"]] = id;
   m_coordMap[attribsnc["id"]] = id;
+
+  update();
 }
 
 #include "PartMatch.moc"

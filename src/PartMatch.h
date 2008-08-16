@@ -59,6 +59,7 @@ public:
   inline void setReadWrite() {emit ssetReadWrite();}
   inline void saveTo(const QString& fileName) {emit ssaveTo(fileName);}
   void prepareAddNewEdge(QMap<QString,QString> attribs);
+  void prepareAddNewCoord(QMap<QString,QString> attribs);
 
   inline void prepareSelectElements() { emit sprepareSelectElements(); }
   inline void setGraphAttributes(QMap<QString,QString> attribs) {emit ssetGraphAttributes(attribs);}
@@ -194,6 +195,15 @@ private:
   /// contains links from coord elements ids in the kgraphviewer
   /// graph to the coord relation id
   QMap<QString, QString> m_coordMap;
+
+  /// true when the COORD button has been pressed and when the user is
+  /// selecting the bounds nodes (coordonant, coord-g and coord-d)
+  /// should be set to false if the relation creation is cancelled
+  bool m_addingCoord;
+
+  QString m_coordCoordonantFormId;
+  QString m_coordCoordgFormId;
+  QString m_coordCoorddFormId;
 };
 
 #endif // PARTMATCH_H

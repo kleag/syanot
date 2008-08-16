@@ -538,7 +538,7 @@ void Syanot::slotCoordButtonClicked()
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
   if (m_currentPartMatch != 0)
-    m_currentPartMatch-> prepareAddNewEdge(attribs);
+    m_currentPartMatch-> prepareAddNewCoord(attribs);
 }
 
 void Syanot::slotModRButtonClicked()
