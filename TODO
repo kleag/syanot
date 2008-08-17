@@ -12,9 +12,9 @@ syanot problems and missing features
 - [DONE] BUG edge removing does not work
 - [DONE] BUG should be able to put and visualize edge bounds on token or group
   easily
-- BUG when creating a new group, a spurious "abc" node is created; crashes
+- [DONE] BUG when removing and creating groups, elements order should be kept
+- [DONE] BUG when creating a new group, a spurious "abc" node is created; crashes
   when clicking on it
-- BUG when removing and creating groups, elements order should be kept
 
 - [DONE] FEATURE should differentiate edge bounds on source/target type: token or group
 - [DONE] FEATURE should be able to remove the groups
@@ -23,13 +23,15 @@ syanot problems and missing features
 - [DONE] FEATURE should be able to add groups
 - [DONE] FEATURE should be able to edit (i.e. change the bounds) the groups
 - [DONE] handling of 3-ary relations such as coord.
-- FEATURE handle the a-propager feature (still needed ?)
-- FEATURE handle the s/o attribute of ATB-SO
+- [DONE] FEATURE handle the s/o attribute of ATB-SO
+- [DONE] FEATURE handle the a-propager feature
 - FEATURE should be able to fetch data from the Passage server and send it back to it
 - FEATURE should be able to individualy move the bounds of a relation
 - FEATURE should be able to display the sentence in more than one line when necessary
   or when chosen by the user
 - FEATURE should be able to not display controls of the kgraphviewer part that are not
   useful for syanot
+- FEATURE undo/redo
 
 
+svn commit -m "Removing bug; selection bugs; kgraphviewer rev. 848408. ; implementing of s-o and a-propager relations parameters handling"

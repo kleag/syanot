@@ -28,9 +28,12 @@
 #include <klibloader.h>
 
 class QListWidgetItem;
+class QDockWidget;
+class QCheckBox;
 
 class KToggleAction;
 class KListWidget;
+class KPushButton;
 
 class kgraphviewerPart;
 
@@ -72,6 +75,10 @@ protected:
 
 signals:
   void hide(KParts::Part* part);
+  void soSujet();
+  void soObjet();
+  void soInd();
+  void aPropager(int);
 
 public slots:
   /**
@@ -114,6 +121,14 @@ public slots:
   void reloadOnChangeMode_pressed(int value);
   void openInExistingWindowMode_pressed(int value);
   void reopenPreviouslyOpenedFilesMode_pressed(int value);*/
+
+  void slotShowSOChooser();
+  void slotHideSOChooser();
+  void slotShowAPropagerChooser();
+  void slotHideAPropagerChooser();
+
+  void slotSetSO(const QString& value);
+  void slotSetAPropager(int value);
   
 private slots:
   void fileNew();
@@ -138,7 +153,9 @@ private:
     
 private:
   void createPartFor(const QString& id);
-  
+  void createSOChooser();
+  void createAPropagerChooser();
+
   QWidget* m_widget;
   KRecentFilesAction* m_rfa;
   KParts::PartManager* m_manager;
@@ -165,6 +182,12 @@ private:
   KListWidget* m_utterancesWidget;
 
   KLibFactory* m_factory;
+
+  QDockWidget* m_aPropageDockWidget;
+  QDockWidget* m_soChooserDockWidget;
+
+  KPushButton* m_soButton;
+  QCheckBox* m_aPropagerCheckbox;
 };
 
 #endif // _SYANOT_H_

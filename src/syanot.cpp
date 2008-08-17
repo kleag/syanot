@@ -53,6 +53,7 @@
 #include <KActionCollection>
 #include <kio/netaccess.h>
 #include <KListWidget>
+#include <KMenu>
 
 #include <QtDBus/QtDBus>
 #include <QDockWidget>
@@ -60,6 +61,7 @@
 #include <QVBoxLayout>
 #include <QFile>
 #include <QTextStream>
+#include <QCheckBox>
 
 #include <iostream>
 
@@ -171,6 +173,10 @@ Syanot::Syanot() :
   kDebug() << "connecting utterance activated";
   connect(m_utterancesWidget, SIGNAL(itemClicked(QListWidgetItem*)),
            this, SLOT(slotUtteranceClicked(QListWidgetItem*)));
+
+  createSOChooser();
+  createAPropagerChooser();
+
 }
 
 Syanot::~Syanot()
@@ -412,12 +418,35 @@ void Syanot::fileSaveAs()
 void Syanot::slotSetActiveGraph( KParts::Part* part)
 {
   kDebug();
+  if (m_currentPartMatch != 0)
+  {
+    disconnect(m_currentPartMatch,SIGNAL(showSOChooser()),this,SLOT(slotShowSOChooser()));
+    disconnect(m_currentPartMatch,SIGNAL(hideSOChooser()),this,SLOT(slotHideSOChooser()));
+    disconnect(m_currentPartMatch,SIGNAL(showAPropagerChooser()),this,SLOT(slotShowAPropagerChooser()));
+    disconnect(m_currentPartMatch,SIGNAL(hideAPropagerChooser()),this,SLOT(slotHideAPropagerChooser()));
+    disconnect(this,SIGNAL(soSujet()),m_currentPartMatch,SLOT(slotSoSujet()));
+    disconnect(this,SIGNAL(soObjet()),m_currentPartMatch,SLOT(slotSoObjet()));
+    disconnect(this,SIGNAL(soInd()),m_currentPartMatch,SLOT(slotSoInd()));
+    disconnect(this,SIGNAL(aPropager(int)),m_currentPartMatch,SLOT(slotAPropager(int)));
+    disconnect(m_currentPartMatch,SIGNAL(setSO(const QString&)),this,SLOT(slotSetSO(const QString&)));
+    disconnect(m_currentPartMatch,SIGNAL(setAPropager(int)),this,SLOT(slotSetAPropager(int)));
+  }
   m_currentPart = part;
   m_currentPartMatch = m_partPartMatchMap[part];
   if (m_currentPart == 0)
   {
     return;
   }
+  connect(m_currentPartMatch,SIGNAL(showSOChooser()),this,SLOT(slotShowSOChooser()));
+  connect(m_currentPartMatch,SIGNAL(hideSOChooser()),this,SLOT(slotHideSOChooser()));
+  connect(m_currentPartMatch,SIGNAL(showAPropagerChooser()),this,SLOT(slotShowAPropagerChooser()));
+  connect(m_currentPartMatch,SIGNAL(hideAPropagerChooser()),this,SLOT(slotHideAPropagerChooser()));
+  connect(this,SIGNAL(soSujet()),m_currentPartMatch,SLOT(slotSoSujet()));
+  connect(this,SIGNAL(soObjet()),m_currentPartMatch,SLOT(slotSoObjet()));
+  connect(this,SIGNAL(soInd()),m_currentPartMatch,SLOT(slotSoInd()));
+  connect(this,SIGNAL(aPropager(int)),m_currentPartMatch,SLOT(slotAPropager(int)));
+  connect(m_currentPartMatch,SIGNAL(setSO(const QString&)),this,SLOT(slotSetSO(const QString&)));
+  connect(m_currentPartMatch,SIGNAL(setAPropager(int)),this,SLOT(slotSetAPropager(int)));
 
   m_currentPartMatch-> setReadWrite();
 }
@@ -746,6 +775,80 @@ void Syanot::slotQuit()
   kDebug();
   if (queryClose())
     KApplication::kApplication()->quit();
+}
+
+void Syanot::createSOChooser()
+{
+  m_soChooserDockWidget = new QDockWidget(this);
+  m_soButton = new KPushButton("s-o", m_soChooserDockWidget);
+
+  KMenu* soMenu = new KMenu(m_soChooserDockWidget);
+  KAction* sujetAction = new KAction(i18n("sujet"), this);
+  soMenu->addAction(sujetAction);
+  connect(sujetAction,SIGNAL(triggered()),this,SIGNAL(soSujet()));
+  KAction* objetAction = new KAction(i18n("objet"), this);
+  soMenu->addAction(objetAction);
+  connect(objetAction,SIGNAL(triggered()),this,SIGNAL(soObjet()));
+  KAction* indAction = new KAction(i18n("ind"), this);
+  soMenu->addAction(indAction);
+  connect(indAction,SIGNAL(triggered()),this,SIGNAL(soInd()));
+
+  m_soButton->setMenu(soMenu);
+  
+  m_soChooserDockWidget->setWidget(m_soButton);
+  addDockWidget ( Qt::LeftDockWidgetArea, m_soChooserDockWidget );
+  m_soChooserDockWidget->hide();
+}
+
+void Syanot::createAPropagerChooser()
+{
+  m_aPropageDockWidget = new QDockWidget(this);
+
+  m_aPropagerCheckbox = new QCheckBox(i18n("to propagate"), this);
+  connect(m_aPropagerCheckbox,SIGNAL(stateChanged(int)),this,SIGNAL(aPropager(int)));
+  m_aPropageDockWidget->setWidget(m_aPropagerCheckbox);
+  addDockWidget ( Qt::LeftDockWidgetArea, m_aPropageDockWidget );
+  m_aPropageDockWidget->hide();
+}
+
+void Syanot::slotShowSOChooser()
+{
+  kDebug() << m_soChooserDockWidget;
+  m_soChooserDockWidget->show();
+//   addDockWidget ( Qt::LeftDockWidgetArea, m_soChooserDockWidget );
+}
+
+void Syanot::slotHideSOChooser()
+{
+  kDebug();
+  m_soChooserDockWidget->hide();
+//   removeDockWidget ( m_soChooserDockWidget );
+}
+
+void Syanot::slotShowAPropagerChooser()
+{
+  kDebug() << m_aPropageDockWidget;
+  m_aPropageDockWidget->show();
+//   addDockWidget ( Qt::LeftDockWidgetArea, m_aPropageDockWidget );
+}
+
+void Syanot::slotHideAPropagerChooser()
+{
+  kDebug();
+  m_aPropageDockWidget->hide();
+//   removeDockWidget ( m_aPropageDockWidget );
+}
+
+void Syanot::slotSetSO(const QString& value)
+{
+  kDebug();
+  m_soButton->setText(value);
+}
+
+void Syanot::slotSetAPropager(int value)
+{
+  kDebug();
+  m_aPropagerCheckbox-> setCheckState ( value?Qt::Checked:Qt::Unchecked );
 }
 
 #include "syanot.moc"

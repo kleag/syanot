@@ -374,6 +374,7 @@ void PartMatch::addRelation(const EasyRelation* relation)
   else if (relation->type() == "ATB-SO")
   {
     attribs["color"] = "#000000:#00FFFF";
+    attribs["so"] = relation->value();
     if (dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[relation->bounds()["attribut"]])!=0)
     {
       attribs["arrowtail"] = "odot";
@@ -700,6 +701,9 @@ void PartMatch::slotSelectionIs(const QList<QString> selection, const QPoint& ev
   m_selection = selection;
 //   GA, GN, GP, GR, NV, PV
 
+  emit hideSOChooser();
+  emit hideAPropagerChooser();
+
   if (m_addingGroup)
   {
     QPixmap gaPix(16,16);
@@ -778,6 +782,28 @@ void PartMatch::slotSelectionIs(const QList<QString> selection, const QPoint& ev
       addNewCoord(relation->id(), m_coordCoordonantFormId, m_coordCoordgFormId, m_coordCoorddFormId);
       m_addingCoord = false;
       unsetCursor();
+      update();
+    }
+  }
+  else if (m_selection.size() == 1)
+  {
+    kDebug() << "selection:" << m_selection[0];
+    foreach(EasyRelation* relation, m_utterance->relations())
+    {
+      kDebug() << "relation:" << relation->id();
+      if (relation->id() == m_selection[0])
+      {
+        if (relation->type() == "ATB-SO")
+        {
+          emit showSOChooser();
+          emit setSO(relation->value());
+        }
+        else if (relation->type() == "MOD-N")
+        {
+          emit showAPropagerChooser();
+          emit setAPropager(relation->toPropagate());
+        }
+      }
     }
   }
 }
@@ -866,11 +892,6 @@ void PartMatch::addGroup(EasyGroup::EasyGroupType type)
       }
     }
   }
-  foreach (EasyConstituent* constituent, toRemove)
-  {
-    kDebug() << "Removing constituent " << constituent->id();
-    m_utterance->removeConstituent(constituent);
-  }
   kDebug() << "Adding group " << newGroup->id();
   m_utterance->addConstituent(newGroup, position);
 
@@ -904,6 +925,16 @@ void PartMatch::addGroup(EasyGroup::EasyGroupType type)
     attribs["fillcolor"] = "grey";
     attribs["fontsize"] = "14";
     addExistingNodeToSubgraph(attribs, QString("cluster_") + newGroup->id());
+  }
+  foreach (EasyConstituent* constituent, toRemove)
+  {
+    kDebug() << "Removing constituent " << constituent->id();
+    m_utterance->removeConstituent(constituent);
+    if (dynamic_cast<EasyGroup*>(constituent))
+    {
+      removeSubgraph(QString("cluster_")+constituent->id());
+      delete constituent;
+    }
   }
 
   update();
@@ -1236,7 +1267,85 @@ void PartMatch::addNewCoord(
   m_coordMap[attribsnd["id"]] = id;
   m_coordMap[attribsnc["id"]] = id;
 
-  update();
+//   update();
+}
+
+void PartMatch::slotSoSujet()
+{
+  kDebug();
+  if (m_selection.size() == 1)
+  {
+    kDebug() << "selection:" << m_selection[0];
+    foreach(EasyRelation* relation, m_utterance->relations())
+    {
+      kDebug() << "relation:" << relation->id();
+      if (relation->id() == m_selection[0])
+      {
+        relation->setValue("sujet");
+        emit setSO(relation->value());
+        setAttribute(relation->id(),"label",relation->type()+" "+relation->value());
+        update();
+      }
+    }
+  }
+}
+
+void PartMatch::slotSoObjet()
+{
+  kDebug();
+  if (m_selection.size() == 1)
+  {
+    kDebug() << "selection:" << m_selection[0];
+    foreach(EasyRelation* relation, m_utterance->relations())
+    {
+      kDebug() << "relation:" << relation->id();
+      if (relation->id() == m_selection[0])
+      {
+        relation->setValue("objet");
+        emit setSO(relation->value());
+        setAttribute(relation->id(),"label",relation->type()+" "+relation->value());
+        update();
+      }
+    }
+  }
+}
+
+void PartMatch::slotSoInd()
+{
+  kDebug();
+  if (m_selection.size() == 1)
+  {
+    kDebug() << "selection:" << m_selection[0];
+    foreach(EasyRelation* relation, m_utterance->relations())
+    {
+      kDebug() << "relation:" << relation->id();
+      if (relation->id() == m_selection[0])
+      {
+        relation->setValue("ind");
+        emit setSO(relation->value());
+        setAttribute(relation->id(),"label",relation->type()+" "+relation->value());
+        update();
+      }
+    }
+  }
+}
+
+void PartMatch::slotAPropager(int value)
+{
+  kDebug();
+  if (m_selection.size() == 1)
+  {
+    kDebug() << "selection:" << m_selection[0];
+    foreach(EasyRelation* relation, m_utterance->relations())
+    {
+      kDebug() << "relation:" << relation->id();
+      if (relation->id() == m_selection[0])
+      {
+        relation->setToPropagate(value);
+        emit setAPropager(relation->toPropagate());
+      }
+    }
+  }
 }
 
 #include "PartMatch.moc"

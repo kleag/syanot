@@ -119,6 +119,12 @@ Q_SIGNALS:
   void ssetHighlighting(bool);
   void ssetCursor(const QCursor&);
   void sunsetCursor();
+  void showSOChooser();
+  void hideSOChooser();
+  void showAPropagerChooser();
+  void hideAPropagerChooser();
+  void setSO(const QString&);
+  void setAPropager(int);
 
 public Q_SLOTS:
 //   void slotAddAttribute(const QString&);
@@ -178,6 +184,10 @@ public Q_SLOTS:
   void slotSetRelationTypeModP();
   void slotSetRelationTypeAppos();
 
+  void slotSoSujet();
+  void slotSoObjet();
+  void slotSoInd();
+  void slotAPropager(int value);
 private:
   void connectSignals();
   void addRelation(const EasyRelation* relation);

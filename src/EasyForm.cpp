@@ -29,7 +29,8 @@ EasyForm::~EasyForm()
 
 void EasyForm::saveAsXmlTo(QTextStream& s) const
 {
-  s << " <F id=\""<<m_id<<"\">"<<m_form<<"</F>\n";
+  QString form = m_form;
+  s << " <F id=\""<<m_id<<"\">"<<form.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")<<"</F>\n";
 }
 
 #include "EasyForm.moc"
