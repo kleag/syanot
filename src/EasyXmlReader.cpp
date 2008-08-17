@@ -304,7 +304,7 @@ void EasyXmlReader::readGroupForm()
   f->setId(id);
   f->setForm(form);
   m_currentGroup->push_back(f);
-//   m_currentUtterance->idsToConstituentsMap().insert(f->id(),f);
+  m_currentUtterance->idsToConstituentsMap().insert(f->id(),f);
 }
 
 void EasyXmlReader::readForm()

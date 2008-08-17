@@ -196,8 +196,6 @@ void PartMatch::connectSignals()
            m_part,SLOT(slotSetCursor(const QCursor&)));
   connect(this,SIGNAL(sunsetCursor()), m_part,SLOT(slotUnsetCursor()));
 
-
-  connect(m_part,SIGNAL(newEdgeAdded(QString,QString)),this,SLOT(slotNewEdgeAdded(QString,QString)));
   connect(m_part,SIGNAL(removeEdge(const QString&)),
                     this,SLOT(slotRemoveEdge(const QString&)));
   connect(m_part,SIGNAL(removeElement(const QString&)),
@@ -433,8 +431,8 @@ void PartMatch::slotNewEdgeFinished(
       const QMap<QString, QString>& attributes)
 {
   kDebug() << srcId << tgtId << attributes;
-
   QMap<QString, QString> attribs = attributes;
+  attribs["id"] = newEdgeAdded(srcId, tgtId);
   QString src = srcId;
   src.remove("cluster_");
   kDebug() << m_utterance->idsToConstituentsMap()[src] ;
@@ -455,16 +453,23 @@ void PartMatch::slotNewEdgeFinished(
   update();
 }
 
-void PartMatch::slotNewEdgeAdded(QString src,QString tgt)
+QString PartMatch::newEdgeAdded(
+    const QString& src,
+    const QString& tgt)
 {
   kDebug() << src << tgt;
   EasyConstituent* srcc = m_utterance->idsToConstituentsMap()[src];
-
   EasyConstituent* tgtc = m_utterance->idsToConstituentsMap()[tgt];
   kDebug() << srcc << tgtc;
+  if (srcc == 0 || tgtc == 0)
+  {
+    kError() << "Missing constituent(s)";
+    return QString();
+  }
+
   EasyRelation* relation = new EasyRelation();
-  relation->setId(QString("E1R")+QString::number(m_utterance->relations().size()+1));
-  kDebug() << m_utteranceId << QString(QString("E1R")+QString::number(m_utterance->relations().size()+1));
+  QString id = m_utteranceId + "R" + QUuid::createUuid().toString().remove("{").remove("}").remove("-");
+  relation->setId(id);
   relation->setType(m_currentRelation);
 
   if (m_currentRelation=="SUJ-V")
@@ -502,13 +507,13 @@ void PartMatch::slotNewEdgeAdded(QString src,QString tgt)
     relation->bounds().insert("premier",src);
     relation->bounds().insert("appose",tgt);
   }
-  else if (m_currentRelation == "COORD")
+/*  else if (m_currentRelation == "COORD")
   {
     relation->bounds().insert("coordonnant",src);
     relation->bounds().insert("coord-g",tgt);
     /// @TODO handle coordination as needed
 //     addNewEdge(relation->bounds()["coordonnant"],relation->bounds()["coord-d"],attribs);
-  }
+  }*/
   else if (m_currentRelation == "MOD-R")
   {
     relation->bounds().insert("modifieur",src);
@@ -534,9 +539,13 @@ void PartMatch::slotNewEdgeAdded(QString src,QString tgt)
     relation->bounds().insert("auxiliaire",src);
     relation->bounds().insert("verbe",tgt);
   }
-  addRelation(relation);
-//   m_utterance->addRelation(relation);
-  update();
+  else if (m_currentRelation == "COMP")
+  {
+    relation->bounds().insert("complementeur",src);
+    relation->bounds().insert("verbe",tgt);
+  }
+  m_utterance->addRelation(relation);
+  return id;
 }
 
 void PartMatch::slotRemoveEdge(const QString& id)
@@ -581,11 +590,12 @@ void PartMatch::slotRemoveElement(const QString& id)
     }
 
     EasyGroup* group = dynamic_cast<EasyGroup*>(m_utterance->idsToConstituentsMap()[groupId]);
-
+    int position = m_utterance->constituents().indexOf(group);
+    m_utterance->removeConstituent(group);
     foreach (EasyForm* form, group->forms())
     {
       kDebug() << "add " << form->id();
-      m_utterance->addConstituent(form);
+      m_utterance->addConstituent(form,position++);
 /*      QMap<QString,QString> attribs;
       attribs["id"] = form->id();
       attribs["label"] = form->form();
@@ -599,7 +609,6 @@ void PartMatch::slotRemoveElement(const QString& id)
     }
     kDebug() << "remove " << group->id();
     removeSubgraph(QString("cluster_")+group->id());
-    m_utterance->removeConstituent(group);
     delete group;
     update();
   }
@@ -814,11 +823,16 @@ void PartMatch::addGroup(EasyGroup::EasyGroupType type)
   kDebug() << type;
   m_addingGroup = false;
   EasyGroup* newGroup = new EasyGroup(m_utterance);
-  newGroup->setId(QString("G")+QUuid::createUuid().toString().remove("{").remove("}").remove("-"));
+  newGroup->setId(m_utteranceId + "G" + QUuid::createUuid().toString().remove("{").remove("}").remove("-"));
   newGroup->setType(type);
   QList<EasyConstituent*> toRemove;
+  int position = std::numeric_limits<int>::max();
   foreach (EasyConstituent* constituent, m_utterance->constituents())
   {
+    if (m_utterance->constituents().indexOf(constituent) < position)
+    {
+      position = m_utterance->constituents().indexOf(constituent);
+    }
     if (dynamic_cast<EasyForm*>(constituent) != 0)
     {
       kDebug() << m_selection << "|" << constituent->id();
@@ -858,7 +872,7 @@ void PartMatch::addGroup(EasyGroup::EasyGroupType type)
     m_utterance->removeConstituent(constituent);
   }
   kDebug() << "Adding group " << newGroup->id();
-  m_utterance->addConstituent(newGroup);
+  m_utterance->addConstituent(newGroup, position);
 
   QMap<QString,QString> attribs;
   attribs["id"] = QString("cluster_") + newGroup->id();

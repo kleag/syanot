@@ -66,6 +66,7 @@ public:
 
   void addRelation(EasyRelation* relation);
   void addConstituent(EasyConstituent* constituent);
+  void addConstituent(EasyConstituent* constituent, int position);
 
   void removeConstituent(EasyConstituent* constituent);
   void removeRelationAt(int i);

@@ -1,4 +1,4 @@
-kgraphviewer/kgrapheditor problems
+kgraphviewer/kgrapheditor problems and missing features
 - [DONE] BUG added edges should be above all
 - [DONE] BUG added edges are drawn not exactly at the good position (each new edge is a little bit more too low)
 - [DONE] BUG edge selection marks not always on the two bounds
@@ -7,10 +7,14 @@ kgraphviewer/kgrapheditor problems
 - BUG scrolling does not start if the scene is left aligned
 
 
-syanot problems
+syanot problems and missing features
 - [DONE] BUG save does not work anymore
 - [DONE] BUG edge removing does not work
-- [DONE] BUG should be able to put and visualize edge bounds on token or group easily
+- [DONE] BUG should be able to put and visualize edge bounds on token or group
+  easily
+- BUG when creating a new group, a spurious "abc" node is created; crashes
+  when clicking on it
+- BUG when removing and creating groups, elements order should be kept
 
 - [DONE] FEATURE should differentiate edge bounds on source/target type: token or group
 - [DONE] FEATURE should be able to remove the groups

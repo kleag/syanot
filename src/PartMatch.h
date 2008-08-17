@@ -87,6 +87,10 @@ public:
   inline bool addingGroup() const {return m_addingGroup;}
   inline void setAddingGroup(bool v) {m_addingGroup = v;}
 
+  QString newEdgeAdded(
+    const QString& src,
+    const QString& tgt);
+
 
 Q_SIGNALS:
   void ssetReadWrite();
@@ -123,8 +127,6 @@ public Q_SLOTS:
 //   void slotAddNewElementAttribute(const QString&);
 //   void slotRemoveNewElementAttribute(const QString&);
 
-  void slotNewEdgeAdded(QString,QString);
-  
   /**
    * Received when the part signals a edge removing action. Will remove the
    * relation in the model and ask back to the part to remove the corresponding

@@ -54,6 +54,13 @@ void EasyUtterance::addConstituent(EasyConstituent* constituent)
   emit changed(this);
 }
 
+void EasyUtterance::addConstituent(EasyConstituent* constituent, int position)
+{
+  m_constituents.insert(position, constituent);
+  m_idsToConstituentsMap[constituent->id()] = constituent;
+  emit changed(this);
+}
+
 void EasyUtterance::removeRelationAt(int i)
 {
   m_relations.removeAt(i);
