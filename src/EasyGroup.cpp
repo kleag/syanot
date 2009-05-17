@@ -91,5 +91,15 @@ void EasyGroup::push_back(EasyForm* form)
   emit (changed(this));
 }
 
+QString EasyGroup::text() const
+{
+  QString result;
+  foreach(const EasyForm* f, m_forms)
+  {
+    result += f->text() + " ";
+  }
+  return result;
+}
+
 
 #include "EasyGroup.moc"

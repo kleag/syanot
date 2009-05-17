@@ -52,6 +52,7 @@ public:
   */
   virtual void saveAsXmlTo(QTextStream& s) const = 0;
 
+  virtual QString text() const;
 Q_SIGNALS:
   void changed(EasyConstituent*);
 

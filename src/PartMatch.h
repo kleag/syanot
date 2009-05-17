@@ -91,7 +91,8 @@ public:
     const QString& src,
     const QString& tgt);
 
-
+  QString text();
+  
 Q_SIGNALS:
   void ssetReadWrite();
   void ssaveTo(const QString& fileName);

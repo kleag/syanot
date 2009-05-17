@@ -65,7 +65,7 @@
 
 #include <iostream>
 
-using namespace Syanot;
+// using namespace Syanot;
 
 Syanot::Syanot() :
     KParts::MainWindow(),
@@ -235,6 +235,7 @@ void Syanot::openUrl(const KUrl& url)
   connect (m_document,SIGNAL(changed(EasyDocument*)),
             this,SLOT(slotDocumentModified()));
 
+  this->setWindowTitle(i18n("Syanot - %1", url.prettyUrl()));
 }
 
 void Syanot::fileOpen()
@@ -272,6 +273,18 @@ void Syanot::setupActions()
 //   KStandardAction::keyBindings(this, SLOT(optionsConfigureKeys()), this);
   actionCollection()->addAction( KStandardAction::ConfigureToolbars, "options_configure_toolbars", this, SLOT( optionsConfigureToolbars() ) );
   actionCollection()->addAction( KStandardAction::Preferences, "options_configure", this, SLOT( optionsConfigure() ) );
+
+  QAction* edit_clear_all_rels = actionCollection()->addAction( "edit_clear_all_rels" );
+  edit_clear_all_rels->setText(i18n("Clear Relations"));
+//   edit_clear_all_rels->setIcon(QPixmap(KGlobal::dirs()->findResource("data","kgraphviewerpart/pics/kgraphviewer-newnode.png")));
+  connect( edit_clear_all_rels, SIGNAL(triggered(bool)), this, SLOT( slotEditClearAllRels() ) );
+  
+}
+
+void Syanot::slotEditClearAllRels()
+{
+  kDebug();
+  
 }
 
 bool Syanot::queryClose()
@@ -674,6 +687,8 @@ void Syanot::activateUtterance(const QString& id)
 
   vboxLayout->addWidget(m_widget);
   m_widget->show();
+
+  enonce->setText(m_currentPartMatch->text());
 }
 
 void Syanot::createPartFor(const QString& id)

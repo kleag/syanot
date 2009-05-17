@@ -11,6 +11,12 @@
     <Separator/>
     <Action name="file_quit"/>
   </Menu>
+  <Menu name="edit"><text>&amp;Edit</text>
+    <Action name="edit_clear_all_rels"/>
+    <Action name="edit_clear_all_deps"/>
+    <Action name="edit_clear_all"/>
+    <Separator/>
+  </Menu>
   <Menu name="view"><text>&amp;View</text>
     <DefineGroup name="view_merge"/>
     <Separator/>
@@ -32,6 +38,9 @@
   <Action name="file_open_recent"/>
   <Action name="file_save"/>
   <Action name="file_save_as"/>
+  <Action name="edit_clear_all_rels"/>
+  <Action name="edit_clear_all_deps"/>
+  <Action name="edit_clear_all"/>
 <Merge/>
 </ToolBar>
 <ToolBar noMerge="3" name="helpToolBar" align="right"><text>Help Toolbar</text>

@@ -682,6 +682,16 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QLabel" name="enonce" >
+       <property name="text" >
+        <string>La phrase est ici.</string>
+       </property>
+       <property name="wordWrap" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>

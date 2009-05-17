@@ -34,6 +34,7 @@
 #include <QUuid>
 #include <QBitmap>
 
+#include <limits>
 // EasyRef relations colors
 //
 // SUJ-V 144 238 144 #90EE90
@@ -1346,6 +1347,11 @@ void PartMatch::slotAPropager(int value)
       }
     }
   }
+}
+
+QString PartMatch::text()
+{
+  return m_utterance->text();
 }
 
 #include "PartMatch.moc"

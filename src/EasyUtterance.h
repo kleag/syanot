@@ -72,6 +72,8 @@ public:
   void removeRelationAt(int i);
 
   EasyRelation* relationNamed(const QString& id);
+
+  QString text() const;  
   
 Q_SIGNALS:
   void changed(EasyUtterance*);

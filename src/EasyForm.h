@@ -50,6 +50,7 @@ public:
 
   virtual void saveAsXmlTo(QTextStream& s) const;
 
+  QString text() const {return form();}
 
 private:
   QString m_form;

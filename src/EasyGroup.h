@@ -67,7 +67,9 @@ public:
   void removeForm(EasyForm* form) {m_forms.removeAll(form);}
 
   inline bool isEmpty() const {return m_forms.isEmpty();}
-  
+
+  QString text() const;
+
 private:
   virtual void dummy() {};
 

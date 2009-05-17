@@ -86,6 +86,16 @@ EasyRelation* EasyUtterance::relationNamed(const QString& id)
   return 0;
 }
 
+QString EasyUtterance::text() const
+{
+  QString result;
+  foreach (const EasyConstituent* c, m_constituents)
+  {
+    result += c->text() + " ";
+  }
+  return result;
+}
+
 QTextStream& operator<<(QTextStream& s, const EasyUtterance& u)
 {
   s << "<E id=\""<<u.id()<<"\">\n";

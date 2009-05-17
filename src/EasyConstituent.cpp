@@ -36,4 +36,9 @@ void EasyConstituent::setId(const QString& id)
   emit(changed(this));
 }
 
+QString EasyConstituent::text() const
+{
+  return "";
+}
+
 #include "EasyConstituent.moc"

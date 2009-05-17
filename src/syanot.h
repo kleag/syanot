@@ -135,6 +135,7 @@ private slots:
   void fileOpen();
   void fileSave();
   void fileSaveAs();
+  void slotEditClearAllRels();
   void close();
   void slotURLSelected(const KUrl&);
   void optionsShowToolbar();

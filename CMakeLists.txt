@@ -1,18 +1,31 @@
 project(syanot)
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
+	                      ${CMAKE_SOURCE_DIR}/cmake/modules
+			                            ${CMAKE_SOURCE_DIR}/skanlite/cmake/modules
+						       )
+					       
+					       # search packages used by KDE
+					       find_package(KDE4 REQUIRED)
+					       include(KDE4Defaults)
+					       include(MacroLibrary)
+					       include(MacroOptionalAddSubdirectory)
+					       include(MacroOptionalDependPackage)
+					       
+					       
+					       set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 
 # search packages used by KDE
-find_package(KDE4 REQUIRED)
-include (KDE4Defaults)
-include (MacroLibrary)
+#find_package(KDE4 REQUIRED)
+#include (KDE4Defaults)
+#include (MacroLibrary)
 
 # are these two really required ?
 find_package(ZLIB REQUIRED)
 if (APPLE)
    find_package(Carbon REQUIRED)
 endif (APPLE)
-find_package(KdepimLibs REQUIRED)
+#find_package(KdepimLibs REQUIRED)
 #macro_optional_find_package(GraphViz)
 
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DQT3_SUPPORT)

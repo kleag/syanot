@@ -39,7 +39,7 @@
 
 #include <iostream>
 
-using namespace Syanot;
+// using namespace Syanot;
 
 SyanotConfigurationDialog::SyanotConfigurationDialog (QWidget *parent, const QString& name, KConfigSkeleton *config,
               KPageDialog::FaceType dialogType, 
