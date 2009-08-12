@@ -37,6 +37,7 @@ QTextStream& operator<<(QTextStream& s, const EasyRelation& r)
     s << "<s-o valeur=\""<<r.value()<<"\"/>\n";
   }
   s<<"</relation>\n";
+  return s;
 }
 
 #include "EasyRelation.moc"
