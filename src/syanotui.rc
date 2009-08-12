@@ -4,9 +4,11 @@
   <Menu name="file"><text>&amp;File</text>
     <Action name="file_new"/>
     <Action name="file_open"/>
+    <Action name="file_open_compare"/>
+    <Action name="file_close_compare"/>
     <Action name="file_open_recent"/>
-    <Action name="file_savel"/>
-    <Action name="file_save_asl"/>
+    <Action name="file_save"/>
+    <Action name="file_save_as"/>
     <DefineGroup name="open_merge" />
     <Separator/>
     <Action name="file_quit"/>

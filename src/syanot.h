@@ -71,6 +71,8 @@ public:
     */
   void openUrl(const KUrl& url);
 
+  void openSecondaryUrl(const KUrl& url);
+
 protected:
 
   bool queryClose(); 
@@ -148,7 +150,9 @@ private slots:
     
   void applyNewToolbarConfig();
   void slotUtteranceClicked(QListWidgetItem*);
-  
+  void slotOpenForComparison(bool);
+  void slotCloseComparison(bool);
+
 private:
   void setupAccel();
   void setupActions();
@@ -159,7 +163,8 @@ private:
   void createSOChooser();
   void createAPropagerChooser();
 
-  QWidget* m_widget;
+  QWidget* m_primaryGraph;
+  QWidget* m_secondaryGraph;
   KRecentFilesAction* m_rfa;
   KParts::PartManager* m_manager;
   
@@ -174,6 +179,7 @@ private:
   QMap<QString, QString> m_newElementAttributes;
 
   EasyDocument* m_document;
+  EasyDocument* m_secondaryDocument;
   bool m_documentModified;
 
   QString m_currentRelation;

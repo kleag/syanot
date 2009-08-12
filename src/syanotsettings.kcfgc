@@ -2,4 +2,3 @@ File=syanotsettings.kcfg
 ClassName=SyanotSettings
 Singleton=true 
 Mutators=true
-NameSpace=Syanot

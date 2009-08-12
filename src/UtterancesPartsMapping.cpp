@@ -40,19 +40,29 @@ void UtterancesPartsMapping::addMapping(PartMatch* match)
   
 void UtterancesPartsMapping::setCurrentPart(KParts::Part* part)
 {
+  if (part == 0)
+  {
+    m_currentPart = 0;
+    m_currentPartMatch = 0;
+  }
+  if (!m_partPartMatchMap.contains(part)) return;
   m_currentPart = part;
   m_currentPartMatch = m_partPartMatchMap[part];
 }
 
 void UtterancesPartsMapping::setCurrentPart(const QString& id)
 {
+  if (!m_utteranceIdPartMap.contains(id)) return;
   m_currentPart = m_utteranceIdPartMap[id];
   m_currentPartMatch = m_utteranceIdPartMatchMap[id];
 }
 
 void UtterancesPartsMapping::clear()
 {
-  foreach (KParts::Part* part, m_partPartMatchMap.keys())
+  m_currentPart = 0;
+  m_currentPartMatch = 0;
+
+foreach (KParts::Part* part, m_partPartMatchMap.keys())
   {
     delete m_partPartMatchMap[part];
     delete part;
@@ -60,7 +70,4 @@ void UtterancesPartsMapping::clear()
   m_partPartMatchMap.clear();
   m_utteranceIdPartMap.clear();
   m_utteranceIdPartMatchMap.clear();
-  
-  m_currentPart = 0;
-  m_currentPartMatch = 0;
 }

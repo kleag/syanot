@@ -72,11 +72,13 @@
 
 Syanot::Syanot(QWidget *parent, Qt::WindowFlags flags) :
     KParts::MainWindow(parent,flags),
-    m_widget(0),
+    m_primaryGraph(0),
+    m_secondaryGraph(0),
     m_rfa(0),
     m_primaryMapping(this),
     m_secondaryMapping(this),
     m_document(0),
+    m_secondaryDocument(0),
     m_documentModified(false)
 {
   kDebug();
@@ -248,7 +250,8 @@ void Syanot::fileOpen()
   // the Open shortcut is pressed (usually CTRL+O) or the Open toolbar
   // button is clicked
   KUrl url = KFileDialog::getOpenUrl(KUrl(), QString("*"), 0, QString::null);
-  
+  if (url.isEmpty()) return;
+
   if (m_rfa != 0)
   {
     m_rfa->addUrl(url);
@@ -282,6 +285,12 @@ void Syanot::setupActions()
 //   edit_clear_all_rels->setIcon(QPixmap(KGlobal::dirs()->findResource("data","kgraphviewerpart/pics/kgraphviewer-newnode.png")));
   connect( edit_clear_all_rels, SIGNAL(triggered(bool)), this, SLOT( slotEditClearAllRels() ) );
   
+  QAction* file_open_compare = actionCollection()->addAction( "file_open_compare" );
+  file_open_compare->setText(i18n("Open for comparison..."));
+  connect( file_open_compare, SIGNAL(triggered(bool)), this, SLOT(slotOpenForComparison(bool)));
+  QAction* file_close_compare = actionCollection()->addAction( "file_close_compare" );
+  file_close_compare->setText(i18n("Close current comparison"));
+  connect( file_close_compare, SIGNAL(triggered(bool)), this, SLOT(slotCloseComparison(bool)));
 }
 
 void Syanot::slotEditClearAllRels()
@@ -392,7 +401,7 @@ void Syanot::close()
 void Syanot::fileSave()
 {
   kDebug();
-  if (m_widget != 0)
+  if (m_primaryGraph != 0)
   {
     KTemporaryFile* temp = new KTemporaryFile();
     temp->setAutoRemove(false);
@@ -422,10 +431,10 @@ void Syanot::fileSave()
 
 void Syanot::fileSaveAs()
 {
-  if (m_widget != 0)
+  if (m_primaryGraph != 0)
   {
     m_openedFile = KFileDialog::getOpenUrl(KUrl(),
-                "*.easy.xml", m_widget,
+                "*.easy.xml", m_primaryGraph,
                 i18n("Save current graph to..."));
     fileSave();
   }
@@ -664,30 +673,45 @@ void Syanot::slotUtteranceClicked(QListWidgetItem* item)
 void Syanot::activateUtterance(const QString& id)
 {
   kDebug() << id;
-  if (m_widget != 0)
+  if (m_primaryGraph != 0)
   {
-    m_widget->hide();
-    vboxLayout->removeWidget(m_widget);
+    m_primaryGraph->hide();
+    vboxLayout->removeWidget(m_primaryGraph);
   }
   else
   {
     vboxLayout->removeItem(spacerItem1);
   }
-
-  if (!m_primaryMapping.contains(id))
+  if (m_secondaryGraph != 0)
   {
-    createPartFor(id);
+    m_secondaryGraph->hide();
+    vboxLayout->removeWidget(m_secondaryGraph);
   }
+
+  createPartFor(id);
+
   m_primaryMapping.setCurrentPart(id);
+  m_secondaryMapping.setCurrentPart(id);
   m_manager->setActivePart(m_primaryMapping.currentPart());
 
-  m_widget = m_primaryMapping.currentPart()->widget();
-  m_widget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-  m_widget->sizePolicy().setHorizontalStretch(1);
-  m_widget->sizePolicy().setVerticalStretch(1);
+  m_primaryGraph = m_primaryMapping.currentPart()->widget();
+  m_primaryGraph->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+  m_primaryGraph->sizePolicy().setHorizontalStretch(1);
+  m_primaryGraph->sizePolicy().setVerticalStretch(1);
 
-  vboxLayout->addWidget(m_widget);
-  m_widget->show();
+  vboxLayout->addWidget(m_primaryGraph);
+  m_primaryGraph->show();
+
+  if (m_secondaryMapping.contains(id))
+  {
+    m_secondaryGraph = m_secondaryMapping.currentPart()->widget();
+    m_secondaryGraph->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    m_secondaryGraph->sizePolicy().setHorizontalStretch(1);
+    m_secondaryGraph->sizePolicy().setVerticalStretch(1);
+
+    vboxLayout->addWidget(m_secondaryGraph);
+    m_secondaryGraph->show();
+  }
 
   enonce->setText(m_primaryMapping.currentPartMatch()->text());
 }
@@ -699,25 +723,46 @@ void Syanot::createPartFor(const QString& id)
   EasyUtterance* utterance = m_document->utteranceIdentifiedBy(id);
   if (utterance == 0) return;
 
-  if (m_primaryMapping.contains(id))
+  if (!m_primaryMapping.contains(id))
   {
-    return;
+    kDebug() << "creating part";
+    KParts::ReadOnlyPart* part = static_cast<KParts::ReadOnlyPart*>(
+    m_factory->create<KParts::ReadOnlyPart>(centralWidget(), this));
+    kDebug() << "part created" << part;
+    if (part)
+    {
+      PartMatch* partMatch = new PartMatch(part, utterance);
+      m_primaryMapping.addMapping(partMatch);
+
+      createGUI(part);
+      part->unplugActionList("view_actionlist");
+      m_manager->addPart( part, true );
+      connect(this,SIGNAL(hide(KParts::Part*)),part,SLOT(slotHide(KParts::Part*)));
+      connect(part,SIGNAL(close()), this,SLOT(slotClose()));
+    }
   }
-  
-  kDebug() << "creating part";
-  KParts::ReadOnlyPart* part = static_cast<KParts::ReadOnlyPart*>(
-  m_factory->create<KParts::ReadOnlyPart>(centralWidget(), this));
-  kDebug() << "part created" << part;
-  if (part)
+
+  if (m_secondaryDocument == 0) return;
+  EasyUtterance* secondaryUtterance = m_secondaryDocument->utteranceIdentifiedBy(id);
+  if (secondaryUtterance == 0) return;
+
+  if (!m_secondaryMapping.contains(id))
   {
-    PartMatch* partMatch = new PartMatch(part, utterance);
-    m_primaryMapping.addMapping(partMatch);
-    
-    createGUI(part);
-    part->unplugActionList("view_actionlist");
-    m_manager->addPart( part, true );
-    connect(this,SIGNAL(hide(KParts::Part*)),part,SLOT(slotHide(KParts::Part*)));
-    connect(part,SIGNAL(close()), this,SLOT(slotClose()));
+    kDebug() << "creating secondary part";
+    KParts::ReadOnlyPart* part = static_cast<KParts::ReadOnlyPart*>(
+    m_factory->create<KParts::ReadOnlyPart>(centralWidget(), this));
+    kDebug() << "secondary part created" << part;
+    if (part)
+    {
+      PartMatch* partMatch = new PartMatch(part, secondaryUtterance);
+      m_secondaryMapping.addMapping(partMatch);
+
+      createGUI(part);
+      part->unplugActionList("view_actionlist");
+      m_manager->addPart( part, true );
+      connect(this,SIGNAL(hide(KParts::Part*)),part,SLOT(slotHide(KParts::Part*)));
+      connect(part,SIGNAL(close()), this,SLOT(slotClose()));
+    }
   }
 }
 
@@ -744,11 +789,11 @@ bool Syanot::slotClose()
   kDebug() << "close=" << close << endl;
   if (close)
   {
-    if (m_widget != 0)
+    if (m_primaryGraph != 0)
     {
-      m_widget->hide();
-      vboxLayout->removeWidget(m_widget);
-      m_widget = 0;
+      m_primaryGraph->hide();
+      vboxLayout->removeWidget(m_primaryGraph);
+      m_primaryGraph = 0;
     }
     m_utterancesWidget->clear();
     m_primaryMapping.clear();
@@ -850,6 +895,61 @@ void Syanot::slotSetAPropager(int value)
 {
   kDebug();
   m_aPropagerCheckbox-> setCheckState ( value?Qt::Checked:Qt::Unchecked );
+}
+
+void Syanot::slotOpenForComparison(bool)
+{
+  kDebug();
+  KUrl url = KFileDialog::getOpenUrl(KUrl(), QString("*"), 0, QString::null);
+  if (url.isEmpty()) return;
+  
+  openSecondaryUrl(url);
+}
+
+void Syanot::openSecondaryUrl(const KUrl& url)
+{
+  kDebug() << url;
+  m_secondaryDocument = new EasyDocument();
+  QString tmpFileName;
+  KIO::NetAccess::download(url,tmpFileName,this);
+  QFile file(tmpFileName);
+  if (!file.open(QFile::ReadOnly | QFile::Text))
+  {
+      KMessageBox::error(this,
+                          i18n("Cannot read file %1:\n%2.",
+                              tmpFileName,file.errorString()),
+                          i18n("Syanot loading secondary utterances"));
+      return;
+  }
+  kDebug() << "tmp file opened:" << tmpFileName;
+
+  EasyXmlReader reader(m_secondaryDocument);
+  if (!reader.read(&file))
+  {
+      KMessageBox::error(this,
+                          i18n("Parse error in file %1 at line %2, column %3:\n%4",
+                              tmpFileName, reader.lineNumber(),
+                              reader.columnNumber(), reader.errorString()),
+                          i18n("Syanot loading secondary utterances"));
+  }
+  else
+  {
+    statusBar()->showMessage(i18n("File loaded"), 2000);
+    activateUtterance(m_primaryMapping.currentPartMatch()->utteranceId());
+  }
+}
+
+void Syanot::slotCloseComparison(bool)
+{
+  if (m_secondaryGraph != 0)
+  {
+    m_secondaryGraph->hide();
+    vboxLayout->removeWidget(m_secondaryGraph);
+    m_secondaryGraph = 0;
+  }
+  m_secondaryMapping.clear();
+  delete m_secondaryDocument;
+  m_secondaryDocument = 0;
 }
 
 #include "syanot.moc"
