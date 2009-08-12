@@ -20,6 +20,8 @@
 #ifndef _SYANOT_H_
 #define _SYANOT_H_
 
+#include "UtterancesPartsMapping.h"
+
 #include <kapplication.h>
 #include <kparts/mainwindow.h>
 #include <ktabwidget.h>
@@ -57,7 +59,7 @@ public:
   /**
     * Default Constructor
     */
-  Syanot();
+  Syanot(QWidget *parent=0, Qt::WindowFlags f=KDE_DEFAULT_WINDOWFLAGS);
 
   /**
     * Default Destructor
@@ -164,14 +166,10 @@ private:
   KToggleAction *m_toolbarAction;
   KToggleAction *m_statusbarAction;
 
-  QMap<QString, KParts::Part*> m_utteranceIdPartMap;
-  QMap<KParts::Part*, PartMatch*> m_partPartMatchMap;
-  QMap<QString, PartMatch*> m_utteranceIdPartMatchMap;
+  UtterancesPartsMapping m_primaryMapping;
+  UtterancesPartsMapping m_secondaryMapping;
   
   KUrl m_openedFile;
-  
-  KParts::Part* m_currentPart;
-  PartMatch* m_currentPartMatch;
   
   QMap<QString, QString> m_newElementAttributes;
 

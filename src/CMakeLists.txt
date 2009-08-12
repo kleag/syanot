@@ -5,7 +5,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/part ${CMAK
 
 set(syanot_SRCS syanotmain.cpp syanot.cpp syanotConfigDialog.cpp
     EasyConstituent.cpp EasyForm.cpp EasyGroup.cpp EasyUtterance.cpp
-    EasyDocument.cpp EasyXmlReader.cpp EasyRelation.cpp PartMatch.cpp)
+    EasyDocument.cpp EasyXmlReader.cpp EasyRelation.cpp PartMatch.cpp
+    UtterancesPartsMapping.cpp)
 
 qt4_add_dbus_adaptor(syanot_SRCS org.kde.syanot.xml syanot.h Syanot)
 

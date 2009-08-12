@@ -62,6 +62,7 @@
 #include <QTreeWidget>
 #include <QVBoxLayout>
 #include <QFile>
+#include <QFrame>
 #include <QTextStream>
 #include <QCheckBox>
 
@@ -69,12 +70,12 @@
 
 // using namespace Syanot;
 
-Syanot::Syanot() :
-    KParts::MainWindow(),
+Syanot::Syanot(QWidget *parent, Qt::WindowFlags flags) :
+    KParts::MainWindow(parent,flags),
     m_widget(0),
     m_rfa(0),
-    m_currentPart(0),
-    m_currentPartMatch(0),
+    m_primaryMapping(this),
+    m_secondaryMapping(this),
     m_document(0),
     m_documentModified(false)
 {
@@ -433,48 +434,47 @@ void Syanot::fileSaveAs()
 void Syanot::slotSetActiveGraph( KParts::Part* part)
 {
   kDebug();
-  if (m_currentPartMatch != 0)
+  if (m_primaryMapping.currentPartMatch() != 0)
   {
-    disconnect(m_currentPartMatch,SIGNAL(showSOChooser()),this,SLOT(slotShowSOChooser()));
-    disconnect(m_currentPartMatch,SIGNAL(hideSOChooser()),this,SLOT(slotHideSOChooser()));
-    disconnect(m_currentPartMatch,SIGNAL(showAPropagerChooser()),this,SLOT(slotShowAPropagerChooser()));
-    disconnect(m_currentPartMatch,SIGNAL(hideAPropagerChooser()),this,SLOT(slotHideAPropagerChooser()));
-    disconnect(this,SIGNAL(soSujet()),m_currentPartMatch,SLOT(slotSoSujet()));
-    disconnect(this,SIGNAL(soObjet()),m_currentPartMatch,SLOT(slotSoObjet()));
-    disconnect(this,SIGNAL(soInd()),m_currentPartMatch,SLOT(slotSoInd()));
-    disconnect(this,SIGNAL(aPropager(int)),m_currentPartMatch,SLOT(slotAPropager(int)));
-    disconnect(m_currentPartMatch,SIGNAL(setSO(const QString&)),this,SLOT(slotSetSO(const QString&)));
-    disconnect(m_currentPartMatch,SIGNAL(setAPropager(int)),this,SLOT(slotSetAPropager(int)));
+    disconnect(m_primaryMapping.currentPartMatch(),SIGNAL(showSOChooser()),this,SLOT(slotShowSOChooser()));
+    disconnect(m_primaryMapping.currentPartMatch(),SIGNAL(hideSOChooser()),this,SLOT(slotHideSOChooser()));
+    disconnect(m_primaryMapping.currentPartMatch(),SIGNAL(showAPropagerChooser()),this,SLOT(slotShowAPropagerChooser()));
+    disconnect(m_primaryMapping.currentPartMatch(),SIGNAL(hideAPropagerChooser()),this,SLOT(slotHideAPropagerChooser()));
+    disconnect(this,SIGNAL(soSujet()),m_primaryMapping.currentPartMatch(),SLOT(slotSoSujet()));
+    disconnect(this,SIGNAL(soObjet()),m_primaryMapping.currentPartMatch(),SLOT(slotSoObjet()));
+    disconnect(this,SIGNAL(soInd()),m_primaryMapping.currentPartMatch(),SLOT(slotSoInd()));
+    disconnect(this,SIGNAL(aPropager(int)),m_primaryMapping.currentPartMatch(),SLOT(slotAPropager(int)));
+    disconnect(m_primaryMapping.currentPartMatch(),SIGNAL(setSO(const QString&)),this,SLOT(slotSetSO(const QString&)));
+    disconnect(m_primaryMapping.currentPartMatch(),SIGNAL(setAPropager(int)),this,SLOT(slotSetAPropager(int)));
   }
-  m_currentPart = part;
-  m_currentPartMatch = m_partPartMatchMap[part];
-  if (m_currentPart == 0)
+  m_primaryMapping.setCurrentPart(part);
+  if (m_primaryMapping.currentPart() == 0)
   {
     return;
   }
-  connect(m_currentPartMatch,SIGNAL(showSOChooser()),this,SLOT(slotShowSOChooser()));
-  connect(m_currentPartMatch,SIGNAL(hideSOChooser()),this,SLOT(slotHideSOChooser()));
-  connect(m_currentPartMatch,SIGNAL(showAPropagerChooser()),this,SLOT(slotShowAPropagerChooser()));
-  connect(m_currentPartMatch,SIGNAL(hideAPropagerChooser()),this,SLOT(slotHideAPropagerChooser()));
-  connect(this,SIGNAL(soSujet()),m_currentPartMatch,SLOT(slotSoSujet()));
-  connect(this,SIGNAL(soObjet()),m_currentPartMatch,SLOT(slotSoObjet()));
-  connect(this,SIGNAL(soInd()),m_currentPartMatch,SLOT(slotSoInd()));
-  connect(this,SIGNAL(aPropager(int)),m_currentPartMatch,SLOT(slotAPropager(int)));
-  connect(m_currentPartMatch,SIGNAL(setSO(const QString&)),this,SLOT(slotSetSO(const QString&)));
-  connect(m_currentPartMatch,SIGNAL(setAPropager(int)),this,SLOT(slotSetAPropager(int)));
+  connect(m_primaryMapping.currentPartMatch(),SIGNAL(showSOChooser()),this,SLOT(slotShowSOChooser()));
+  connect(m_primaryMapping.currentPartMatch(),SIGNAL(hideSOChooser()),this,SLOT(slotHideSOChooser()));
+  connect(m_primaryMapping.currentPartMatch(),SIGNAL(showAPropagerChooser()),this,SLOT(slotShowAPropagerChooser()));
+  connect(m_primaryMapping.currentPartMatch(),SIGNAL(hideAPropagerChooser()),this,SLOT(slotHideAPropagerChooser()));
+  connect(this,SIGNAL(soSujet()),m_primaryMapping.currentPartMatch(),SLOT(slotSoSujet()));
+  connect(this,SIGNAL(soObjet()),m_primaryMapping.currentPartMatch(),SLOT(slotSoObjet()));
+  connect(this,SIGNAL(soInd()),m_primaryMapping.currentPartMatch(),SLOT(slotSoInd()));
+  connect(this,SIGNAL(aPropager(int)),m_primaryMapping.currentPartMatch(),SLOT(slotAPropager(int)));
+  connect(m_primaryMapping.currentPartMatch(),SIGNAL(setSO(const QString&)),this,SLOT(slotSetSO(const QString&)));
+  connect(m_primaryMapping.currentPartMatch(),SIGNAL(setAPropager(int)),this,SLOT(slotSetAPropager(int)));
 
-  m_currentPartMatch-> setReadWrite();
+  m_primaryMapping.currentPartMatch()-> setReadWrite();
 }
 
 void Syanot::slotAddAttribute(const QString& attribName)
 {
-  m_currentPartMatch-> addAttribute(attribName);
+  m_primaryMapping.currentPartMatch()-> addAttribute(attribName);
 }
 
 void Syanot::slotRemoveAttribute(const QString& nodeName, const QString& attribName)
 {
   kDebug();
-  m_currentPartMatch-> removeAttribute(nodeName,attribName);
+  m_primaryMapping.currentPartMatch()-> removeAttribute(nodeName,attribName);
 }
 
 void Syanot::slotAddNewElementAttribute(const QString& attrib)
@@ -491,167 +491,167 @@ void Syanot::slotRemoveNewElementAttribute(const QString& attrib)
 
 void Syanot::slotSujVButtonClicked()
 {
-  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
+  if (m_primaryMapping.currentPartMatch() !=0 ) m_primaryMapping.currentPartMatch()->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "SUJ-V";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  if (m_currentPartMatch != 0)
-    m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_primaryMapping.currentPartMatch() != 0)
+    m_primaryMapping.currentPartMatch()-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotCodVButtonClicked()
 {
-  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
+  if (m_primaryMapping.currentPartMatch() !=0 ) m_primaryMapping.currentPartMatch()->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "COD-V";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  if (m_currentPartMatch != 0)
-    m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_primaryMapping.currentPartMatch() != 0)
+    m_primaryMapping.currentPartMatch()-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotModVButtonClicked()
 {
-  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
+  if (m_primaryMapping.currentPartMatch() !=0 ) m_primaryMapping.currentPartMatch()->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "MOD-V";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  if (m_currentPartMatch != 0)
-    m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_primaryMapping.currentPartMatch() != 0)
+    m_primaryMapping.currentPartMatch()-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotModAButtonClicked()
 {
-  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
+  if (m_primaryMapping.currentPartMatch() !=0 ) m_primaryMapping.currentPartMatch()->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "MOD-A";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  if (m_currentPartMatch != 0)
-    m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_primaryMapping.currentPartMatch() != 0)
+    m_primaryMapping.currentPartMatch()-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotModPButtonClicked()
 {
-  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
+  if (m_primaryMapping.currentPartMatch() !=0 ) m_primaryMapping.currentPartMatch()->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "MOD-P";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  if (m_currentPartMatch != 0)
-    m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_primaryMapping.currentPartMatch() != 0)
+    m_primaryMapping.currentPartMatch()-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotJuxtButtonClicked()
 {
-  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
+  if (m_primaryMapping.currentPartMatch() !=0 ) m_primaryMapping.currentPartMatch()->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "JUXT";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  if (m_currentPartMatch != 0)
-    m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_primaryMapping.currentPartMatch() != 0)
+    m_primaryMapping.currentPartMatch()-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotApposButtonClicked()
 {
-  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
+  if (m_primaryMapping.currentPartMatch() !=0 ) m_primaryMapping.currentPartMatch()->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "APPOS";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  if (m_currentPartMatch != 0)
-    m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_primaryMapping.currentPartMatch() != 0)
+    m_primaryMapping.currentPartMatch()-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotCoordButtonClicked()
 {
-  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
+  if (m_primaryMapping.currentPartMatch() !=0 ) m_primaryMapping.currentPartMatch()->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "COORD";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  if (m_currentPartMatch != 0)
-    m_currentPartMatch-> prepareAddNewCoord(attribs);
+  if (m_primaryMapping.currentPartMatch() != 0)
+    m_primaryMapping.currentPartMatch()-> prepareAddNewCoord(attribs);
 }
 
 void Syanot::slotModRButtonClicked()
 {
-  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
+  if (m_primaryMapping.currentPartMatch() !=0 ) m_primaryMapping.currentPartMatch()->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "MOD-R";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  if (m_currentPartMatch != 0)
-    m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_primaryMapping.currentPartMatch() != 0)
+    m_primaryMapping.currentPartMatch()-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotModNButtonClicked()
 {
-  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
+  if (m_primaryMapping.currentPartMatch() !=0 ) m_primaryMapping.currentPartMatch()->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "MOD-N";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  if (m_currentPartMatch != 0)
-    m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_primaryMapping.currentPartMatch() != 0)
+    m_primaryMapping.currentPartMatch()-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotAtbSOButtonClicked()
 {
-  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
+  if (m_primaryMapping.currentPartMatch() !=0 ) m_primaryMapping.currentPartMatch()->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "ATB-SO";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  if (m_currentPartMatch != 0)
-    m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_primaryMapping.currentPartMatch() != 0)
+    m_primaryMapping.currentPartMatch()-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotCplVButtonClicked()
 {
-  m_currentPartMatch->setAddingGroup(false);
+  m_primaryMapping.currentPartMatch()->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "CPL-V";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  if (m_currentPartMatch != 0)
-    m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_primaryMapping.currentPartMatch() != 0)
+    m_primaryMapping.currentPartMatch()-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotAuxVButtonClicked()
 {
-  if (m_currentPartMatch !=0 ) m_currentPartMatch->setAddingGroup(false);
+  if (m_primaryMapping.currentPartMatch() !=0 ) m_primaryMapping.currentPartMatch()->setAddingGroup(false);
   QMap<QString,QString> attribs;
   attribs["color"] = "black";
   attribs["label"] = "AUX-V";
   attribs["weight"] = "0.0";
   attribs["z"] = "5";
-  if (m_currentPartMatch != 0)
-    m_currentPartMatch-> prepareAddNewEdge(attribs);
+  if (m_primaryMapping.currentPartMatch() != 0)
+    m_primaryMapping.currentPartMatch()-> prepareAddNewEdge(attribs);
 }
 
 void Syanot::slotGroupButtonClicked()
 {
   kDebug();
-  if (m_currentPartMatch != 0)
+  if (m_primaryMapping.currentPartMatch() != 0)
   {
-    m_currentPartMatch-> prepareSelectElements();
-    m_currentPartMatch->setAddingGroup(true);
+    m_primaryMapping.currentPartMatch()-> prepareSelectElements();
+    m_primaryMapping.currentPartMatch()->setAddingGroup(true);
   }
 }
 
@@ -674,15 +674,14 @@ void Syanot::activateUtterance(const QString& id)
     vboxLayout->removeItem(spacerItem1);
   }
 
-  if (!m_utteranceIdPartMap.contains(id))
+  if (!m_primaryMapping.contains(id))
   {
     createPartFor(id);
   }
-  m_currentPart = m_utteranceIdPartMap[id];
-  m_currentPartMatch = m_utteranceIdPartMatchMap[id];
-  m_manager->setActivePart(m_currentPart);
+  m_primaryMapping.setCurrentPart(id);
+  m_manager->setActivePart(m_primaryMapping.currentPart());
 
-  m_widget = m_currentPart->widget();
+  m_widget = m_primaryMapping.currentPart()->widget();
   m_widget->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
   m_widget->sizePolicy().setHorizontalStretch(1);
   m_widget->sizePolicy().setVerticalStretch(1);
@@ -690,7 +689,7 @@ void Syanot::activateUtterance(const QString& id)
   vboxLayout->addWidget(m_widget);
   m_widget->show();
 
-  enonce->setText(m_currentPartMatch->text());
+  enonce->setText(m_primaryMapping.currentPartMatch()->text());
 }
 
 void Syanot::createPartFor(const QString& id)
@@ -700,7 +699,7 @@ void Syanot::createPartFor(const QString& id)
   EasyUtterance* utterance = m_document->utteranceIdentifiedBy(id);
   if (utterance == 0) return;
 
-  if (m_utteranceIdPartMap.contains(id))
+  if (m_primaryMapping.contains(id))
   {
     return;
   }
@@ -712,9 +711,7 @@ void Syanot::createPartFor(const QString& id)
   if (part)
   {
     PartMatch* partMatch = new PartMatch(part, utterance);
-    m_utteranceIdPartMap[id] = part;
-    m_utteranceIdPartMatchMap[id] = partMatch;
-    m_partPartMatchMap[part] = partMatch;
+    m_primaryMapping.addMapping(partMatch);
     
     createGUI(part);
     part->unplugActionList("view_actionlist");
@@ -730,7 +727,7 @@ bool Syanot::slotClose()
 
   bool close;
   
-  if (m_currentPartMatch) m_currentPartMatch->setAddingGroup(false);
+  if (m_primaryMapping.currentPartMatch()) m_primaryMapping.currentPartMatch()->setAddingGroup(false);
   if (m_documentModified)
   {
     close = (KMessageBox::questionYesNo(0,
@@ -754,23 +751,10 @@ bool Syanot::slotClose()
       m_widget = 0;
     }
     m_utterancesWidget->clear();
-
-    foreach (KParts::Part* part, m_partPartMatchMap.keys())
-    {
-      delete m_partPartMatchMap[part];
-      delete part;
-    }
-    m_partPartMatchMap.clear();
-    m_utteranceIdPartMap.clear();
-    m_utteranceIdPartMatchMap.clear();
-
-    m_openedFile = KUrl();
-
-    m_currentPart = 0;
-    m_currentPartMatch = 0;
-
+    m_primaryMapping.clear();
     m_newElementAttributes.clear();
-
+    m_openedFile = KUrl();
+    
     if (m_document != 0)
     {
       delete m_document;
