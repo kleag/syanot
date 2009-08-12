@@ -54,6 +54,7 @@ public:
   inline void setUtterance(EasyUtterance* u) {m_utterance = u;}
   
   inline const KParts::Part* part() const {return m_part;}
+  inline KParts::Part* part() {return m_part;}
   void setPart(KParts::Part* p);
   
   inline void setReadWrite() {emit ssetReadWrite();}
