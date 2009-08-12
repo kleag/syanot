@@ -64,7 +64,7 @@ int main(int argc, char **argv)
       Syanot *widget = 0;
       if ( args->count() == 0 )
       {
-        widget = new Syanot;
+        widget = new Syanot();
         new SyanotAdaptor(widget);
         QDBusConnection::sessionBus().registerObject("/Syanot", widget);
         widget->show();
