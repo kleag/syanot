@@ -49,6 +49,7 @@ int main(int argc, char **argv)
   KCmdLineOptions options;
   options.add("+[URL]", ki18n( "Dot graph to open" ));
   options.add("comparewith file", ki18n("URL of a file containing an analysis to compare the main analysis with"));
+  options.add("utterances list", ki18n("List of utterances ids to display"));
   KCmdLineArgs::addCmdLineOptions( options );
   KApplication app;
   
@@ -97,6 +98,19 @@ int main(int argc, char **argv)
             QDBusInterface iface("org.kde.syanot", "/Syanot", "", QDBusConnection::sessionBus());
             if (iface.isValid()) 
             {
+              if (args->isSet("utterances"))
+              {
+                QDBusReply<void> reply = iface.call("slotSetUtterances", args->getOption("utterances"));
+                if (reply.isValid())
+                {
+                  kDebug() << "Reply was valid" << endl;
+                }
+                else
+                {
+                  kError() << "Call failed: " << reply.error().message() << endl;
+                  return 1;
+                }
+              }
               QDBusReply<void> reply = iface.call("openUrl", url.pathOrUrl());
               if (reply.isValid()) 
               {
@@ -136,6 +150,10 @@ int main(int argc, char **argv)
             new SyanotAdaptor(widget);
             QDBusConnection::sessionBus().registerObject("/Syanot", widget);
             widget->show();
+            if (args->isSet("utterances"))
+            {
+              widget->slotSetUtterances(args->getOption("utterances"));
+            }
             widget->openUrl( args->url( i ) );
             if (args->isSet("comparewith"))
             {

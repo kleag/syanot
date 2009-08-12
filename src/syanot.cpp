@@ -79,7 +79,8 @@ Syanot::Syanot(QWidget *parent, Qt::WindowFlags flags) :
     m_secondaryMapping(this),
     m_document(0),
     m_secondaryDocument(0),
-    m_documentModified(false)
+    m_documentModified(false),
+    m_utterancesList()
 {
   kDebug();
   m_factory = KPluginLoader("kgraphviewerpart").factory();
@@ -227,7 +228,10 @@ void Syanot::openUrl(const KUrl& url)
 
     foreach (EasyUtterance* utterance, m_document->utterances())
     {
-      m_utterancesWidget->addItem(utterance->id());
+      if (m_utterancesList.isEmpty() || m_utterancesList.contains(utterance->id()))
+      {
+        m_utterancesWidget->addItem(utterance->id());
+      }
     }
     m_utterancesWidget->setCurrentRow(0);
     if (m_utterancesWidget->currentItem()!=0)
@@ -949,6 +953,12 @@ void Syanot::slotCloseComparison(bool)
   m_secondaryMapping.clear();
   delete m_secondaryDocument;
   m_secondaryDocument = 0;
+}
+
+void Syanot::slotSetUtterances(const QString& utterances)
+{
+  qDebug() << "Syanot::slotSetUtterances" << utterances;
+  m_utterancesList = utterances.split(',', QString::SkipEmptyParts);
 }
 
 #include "syanot.moc"

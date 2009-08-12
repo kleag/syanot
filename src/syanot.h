@@ -134,6 +134,7 @@ public slots:
 
   void slotSetSO(const QString& value);
   void slotSetAPropager(int value);
+  void slotSetUtterances(const QString& utterances);
   
 private slots:
   void fileNew();
@@ -194,6 +195,8 @@ private:
 
   KPushButton* m_soButton;
   QCheckBox* m_aPropagerCheckbox;
+
+  QStringList m_utterancesList;
 };
 
 #endif // _SYANOT_H_
