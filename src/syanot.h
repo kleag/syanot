@@ -25,7 +25,6 @@
 #include <ktabwidget.h>
 #include <kaction.h>
 #include <krecentfilesaction.h>
-#include <klibloader.h>
 
 class QListWidgetItem;
 class QDockWidget;
@@ -34,6 +33,7 @@ class QCheckBox;
 class KToggleAction;
 class KListWidget;
 class KPushButton;
+class KPluginFactory;
 
 class kgraphviewerPart;
 
@@ -182,7 +182,7 @@ private:
 
   KListWidget* m_utterancesWidget;
 
-  KLibFactory* m_factory;
+  KPluginFactory* m_factory;
 
   QDockWidget* m_aPropageDockWidget;
   QDockWidget* m_soChooserDockWidget;

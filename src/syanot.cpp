@@ -54,6 +54,8 @@
 #include <kio/netaccess.h>
 #include <KListWidget>
 #include <KMenu>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 
 #include <QtDBus/QtDBus>
 #include <QDockWidget>
@@ -77,7 +79,7 @@ Syanot::Syanot() :
     m_documentModified(false)
 {
   kDebug();
-  m_factory = KLibLoader::self()->factory("kgraphviewerpart");
+  m_factory = KPluginLoader("kgraphviewerpart").factory();
   if (m_factory == 0)
   {
     // if we couldn't find our Part, we exit since the Shell by
