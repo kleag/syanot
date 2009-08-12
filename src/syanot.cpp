@@ -129,7 +129,6 @@ Syanot::Syanot(QWidget *parent, Qt::WindowFlags flags) :
   {
     kDebug() << "Service Registered successfuly";
     QDBusConnection::sessionBus().registerObject("/", this, QDBusConnection::ExportAllSlots);
-    
   }
   else
   {

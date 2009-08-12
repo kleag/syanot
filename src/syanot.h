@@ -89,6 +89,7 @@ public slots:
     * Use this method to load whatever file/URL you have
     */
   void openUrl(const QString& url) {openUrl(KUrl(url));}
+  void openSecondaryUrl(const QString& url) {openSecondaryUrl(KUrl(url));}
 
   /**
    * Received when the part signals a close action.   */

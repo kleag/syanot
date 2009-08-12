@@ -48,6 +48,7 @@ int main(int argc, char **argv)
 
   KCmdLineOptions options;
   options.add("+[URL]", ki18n( "Dot graph to open" ));
+  options.add("comparewith file", ki18n("URL of a file containing an analysis to compare the main analysis with"));
   KCmdLineArgs::addCmdLineOptions( options );
   KApplication app;
   
@@ -100,11 +101,31 @@ int main(int argc, char **argv)
               if (reply.isValid()) 
               {
                 kDebug() << "Reply was valid" << endl;
+              }
+              else
+              {
+                kError() << "Call failed: " << reply.error().message() << endl;
+                return 1;
+              }
+              if (args->isSet("comparewith"))
+              {
+                QString strarg = args->getOption("comparewith");
+                KUrl url;
+                if (strarg.left(1) == "/")
+                  url = KUrl(strarg);
+                else url = KUrl(QDir::currentPath() + '/' + strarg);
+                reply = iface.call("openSecondaryUrl", url.pathOrUrl());
+                if (reply.isValid())
+                {
+                  kDebug() << "Reply was valid" << endl;
+                }
+                else
+                {
+                  kError() << "Call failed: " << reply.error().message() << endl;
+                  return 1;
+                }
                 return 0;
               }
-
-              kError() << "Call failed: " << reply.error().message() << endl;
-              return 1;
             }
             kError() << "Invalid interface" << endl;
             exit(0);
@@ -116,6 +137,17 @@ int main(int argc, char **argv)
             QDBusConnection::sessionBus().registerObject("/Syanot", widget);
             widget->show();
             widget->openUrl( args->url( i ) );
+            if (args->isSet("comparewith"))
+            {
+                QString strarg = args->getOption("comparewith");
+              kDebug() << "comparewith" << args->getOption("comparewith");
+                KUrl url;
+                if (strarg.left(1) == "/")
+                  url = KUrl(strarg);
+                else url = KUrl(QDir::currentPath() + '/' + strarg);
+              kDebug() << "openSecondaryUrl" << url.pathOrUrl();
+              widget->openSecondaryUrl(url.pathOrUrl());
+            }
           }
         }
       }
