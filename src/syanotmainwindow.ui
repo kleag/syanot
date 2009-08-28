@@ -1,43 +1,44 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>SyanotMainWindow</class>
- <widget class="QFrame" name="SyanotMainWindow" >
-  <property name="geometry" >
+ <widget class="QFrame" name="SyanotMainWindow">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1159</width>
-    <height>521</height>
+    <width>709</width>
+    <height>543</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Syanot</string>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <layout class="QVBoxLayout" >
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="vboxLayout">
      <item>
-      <widget class="KButtonGroup" name="kbuttongroup" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+      <widget class="KButtonGroup" name="kbuttongroup">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize" >
+       <property name="minimumSize">
         <size>
          <width>200</width>
          <height>85</height>
         </size>
        </property>
-       <layout class="QGridLayout" name="gridLayout" >
-        <item row="0" column="0" >
-         <widget class="KPushButton" name="sujvbutton" >
-          <property name="palette" >
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="KPushButton" name="sujvbutton">
+          <property name="palette">
            <palette>
             <active>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>144</red>
                 <green>238</green>
                 <blue>144</blue>
@@ -46,9 +47,9 @@
              </colorrole>
             </active>
             <inactive>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>144</red>
                 <green>238</green>
                 <blue>144</blue>
@@ -57,9 +58,9 @@
              </colorrole>
             </inactive>
             <disabled>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>144</red>
                 <green>238</green>
                 <blue>144</blue>
@@ -69,19 +70,19 @@
             </disabled>
            </palette>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>SUJ-V</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="1" >
-         <widget class="KPushButton" name="auxvbutton" >
-          <property name="palette" >
+        <item row="0" column="1">
+         <widget class="KPushButton" name="auxvbutton">
+          <property name="palette">
            <palette>
             <active>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>173</red>
                 <green>217</green>
                 <blue>230</blue>
@@ -90,9 +91,9 @@
              </colorrole>
             </active>
             <inactive>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>173</red>
                 <green>217</green>
                 <blue>230</blue>
@@ -101,9 +102,9 @@
              </colorrole>
             </inactive>
             <disabled>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>173</red>
                 <green>217</green>
                 <blue>230</blue>
@@ -113,19 +114,19 @@
             </disabled>
            </palette>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>AUX-V</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="2" >
-         <widget class="KPushButton" name="modvbutton" >
-          <property name="palette" >
+        <item row="0" column="2">
+         <widget class="KPushButton" name="modvbutton">
+          <property name="palette">
            <palette>
             <active>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>255</red>
                 <green>153</green>
                 <blue>255</blue>
@@ -134,9 +135,9 @@
              </colorrole>
             </active>
             <inactive>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>255</red>
                 <green>153</green>
                 <blue>255</blue>
@@ -145,9 +146,9 @@
              </colorrole>
             </inactive>
             <disabled>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>255</red>
                 <green>153</green>
                 <blue>255</blue>
@@ -157,19 +158,19 @@
             </disabled>
            </palette>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>MOD-V</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="3" colspan="2" >
-         <widget class="KPushButton" name="modnbutton" >
-          <property name="palette" >
+        <item row="0" column="3" colspan="2">
+         <widget class="KPushButton" name="modnbutton">
+          <property name="palette">
            <palette>
             <active>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>255</red>
                 <green>204</green>
                 <blue>153</blue>
@@ -178,9 +179,9 @@
              </colorrole>
             </active>
             <inactive>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>255</red>
                 <green>204</green>
                 <blue>153</blue>
@@ -189,9 +190,9 @@
              </colorrole>
             </inactive>
             <disabled>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>255</red>
                 <green>204</green>
                 <blue>153</blue>
@@ -201,19 +202,19 @@
             </disabled>
            </palette>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>MOD-N</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="5" colspan="2" >
-         <widget class="KPushButton" name="modrbutton" >
-          <property name="palette" >
+        <item row="0" column="5" colspan="2">
+         <widget class="KPushButton" name="modrbutton">
+          <property name="palette">
            <palette>
             <active>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>204</red>
                 <green>204</green>
                 <blue>0</blue>
@@ -222,9 +223,9 @@
              </colorrole>
             </active>
             <inactive>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>204</red>
                 <green>204</green>
                 <blue>0</blue>
@@ -233,9 +234,9 @@
              </colorrole>
             </inactive>
             <disabled>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>204</red>
                 <green>204</green>
                 <blue>0</blue>
@@ -245,19 +246,19 @@
             </disabled>
            </palette>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>MOD-R</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="7" colspan="2" >
-         <widget class="KPushButton" name="juxtbutton" >
-          <property name="palette" >
+        <item row="0" column="7" colspan="2">
+         <widget class="KPushButton" name="juxtbutton">
+          <property name="palette">
            <palette>
             <active>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>0</red>
                 <green>255</green>
                 <blue>204</blue>
@@ -266,9 +267,9 @@
              </colorrole>
             </active>
             <inactive>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>0</red>
                 <green>255</green>
                 <blue>204</blue>
@@ -277,9 +278,9 @@
              </colorrole>
             </inactive>
             <disabled>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>0</red>
                 <green>255</green>
                 <blue>204</blue>
@@ -289,19 +290,19 @@
             </disabled>
            </palette>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>JUXT</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="9" >
-         <widget class="KPushButton" name="coordbutton" >
-          <property name="palette" >
+        <item row="0" column="9">
+         <widget class="KPushButton" name="coordbutton">
+          <property name="palette">
            <palette>
             <active>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>204</red>
                 <green>255</green>
                 <blue>255</blue>
@@ -310,9 +311,9 @@
              </colorrole>
             </active>
             <inactive>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>204</red>
                 <green>255</green>
                 <blue>255</blue>
@@ -321,9 +322,9 @@
              </colorrole>
             </inactive>
             <disabled>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>204</red>
                 <green>255</green>
                 <blue>255</blue>
@@ -333,19 +334,19 @@
             </disabled>
            </palette>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>COORD</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="0" >
-         <widget class="KPushButton" name="codvbutton" >
-          <property name="palette" >
+        <item row="1" column="0">
+         <widget class="KPushButton" name="codvbutton">
+          <property name="palette">
            <palette>
             <active>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>255</red>
                 <green>162</green>
                 <blue>0</blue>
@@ -354,9 +355,9 @@
              </colorrole>
             </active>
             <inactive>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>255</red>
                 <green>162</green>
                 <blue>0</blue>
@@ -365,9 +366,9 @@
              </colorrole>
             </inactive>
             <disabled>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>255</red>
                 <green>162</green>
                 <blue>0</blue>
@@ -377,19 +378,19 @@
             </disabled>
            </palette>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>COD-V</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="1" >
-         <widget class="KPushButton" name="cplvbutton" >
-          <property name="palette" >
+        <item row="1" column="1">
+         <widget class="KPushButton" name="cplvbutton">
+          <property name="palette">
            <palette>
             <active>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>255</red>
                 <green>255</green>
                 <blue>0</blue>
@@ -398,9 +399,9 @@
              </colorrole>
             </active>
             <inactive>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>255</red>
                 <green>255</green>
                 <blue>0</blue>
@@ -409,9 +410,9 @@
              </colorrole>
             </inactive>
             <disabled>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>255</red>
                 <green>255</green>
                 <blue>0</blue>
@@ -421,19 +422,19 @@
             </disabled>
            </palette>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>CPL-V</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="2" colspan="2" >
-         <widget class="KPushButton" name="atbsobutton" >
-          <property name="palette" >
+        <item row="1" column="2" colspan="2">
+         <widget class="KPushButton" name="atbsobutton">
+          <property name="palette">
            <palette>
             <active>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>0</red>
                 <green>255</green>
                 <blue>255</blue>
@@ -442,9 +443,9 @@
              </colorrole>
             </active>
             <inactive>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>0</red>
                 <green>255</green>
                 <blue>255</blue>
@@ -453,9 +454,9 @@
              </colorrole>
             </inactive>
             <disabled>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>0</red>
                 <green>255</green>
                 <blue>255</blue>
@@ -465,19 +466,19 @@
             </disabled>
            </palette>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>ATB_SO</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="4" colspan="2" >
-         <widget class="KPushButton" name="modabutton" >
-          <property name="palette" >
+        <item row="1" column="4" colspan="2">
+         <widget class="KPushButton" name="modabutton">
+          <property name="palette">
            <palette>
             <active>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>204</red>
                 <green>153</green>
                 <blue>0</blue>
@@ -486,9 +487,9 @@
              </colorrole>
             </active>
             <inactive>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>204</red>
                 <green>153</green>
                 <blue>0</blue>
@@ -497,9 +498,9 @@
              </colorrole>
             </inactive>
             <disabled>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>204</red>
                 <green>153</green>
                 <blue>0</blue>
@@ -509,19 +510,19 @@
             </disabled>
            </palette>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>MOD-A</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="6" colspan="2" >
-         <widget class="KPushButton" name="modpbutton" >
-          <property name="palette" >
+        <item row="1" column="6" colspan="2">
+         <widget class="KPushButton" name="modpbutton">
+          <property name="palette">
            <palette>
             <active>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>51</red>
                 <green>255</green>
                 <blue>255</blue>
@@ -530,9 +531,9 @@
              </colorrole>
             </active>
             <inactive>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>51</red>
                 <green>255</green>
                 <blue>255</blue>
@@ -541,9 +542,9 @@
              </colorrole>
             </inactive>
             <disabled>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>51</red>
                 <green>255</green>
                 <blue>255</blue>
@@ -553,19 +554,19 @@
             </disabled>
            </palette>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>MOD-P</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="8" >
-         <widget class="KPushButton" name="apposbutton" >
-          <property name="palette" >
+        <item row="1" column="8">
+         <widget class="KPushButton" name="apposbutton">
+          <property name="palette">
            <palette>
             <active>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>0</red>
                 <green>255</green>
                 <blue>0</blue>
@@ -574,9 +575,9 @@
              </colorrole>
             </active>
             <inactive>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>0</red>
                 <green>255</green>
                 <blue>0</blue>
@@ -585,9 +586,9 @@
              </colorrole>
             </inactive>
             <disabled>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>0</red>
                 <green>255</green>
                 <blue>0</blue>
@@ -597,17 +598,17 @@
             </disabled>
            </palette>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>APPOS</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="10" >
+        <item row="1" column="10">
          <spacer>
-          <property name="orientation" >
+          <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeHint" stdset="0" >
+          <property name="sizeHint" stdset="0">
            <size>
             <width>40</width>
             <height>20</height>
@@ -615,21 +616,21 @@
           </property>
          </spacer>
         </item>
-        <item row="0" column="10" >
-         <widget class="KPushButton" name="groupbutton" >
-          <property name="text" >
+        <item row="0" column="10">
+         <widget class="KPushButton" name="groupbutton">
+          <property name="text">
            <string>Group</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="9" >
-         <widget class="KPushButton" name="compbutton" >
-          <property name="palette" >
+        <item row="1" column="9">
+         <widget class="KPushButton" name="compbutton">
+          <property name="palette">
            <palette>
             <active>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>102</red>
                 <green>255</green>
                 <blue>255</blue>
@@ -638,9 +639,9 @@
              </colorrole>
             </active>
             <inactive>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>102</red>
                 <green>255</green>
                 <blue>255</blue>
@@ -649,9 +650,9 @@
              </colorrole>
             </inactive>
             <disabled>
-             <colorrole role="Button" >
-              <brush brushstyle="SolidPattern" >
-               <color alpha="255" >
+             <colorrole role="Button">
+              <brush brushstyle="SolidPattern">
+               <color alpha="255">
                 <red>102</red>
                 <green>255</green>
                 <blue>255</blue>
@@ -661,7 +662,7 @@
             </disabled>
            </palette>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>COMP</string>
           </property>
          </widget>
@@ -671,26 +672,118 @@
      </item>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
-       <property name="sizeHint" stdset="0" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
-         <height>40</height>
+         <height>417</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="enonce" >
-       <property name="text" >
-        <string>La phrase est ici.</string>
-       </property>
-       <property name="wordWrap" >
-        <bool>true</bool>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="enonce">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="mouseTracking">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>La phrase est ici.</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="textInteractionFlags">
+          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string>background-color: rgb(255, 85, 255);</string>
+         </property>
+         <property name="text">
+          <string>GA</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="styleSheet">
+          <string>background-color: rgb(255, 0, 0);</string>
+         </property>
+         <property name="text">
+          <string>GN</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="styleSheet">
+          <string>background-color: rgb(85, 0, 255);</string>
+         </property>
+         <property name="text">
+          <string>GP</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_4">
+         <property name="styleSheet">
+          <string>background-color: rgb(255, 170, 0);</string>
+         </property>
+         <property name="text">
+          <string>GR</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="styleSheet">
+          <string>background-color: rgb(0, 255, 0);</string>
+         </property>
+         <property name="text">
+          <string>NV</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="styleSheet">
+          <string>background-color: rgb(174, 174, 174);</string>
+         </property>
+         <property name="text">
+          <string>PV</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
