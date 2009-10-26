@@ -65,6 +65,7 @@
 #include <QFrame>
 #include <QTextStream>
 #include <QCheckBox>
+#include <QSplitter>
 
 #include <iostream>
 
@@ -96,6 +97,7 @@ Syanot::Syanot(QWidget *parent, Qt::WindowFlags flags) :
   }
   QFrame* f = new QFrame();
   setupUi(f);
+
   // set the shell's ui resource file
   setXMLFile("syanotui.rc");
 
@@ -182,6 +184,13 @@ Syanot::Syanot(QWidget *parent, Qt::WindowFlags flags) :
   createSOChooser();
   createAPropagerChooser();
 
+  m_splitter = new QSplitter();
+  vboxLayout->addWidget(m_splitter);
+  m_splitter->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+  m_splitter->sizePolicy().setHorizontalStretch(1);
+  m_splitter->sizePolicy().setVerticalStretch(1);
+  m_splitter->setOrientation(Qt::Vertical);
+  m_splitter->show();
 }
 
 Syanot::~Syanot()
@@ -679,16 +688,16 @@ void Syanot::activateUtterance(const QString& id)
   if (m_primaryGraph != 0)
   {
     m_primaryGraph->hide();
-    vboxLayout->removeWidget(m_primaryGraph);
+//     m_splitter->removeWidget(m_primaryGraph);
   }
   else
   {
-    vboxLayout->removeItem(spacerItem1);
+//     vboxLayout->removeItem(spacerItem1);
   }
   if (m_secondaryGraph != 0)
   {
     m_secondaryGraph->hide();
-    vboxLayout->removeWidget(m_secondaryGraph);
+//     m_splitter->removeWidget removeWidget(m_secondaryGraph);
   }
 
   createPartFor(id);
@@ -702,7 +711,7 @@ void Syanot::activateUtterance(const QString& id)
   m_primaryGraph->sizePolicy().setHorizontalStretch(1);
   m_primaryGraph->sizePolicy().setVerticalStretch(1);
 
-  vboxLayout->addWidget(m_primaryGraph);
+  m_splitter->addWidget(m_primaryGraph);
   m_primaryGraph->show();
 
   if (m_secondaryMapping.contains(id))
@@ -712,7 +721,7 @@ void Syanot::activateUtterance(const QString& id)
     m_secondaryGraph->sizePolicy().setHorizontalStretch(1);
     m_secondaryGraph->sizePolicy().setVerticalStretch(1);
 
-    vboxLayout->addWidget(m_secondaryGraph);
+    m_splitter->addWidget(m_secondaryGraph);
     m_secondaryGraph->show();
   }
 

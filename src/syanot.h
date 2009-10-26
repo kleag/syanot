@@ -31,6 +31,7 @@
 class QListWidgetItem;
 class QDockWidget;
 class QCheckBox;
+class QSplitter;
 
 class KToggleAction;
 class KListWidget;
@@ -197,6 +198,8 @@ private:
   QCheckBox* m_aPropagerCheckbox;
 
   QStringList m_utterancesList;
+
+  QSplitter* m_splitter;
 };
 
 #endif // _SYANOT_H_
