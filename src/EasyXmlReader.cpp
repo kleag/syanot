@@ -56,6 +56,10 @@ bool EasyXmlReader::read(QIODevice *device)
       {
         readDocument();
       }
+      else if (name() == "E")
+      {
+        readUtterance();
+      }
       else
       {
         raiseError(QObject::tr("The file is not in an Easy format."));
