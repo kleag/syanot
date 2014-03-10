@@ -84,11 +84,14 @@ Syanot::Syanot(QWidget *parent, Qt::WindowFlags flags) :
     m_utterancesList()
 {
   kDebug();
-  m_factory = KPluginLoader("kgraphviewerpart").factory();
+  KPluginLoader loader("kgraphviewerpart");
+  qDebug() << "Loded kgraphviewerpart plugin:" << loader.fileName();
+  m_factory = loader.factory();
   if (m_factory == 0)
   {
     // if we couldn't find our Part, we exit since the Shell by
     // itself can't do anything useful
+    qDebug() << "Faild to load kgraphviewerpart plugin:" << loader.errorString();
     KMessageBox::error(this, i18n("Could not find our part."));
     kapp->quit();
     // we return here, cause kapp->quit() only means "exit the
