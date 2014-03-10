@@ -1,5 +1,5 @@
 kgraphviewer/kgrapheditor problems
-- BUG added edges are drawn not exactly at the good position (each new edge is a little bit more too low)
+- [DONE] BUG added edges are drawn not exactly at the good position (each new edge is a little bit more too low)
 - BUG edge selection marks not always on the two bounds
 - FEATURE should be able to scroll by DnD or with the mouse wheel
 

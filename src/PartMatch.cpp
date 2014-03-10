@@ -19,15 +19,15 @@
 
 #include "PartMatch.h"
 
-#include "EasyUtterance.h"
-#include "EasyRelation.h"
-#include "EasyForm.h"
-#include "EasyGroup.h"
+#include "PassageUtterance.h"
+#include "PassageRelation.h"
+#include "PassageWord.h"
+#include "PassageGroup.h"
 
 #include <kparts/partmanager.h>
 #include <kdebug.h>
 
-PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
+PartMatch::PartMatch(KParts::Part* p, PassageUtterance* u, QObject* parent) :
     QObject(parent),
     m_utteranceId(u->id()),
     m_part(p),
@@ -42,14 +42,14 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
   graphAttribs["fontsize"] = "14";
   setGraphAttributes(graphAttribs);
   
-  const QList<EasyConstituent*>&  constituents = m_utterance->constituents();
-  foreach (const EasyConstituent* constituent, constituents)
+  const QList<PassageConstituent*>&  constituents = m_utterance->constituents();
+  foreach (const PassageConstituent* constituent, constituents)
   {
-    if (dynamic_cast<const EasyForm*>(constituent) != 0)
+    if (dynamic_cast<const PassageWord*>(constituent) != 0)
     {
       QMap<QString,QString> attribs;
       attribs["id"] = constituent->id();
-      attribs["label"] = dynamic_cast<const EasyForm*>(constituent)->form();
+      attribs["label"] = dynamic_cast<const PassageWord*>(constituent)->form();
       attribs["shape"] = "square";
       addNewNode(attribs);
       if (!previousFormId.isEmpty())
@@ -61,26 +61,26 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
       }
       previousFormId = constituent->id();
     }
-    else if (dynamic_cast<const EasyGroup*>(constituent) != 0)
+    else if (dynamic_cast<const PassageGroup*>(constituent) != 0)
     {
-      const EasyGroup* group = dynamic_cast<const EasyGroup*>(constituent);
+      const PassageGroup* group = dynamic_cast<const PassageGroup*>(constituent);
       QMap<QString,QString> attribs;
       attribs["id"] = QString("cluster_") + group->id();
       QString color = "black";
       switch (group->type())
       {//GA, GN, GP, GR, NV, PV
-        case EasyGroup::GA: color = "violet"; break;
-        case EasyGroup::GN: color = "red"; break;
-        case EasyGroup::GP: color = "blue"; break;
-        case EasyGroup::GR: color = "orange"; break;
-        case EasyGroup::NV: color = "green"; break;
-        case EasyGroup::PV: color = "grey"; break;
+        case PassageGroup::GA: color = "violet"; break;
+        case PassageGroup::GN: color = "red"; break;
+        case PassageGroup::GP: color = "blue"; break;
+        case PassageGroup::GR: color = "orange"; break;
+        case PassageGroup::NV: color = "green"; break;
+        case PassageGroup::PV: color = "grey"; break;
         default:;
       }
       attribs["color"] = color;
       attribs["style"] = "filled";
       addNewSubgraph(attribs);
-      foreach(EasyForm* form, group->forms())
+      foreach(PassageWord* form, group->forms())
       {
         QMap<QString,QString> attribs;
         attribs["id"] = form->id();
@@ -102,8 +102,8 @@ PartMatch::PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent) :
       }
     }
   }
-  const QList<EasyRelation*>&  relations = m_utterance->relations();
-  foreach (const EasyRelation* relation, relations)
+  const QList<PassageRelation*>&  relations = m_utterance->relations();
+  foreach (const PassageRelation* relation, relations)
   {
     QMap<QString,QString> attribs;
     attribs["id"] = relation->id();
@@ -202,10 +202,14 @@ void PartMatch::connectSignals()
   connect(this,SIGNAL(sremoveEdge(const QString&)),
            m_part,SLOT(slotRemoveEdge(const QString&)));
   connect(this,
-      SIGNAL(ssetAttribute(const QString&,const QString&,const QString&)),
-      m_part,
-      SLOT(slotSetAttribute(const QString&,const QString&,const QString&)));
-           
+          SIGNAL(ssetAttribute(const QString&,const QString&,const QString&)),
+          m_part,
+          SLOT(slotSetAttribute(const QString&,const QString&,const QString&)));
+  connect(this,SIGNAL(sprepareSelectElements()),
+           m_part,SLOT(slotPrepareToSelect()));
+          
+
+          
   connect(m_part,SIGNAL(newEdgeAdded(QString,QString)),this,SLOT(slotNewEdgeAdded(QString,QString)));
   connect(m_part,SIGNAL(removeEdge(const QString&)),
                     this,SLOT(slotRemoveEdge(const QString&)));
@@ -216,10 +220,10 @@ void PartMatch::connectSignals()
 void PartMatch::slotNewEdgeAdded(QString src,QString tgt)
 {
   kDebug() << src << tgt;
-  EasyConstituent* srcc = m_utterance->idsToConstituentsMap()[src];
-  EasyConstituent* tgtc = m_utterance->idsToConstituentsMap()[tgt];
+  PassageConstituent* srcc = m_utterance->idsToConstituentsMap()[src];
+  PassageConstituent* tgtc = m_utterance->idsToConstituentsMap()[tgt];
   kDebug() << srcc << tgtc;
-  EasyRelation* relation = new EasyRelation();
+  PassageRelation* relation = new PassageRelation();
   relation->setId(QString("E1R")+QString::number(m_utterance->relations().size()+1));
   kDebug() << m_utteranceId << QString(QString("E1R")+QString::number(m_utterance->relations().size()+1));
   relation->setType(m_currentRelation);
@@ -300,7 +304,7 @@ void PartMatch::slotRemoveEdge(const QString& id)
   kDebug() << id;
   for (int i = 0; i < m_utterance->relations().size(); i++)
   {
-    EasyRelation* rel = m_utterance->relations().at(i);
+    PassageRelation* rel = m_utterance->relations().at(i);
     if (rel->id() == id)
     {
       m_utterance->removeRelationAt(i);
@@ -320,8 +324,8 @@ void PartMatch::prepareAddNewEdge(QMap<QString,QString> attribs)
                           // creating a new edge
   if (!m_selection.isEmpty())
   {
-    QList<EasyRelation*>&  relations = m_utterance->relations();
-    foreach (EasyRelation* relation, relations)
+    QList<PassageRelation*>&  relations = m_utterance->relations();
+    foreach (PassageRelation* relation, relations)
     {
       if (m_selection.contains(relation->id()))
       {

@@ -25,7 +25,7 @@
 
 class kgraphviewerPart;
 
-class EasyUtterance;
+class PassageUtterance;
 
 /**
  * @author Gael de Chalendar <kleag@free.fr>
@@ -37,7 +37,7 @@ public:
   /**
     * Default Constructor
     */
-  PartMatch(KParts::Part* p, EasyUtterance* u, QObject* parent = 0);
+  PartMatch(KParts::Part* p, PassageUtterance* u, QObject* parent = 0);
 
   /**
     * Default Destructor
@@ -47,8 +47,8 @@ public:
   inline const QString& utteranceId() const {return m_utteranceId;}
   inline void setUtteranceId(const QString& id) {m_utteranceId = id;}
   
-  inline const EasyUtterance* utterance() const {return m_utterance;}
-  inline void setUtterance(EasyUtterance* u) {m_utterance = u;}
+  inline const PassageUtterance* utterance() const {return m_utterance;}
+  inline void setUtterance(PassageUtterance* u) {m_utterance = u;}
   
   inline const KParts::Part* part() const {return m_part;}
   void setPart(KParts::Part* p);
@@ -56,6 +56,8 @@ public:
   inline void setReadWrite() {emit ssetReadWrite();}
   inline void saveTo(const QString& fileName) {emit ssaveTo(fileName);}
   void prepareAddNewEdge(QMap<QString,QString> attribs);
+  
+  inline void prepareSelectElements() {  emit sprepareSelectElements(); }
   inline void setGraphAttributes(QMap<QString,QString> attribs) {emit ssetGraphAttributes(attribs);}
   inline void addNewNode(QMap<QString,QString> attribs) {emit saddNewNode(attribs);}
   inline void addNewNodeToSubgraph(QMap<QString,QString> attribs, QString subgraph) {emit saddNewNodeToSubgraph(attribs,subgraph);}
@@ -75,6 +77,7 @@ Q_SIGNALS:
   void ssetReadWrite();
   void ssaveTo(const QString& fileName);
   void sprepareAddNewEdge(QMap<QString,QString> attribs);
+  void sprepareSelectElements();
   void ssetGraphAttributes(QMap<QString,QString> attribs);
   void saddNewNode(QMap<QString,QString> attribs);
   void saddNewNodeToSubgraph(QMap<QString,QString> attribs, QString subgraph);
@@ -115,7 +118,7 @@ private:
   
   KParts::Part* m_part;
   
-  EasyUtterance* m_utterance;
+  PassageUtterance* m_utterance;
 
   QString m_currentRelation;
 

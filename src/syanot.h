@@ -34,8 +34,8 @@ class KListWidget;
 
 class kgraphviewerPart;
 
-class EasyDocument;
-class EasyUtterance;
+class PassageDocument;
+class PassageUtterance;
 class PartMatch;
 
 #include "ui_syanotmainwindow.h"
@@ -107,6 +107,7 @@ public slots:
   void slotAtbSOButtonClicked();
   void slotCplVButtonClicked();
   void slotAuxVButtonClicked();
+  void slotGroupButtonClicked();
 
   void slotDocumentModified();
 /*public slots:
@@ -156,7 +157,7 @@ private:
   
   QMap<QString, QString> m_newElementAttributes;
 
-  EasyDocument* m_document;
+  PassageDocument* m_document;
   bool m_documentModified;
 
   QString m_currentRelation;
