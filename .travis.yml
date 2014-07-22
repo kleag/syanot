@@ -4,4 +4,7 @@ compiler:
   - clang
 # Change this to your needs
 script: mkdir build && cd build && cmake .. && make && make package
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install kdelibs5-dev kgraphviewer
 
